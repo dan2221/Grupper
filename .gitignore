@@ -18,11 +18,22 @@
 *.zip
 *.tar.gz
 *.rar
+
+# Additional file extensions
 *.7z
+*.dll
+*.exe
+*.py
+*.bat
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# SorR folders
+# folders to exclude
 mod/
 palettes/
+data/
+Downloads/
+icons/
+other versions/
+Tools/
