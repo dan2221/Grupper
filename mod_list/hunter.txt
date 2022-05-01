@@ -1,0 +1,32 @@
+Mod Folder:H.U.N.T.E.R MotY
+Author:Don Vecta
+
+[Data Files]
+adam1.wav
+se2.wav
+se9.wav
+se10.wav
+se16.wav
+se26.wav
+se30.wav
+se45.wav
+se104.wav
+sev1.wav
+sev2.wav
+sev4.wav
+sev12.wav
+sev13.wav
+sev22.wav
+sev23.wav
+sev45.wav
+sor1_blaze1.wav
+sor2_blaze1.wav
+seblaze1.wav
+seaxel2.wav
+seaxel4.wav
+semax3.wav
+sor3_axel2.wav
+
+[SORR Musics]
+
+[Other Mods Musics]
