@@ -158,7 +158,7 @@ public class FuncoesMods {
 			if (moddata[1] == null) {
 				moddata[1] = moddata[0];
 			}
-			// If a mod doesn't have an declared author on its txt, the string bellow
+			// If a mod doesn't have an declared author on its txt, the string below
 			// will be used.
 			if (moddata[2] == null) {
 				moddata[2] = " - ";

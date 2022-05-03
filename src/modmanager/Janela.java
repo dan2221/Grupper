@@ -68,10 +68,9 @@ public class Janela extends JFrame {
 		// Show current directory
 		String dir_atual = System.getProperty("user.dir");
 		System.out.println("Grupper directory: " + dir_atual);
-		
+
 		// Search for important files and folders
 		FuncoesMods.importantFiles();
-		  
 
 		// Get all txt mod files
 		ArrayList<String> txtmodfiles = FuncoesMods.getAllFiles("mod_list//*.txt");
@@ -83,7 +82,7 @@ public class Janela extends JFrame {
 		String[] moddata = new String[3];
 		int counter = 0;
 		for (String arq : txtmodfiles) {
-			
+
 			// Get mod data (folder, title and author)
 			moddata = FuncoesMods.readTxt(arq);
 			allmodsvalues[counter][0] = moddata[0];
@@ -111,106 +110,118 @@ public class Janela extends JFrame {
 				}
 			}
 		}
-//		for (int i = 0; i < allmodsvalues.length; i++) {
-//			
-//		}
-		
+		if (installed == false) {
+			try {
+				File myObj = new File("mod//sorr.txt");
+				if (myObj.createNewFile()) {
+					System.out.println("File created: " + myObj.getName());
+				} else {
+					System.out.println("File already exists.");
+				}
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
+		}
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
 		tabbedPane.setBounds(0, 0, 399, 419);
 		contentPane.add(tabbedPane);
-		
+
 		JPanel panel_level = new JPanel();
 		tabbedPane.addTab("   Levels    ", null, panel_level, null);
 		panel_level.setLayout(null);
-				
-				/////// Instalar Mod ///////////////////////////////////////////////////////
-						JButton btInstall = new JButton("Install mod");
-						btInstall.setBounds(247, 357, 137, 23);
-						panel_level.add(btInstall);
-						
-						///////// Botão para ESCOLHER MOD /////////////////////////////////////////////////////////
-								JButton btFolder = new JButton("Open SorR Folder");
-								btFolder.setBounds(21, 357, 146, 23);
-								panel_level.add(btFolder);
-								btFolder.setBackground(UIManager.getColor("Button.background"));
-												
-														JScrollPane scrollPane_mods = new JScrollPane();
-														scrollPane_mods.setBounds(10, 9, 374, 308);
-														panel_level.add(scrollPane_mods);
-														
-																// Instanciando objeto personalizado
-														
-														//////// LISTA DE MODS ////////////////////////////////////////////////////////////////////
-																// Create Jlist using a model
-																JList<SorrMod> listMod = new JList<SorrMod>(myModel);
-																scrollPane_mods.setViewportView(listMod);
-																// add(new JScrollPane(listMod));
-																// // List Background color
-																listMod.setBackground(new Color(90, 90, 90));
-																// // Foreground color
-																listMod.setForeground(Color.white);
-																//
-																listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
-																listMod.setBackground(UIManager.getColor("textInactiveText"));
-																listMod.setForeground(Color.BLACK);
-																
-																		// Adiciona a lista para a janela :)
-																
-																		listMod.setCellRenderer(new ModRenderer());
-																		
-																		JPanel panel_char = new JPanel();
-																		tabbedPane.addTab("Characters", null, panel_char, null);
-																		
-																		JPanel panel_theme = new JPanel();
-																		tabbedPane.addTab("Themes", null, panel_theme, null);
-																		
-																		JPanel panel_music = new JPanel();
-																		tabbedPane.addTab("Music Player", null, panel_music, null);
-																		
-																		JPanel panel_option = new JPanel();
-																		tabbedPane.addTab("Options", null, panel_option, null);
-																		panel_option.setLayout(null);
-																		
-																		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
-																		chckbxAvMods.setBounds(26, 38, 341, 23);
-																		panel_option.add(chckbxAvMods);
-																		
-																		JCheckBox chckbxNewCheckBox = new JCheckBox("Use level mod menu images.");
-																		chckbxNewCheckBox.setBounds(26, 88, 341, 23);
-																		panel_option.add(chckbxNewCheckBox);
-																		
-																		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \npalettes");
-																		chckbxNewCheckBox_1.setBounds(26, 144, 341, 23);
-																		panel_option.add(chckbxNewCheckBox_1);
-																		
-																		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
-																		chckbxNewCheckBox_2.setBounds(26, 214, 341, 23);
-																		panel_option.add(chckbxNewCheckBox_2);
-																		
-																		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
-																		lblNewLabel.setBounds(47, 174, 314, 14);
-																		panel_option.add(lblNewLabel);
-								btFolder.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										
-										// Use isso para alternar de painel
-										//scrollPane_mods.setVisible(false);
-										
-										// Show current directory
-										try {
-											Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
-										} catch (IOException e1) {
-											// TODO Auto-generated catch block
-											e1.printStackTrace();
-										}
-									}
-								});
-						btInstall.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
-								FuncoesMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
-							}
-						});
+
+		/////// Instalar Mod ///////////////////////////////////////////////////////
+		JButton btInstall = new JButton("Install mod");
+		btInstall.setBounds(247, 357, 137, 23);
+		panel_level.add(btInstall);
+
+		///////// Botão para ESCOLHER MOD
+		///////// /////////////////////////////////////////////////////////
+		JButton btFolder = new JButton("Open SorR Folder");
+		btFolder.setBounds(21, 357, 146, 23);
+		panel_level.add(btFolder);
+		btFolder.setBackground(UIManager.getColor("Button.background"));
+
+		JScrollPane scrollPane_mods = new JScrollPane();
+		scrollPane_mods.setBounds(10, 9, 374, 308);
+		panel_level.add(scrollPane_mods);
+
+		// Instanciando objeto personalizado
+
+		//////// LISTA DE MODS
+		//////// ////////////////////////////////////////////////////////////////////
+		// Create Jlist using a model
+		JList<SorrMod> listMod = new JList<SorrMod>(myModel);
+		scrollPane_mods.setViewportView(listMod);
+		// add(new JScrollPane(listMod));
+		// // List Background color
+		listMod.setBackground(new Color(90, 90, 90));
+		// // Foreground color
+		listMod.setForeground(Color.white);
+		//
+		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
+		listMod.setBackground(UIManager.getColor("textInactiveText"));
+		listMod.setForeground(Color.BLACK);
+
+		// Adiciona a lista para a janela :)
+
+		listMod.setCellRenderer(new ModRenderer());
+
+		JPanel panel_char = new JPanel();
+		tabbedPane.addTab("Characters", null, panel_char, null);
+
+		JPanel panel_theme = new JPanel();
+		tabbedPane.addTab("Themes", null, panel_theme, null);
+
+		JPanel panel_music = new JPanel();
+		tabbedPane.addTab("Music Player", null, panel_music, null);
+
+		JPanel panel_option = new JPanel();
+		tabbedPane.addTab("Options", null, panel_option, null);
+		panel_option.setLayout(null);
+
+		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
+		chckbxAvMods.setBounds(26, 38, 341, 23);
+		panel_option.add(chckbxAvMods);
+
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Use level mod menu images.");
+		chckbxNewCheckBox.setBounds(26, 88, 341, 23);
+		panel_option.add(chckbxNewCheckBox);
+
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \npalettes");
+		chckbxNewCheckBox_1.setBounds(26, 144, 341, 23);
+		panel_option.add(chckbxNewCheckBox_1);
+
+		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
+		chckbxNewCheckBox_2.setBounds(26, 214, 341, 23);
+		panel_option.add(chckbxNewCheckBox_2);
+
+		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
+		lblNewLabel.setBounds(47, 174, 314, 14);
+		panel_option.add(lblNewLabel);
+		btFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Use isso para alternar de painel
+				// scrollPane_mods.setVisible(false);
+
+				// Show current directory
+				try {
+					Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		btInstall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
+				FuncoesMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
+			}
+		});
 	}
 }
