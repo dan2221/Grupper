@@ -32,6 +32,8 @@ hs_err_pid*
 
 # folders to exclude
 mod/
+manual/
+savegame/
 palettes/
 data/
 Downloads/
@@ -40,3 +42,6 @@ other versions/
 Tools/
 
 bin/
+bugtrack.txt
+*.html
+*.dat

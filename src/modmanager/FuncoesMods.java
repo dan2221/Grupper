@@ -1,6 +1,10 @@
 package modmanager;
 
 import java.util.ArrayList; // import the ArrayList class
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.io.BufferedReader;
 
 // Libraries for file checking
@@ -11,9 +15,38 @@ import java.nio.file.Files;
 
 public class FuncoesMods {
 
-	public static boolean anyFile(String diretorio)
-	// Checks if exists any file with the desired extension
-	{
+	/**
+	 * Search for files and folders needed for Grupper works correctly.
+	 */
+	public static void importantFiles() {
+		String[] folders2make = { "data", "mod//chars", "mod//themes", "mod//games" };
+		for (String i : folders2make) {
+			File selIndex = new File(i);
+			if (!selIndex.exists()) {
+				selIndex.mkdirs();
+				System.out.println(String.format("Directory \"%s\" created!", i));
+			}
+		}
+		String[] pal_folders = { "palettes//chars", "palettes//backup_chars", "palettes//enemies",
+				"palettes//backup_enemies" };
+		for (String i : pal_folders) {
+			File selIndex = new File(i);
+			if (!selIndex.exists()) {
+				errorMsg(i, "folder");
+			}
+		}
+		if (!new File("SorR.exe").exists()) {
+			errorMsg("SorR.exe","file");
+		}
+	}
+
+	/**
+	 * Checks if exists any file with the desired extension.
+	 * 
+	 * @param diretorio
+	 * @return boolean value
+	 */
+	public static boolean anyFile(String diretorio) {
 		boolean existe = false;
 		String params[] = diretorio.split("\\*");
 		File folder = new File(params[0]);
@@ -30,21 +63,35 @@ public class FuncoesMods {
 		return existe;
 	}
 
-	public static ArrayList<String> getAllFiles(String extension, String diretorio)
-	// Get all files inside a folder
-	{
-		File folder = new File(diretorio);
+	/**
+	 * Get all files inside a folder.
+	 * 
+	 * @param diretorio
+	 * @return list of files as a ArrayList
+	 */
+	public static ArrayList<String> getAllFiles(String diretorio) {
+		String[] params = diretorio.split("\\*");
+		File folder = new File(params[0]);
 		File[] listoffiles = folder.listFiles();
 		ArrayList<String> allfiles = new ArrayList<String>(); // Create an ArrayList object
 		int count = 0;
-		// System.out.println("tamanho: "+listoffiles.length);
 
 		if (listoffiles != null) {
-			for (File file : listoffiles) {
-				if (file.isFile() && file.getName().endsWith(extension)) {
-					allfiles.add(file.getName().toString());
-					System.out.println(allfiles.get(count) + " added!");
-					count++;
+			if (diretorio.endsWith("*.*")) { // No extension defined
+				for (File file : listoffiles) {
+					if (file.isFile()) {
+						allfiles.add(file.getName().toString());
+						System.out.println(allfiles.get(count) + " added!");
+						count++;
+					}
+				}
+			} else { // extension defined
+				for (File file : listoffiles) {
+					if (file.isFile() && file.getName().endsWith(params[1])) {
+						allfiles.add(file.getName().toString());
+						System.out.println(allfiles.get(count) + " added!");
+						count++;
+					}
 				}
 			}
 		}
@@ -70,10 +117,13 @@ public class FuncoesMods {
 		}
 	}
 
-	// faça com que o método retorne um array!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/**
+	 * Read a txt file to colect all mod data.
+	 * 
+	 * @param filename
+	 * @return
+	 */
 	public static String[] readTxt(String filename) {
-		// Read txt file to colect mod data
-
 		String[] moddata = new String[3];
 
 		try {
@@ -128,8 +178,13 @@ public class FuncoesMods {
 		return moddata;
 	}
 
+	/**
+	 * Checks the status of the mod
+	 * 
+	 * @param proj
+	 * @return 1: installed, 2: unavaliable, 0: available
+	 */
 	public static int scanMod(String proj) {
-		// Checks if a mod is installed or not
 		int status = 0;
 
 		System.out.println("Searching for " + proj + "...");
@@ -167,5 +222,29 @@ public class FuncoesMods {
 		System.out.println("Scanning completed!");
 		System.out.println("--------------------------------------------------");
 		return status;
+	}
+
+	/**
+	 * Install the mod
+	 * 
+	 * @param selectedMod
+	 */
+	public static void installMod(String selectedMod) {
+		// List all data files in a txt file
+		System.out.println("Installing " + selectedMod + "...");
+		if (new File("mod//games//" + selectedMod + "//data").exists()) {
+			ArrayList<String> datafiles = getAllFiles("mod//games//" + selectedMod + "//data//*.*");
+			for (String item : datafiles) {
+				System.out.println(item);
+			}
+			System.out.println(datafiles);
+		}
+	}
+
+	public static void errorMsg(String file, String additionalText) {
+		String message = "The " + additionalText + " \"" + file.replace("//", "/") + "\" was not found!\n"
+				+ "The program needs that to work.";
+		JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
+		System.exit(0);
 	}
 }
