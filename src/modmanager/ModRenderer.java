@@ -43,10 +43,6 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 	@Override
 	public Component getListCellRendererComponent(JList<? extends SorrMod> list, SorrMod SorrMod, int index, boolean isSelected,
 			boolean cellHasFocus) {
-
-		// Show current directory
-		// String dir_atual = System.getProperty("user.dir");
-		// System.out.println("Grupper directory: " + dir_atual);
 		
 		// System.out.println("String do getclass:" + getClass());
 		// System.out.println("ÍCONE: " + System.getProperty("user.dir") + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png");
@@ -54,7 +50,7 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		if  (new File("mod//games//"+ SorrMod.getName() + "//logo.png").exists()) {
 			lbIcon.setIcon(new ImageIcon(System.getProperty("user.dir") + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png"));
 		} else {
-			lbIcon.setIcon(new ImageIcon(getClass().getResource("/modmanager/default_logo.png")));
+			lbIcon.setIcon(new ImageIcon(getClass().getResource("/images/default_logo.png")));
 		}
 		
 		

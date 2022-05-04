@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.DefaultListModel; // Lista padrão
 import javax.swing.JButton;
@@ -96,9 +95,8 @@ public class Janela extends JFrame {
 		for (int i = 0; i < allmodsvalues.length; i++) {
 			System.out.println();
 			for (int j = 0; j < allmodsvalues[i].length; j++) {
-				// System.out.print(allmodsvalues[i][j] + " - ");
 				if (j == 0) {
-
+					
 				}
 				if (j == 2) {
 					// Add the mod to list {Mod Name},{Author},{status}

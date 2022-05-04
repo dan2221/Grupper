@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/modmanager/default_logo.png</name>
-			<type>1</type>
-			<location>C:/Users/danie/eclipse-workspace/Grupper/grupper/images/default_logo.png</location>
-		</link>
-	</linkedResources>
 </projectDescription>

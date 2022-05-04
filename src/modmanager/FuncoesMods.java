@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 // Libraries for file checking
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -36,7 +37,7 @@ public class FuncoesMods {
 			}
 		}
 		if (!new File("SorR.exe").exists()) {
-			errorMsg("SorR.exe","file");
+			errorMsg("SorR.exe", "file");
 		}
 	}
 
@@ -234,10 +235,17 @@ public class FuncoesMods {
 		System.out.println("Installing " + selectedMod + "...");
 		if (new File("mod//games//" + selectedMod + "//data").exists()) {
 			ArrayList<String> datafiles = getAllFiles("mod//games//" + selectedMod + "//data//*.*");
-			for (String item : datafiles) {
-				System.out.println(item);
+			try (FileWriter writer = new FileWriter("mod//sorr.txt")) {
+				for (String item : datafiles) {
+					System.out.println(item);
+					writer.write(item + "\n");
+				}
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			System.out.println(datafiles);
+			new File("mod//sorr.txt").renameTo(new File("mod//"+selectedMod+".txt"));
 		}
 	}
 
