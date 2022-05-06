@@ -14,7 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class FuncoesMods {
+public class FuncMods {
 
 	/**
 	 * Search for files and folders needed for Grupper works correctly.
@@ -100,21 +100,28 @@ public class FuncoesMods {
 		return allfiles;
 	}
 
+	/**
+	 * Move desired file or folder. It works like the Batch Script move command.
+	 * 
+	 * @param origem
+	 * @param destino
+	 * 
+	 */
 	public static void move(String origem, String destino) {
-		// Move files and folders
+		// Getting the filename or folder
+		String[] tree = origem.split("//", 0);
+		String item = tree[tree.length - 1];
+
 		File param1 = new File(origem);
-		File param2 = new File(destino);
+		File param2 = new File(destino + "//" + item);
 		System.out.println("Origin: " + param1);
 		System.out.println("Destiny: " + param2);
-		if (param1.isDirectory() == true) {
-			System.out.println("É um diretório!");
-			try {
-				Files.move(param1.toPath(), param2.toPath());
-				System.out.println("Directory moved successfully.");
-			} catch (IOException ex) {
-				System.out.println("Error found!");
-				ex.printStackTrace();
-			}
+		try {
+			Files.move(param1.toPath(), param2.toPath());
+			System.out.println("\"" + item + "\" moved successfully.");
+		} catch (IOException ex) {
+			System.out.println("Error found!");
+			ex.printStackTrace();
 		}
 	}
 
@@ -180,7 +187,7 @@ public class FuncoesMods {
 	}
 
 	/**
-	 * Checks the status of the mod
+	 * Checks the status of the mod.
 	 * 
 	 * @param proj
 	 * @return 1: installed, 2: unavaliable, 0: available
@@ -200,16 +207,15 @@ public class FuncoesMods {
 				System.out.println("\"palettes\" folder created ");
 			}
 			// Checking for enemie's palettes
-			if (FuncoesMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
+			if (FuncMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
 				System.out.println("Enemies palettes not found!");
 				status = 0; // Disabled mod
 			} else {
 				// Auto fix enemies palette folder path
-				if (FuncoesMods.anyFile("mod//games//" + proj + "//enemies//*.pal")) {
-					FuncoesMods.move("mod//games//" + proj + "//enemies",
-							"mod//games//" + proj + "//palettes//enemies");
+				if (FuncMods.anyFile("mod//games//" + proj + "//enemies//*.pal")) {
+					FuncMods.move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
 				} else {
-					if (FuncoesMods.anyFile("palettes//sorr_enemies//*.pal")) {
+					if (FuncMods.anyFile("palettes//sorr_enemies//*.pal")) {
 						System.out.println("The mod is installed!");
 						status = 1; // Installed mod
 					} else {
@@ -245,10 +251,15 @@ public class FuncoesMods {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new File("mod//sorr.txt").renameTo(new File("mod//"+selectedMod+".txt"));
+			new File("mod//sorr.txt").renameTo(new File("mod//" + selectedMod + ".txt"));
 		}
 	}
 
+	/**
+	 * Show an error message when an important file is missing.
+	 * @param file
+	 * @param additionalText
+	 */
 	public static void errorMsg(String file, String additionalText) {
 		String message = "The " + additionalText + " \"" + file.replace("//", "/") + "\" was not found!\n"
 				+ "The program needs that to work.";

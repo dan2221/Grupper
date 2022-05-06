@@ -61,18 +61,15 @@ public class Janela extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		// create the model and add elements
-		DefaultListModel<SorrMod> myModel = new DefaultListModel<>();
-
 		// Show current directory
 		String dir_atual = System.getProperty("user.dir");
 		System.out.println("Grupper directory: " + dir_atual);
 
 		// Search for important files and folders
-		FuncoesMods.importantFiles();
+		FuncMods.importantFiles();
 
 		// Get all txt mod files
-		ArrayList<String> txtmodfiles = FuncoesMods.getAllFiles("mod_list//*.txt");
+		ArrayList<String> txtmodfiles = FuncMods.getAllFiles("mod_list//*.txt");
 
 		// Count txt mod files
 		int quantmods = txtmodfiles.size();
@@ -83,44 +80,19 @@ public class Janela extends JFrame {
 		for (String arq : txtmodfiles) {
 
 			// Get mod data (folder, title and author)
-			moddata = FuncoesMods.readTxt(arq);
+			moddata = FuncMods.readTxt(arq);
 			allmodsvalues[counter][0] = moddata[0];
 			allmodsvalues[counter][1] = moddata[1];
 			allmodsvalues[counter][2] = moddata[2];
 
 			counter++;
 		}
-
-		boolean installed = false;
-		for (int i = 0; i < allmodsvalues.length; i++) {
-			System.out.println();
-			for (int j = 0; j < allmodsvalues[i].length; j++) {
-				if (j == 0) {
-					
-				}
-				if (j == 2) {
-					// Add the mod to list {Mod Name},{Author},{status}
-					int modstatus = FuncoesMods.scanMod(allmodsvalues[i][0]);
-					myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
-					if (modstatus == 1) {
-						installed = true;
-					}
-				}
-			}
-		}
-		if (installed == false) {
-			try {
-				File myObj = new File("mod//sorr.txt");
-				if (myObj.createNewFile()) {
-					System.out.println("File created: " + myObj.getName());
-				} else {
-					System.out.println("File already exists.");
-				}
-			} catch (IOException e) {
-				System.out.println("An error occurred.");
-				e.printStackTrace();
-			}
-		}
+		
+		// create the model and add elements
+		DefaultListModel<SorrMod> myModel = Start.refreshModList(allmodsvalues);
+		
+		FuncMods.move("GMS.py", "mod");
+		
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
@@ -218,7 +190,7 @@ public class Janela extends JFrame {
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
-				FuncoesMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
+				FuncMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
 			}
 		});
 	}
