@@ -20,8 +20,60 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
+import javax.swing.ImageIcon;
 
 public class Janela extends JFrame {
+
+	ImageIcon imgmod;
+	String[][] allmoddata;
+	String modselecionado;
+
+	/**
+	 * Get title image of the installed mod.
+	 * @return imgmod
+	 */
+	public ImageIcon getModImage() {
+		return imgmod;
+	}
+
+	public void setImageIcon(String[][] allmodsvalues) {
+		imgmod = new ImageIcon("mod//games//" + FuncMods.existsInstallation(allmodsvalues) + "//title.png");
+	}
+
+	public String getInstalledMod() {
+		return modselecionado;
+	}
+
+	public void setInstalledMod() {
+		modselecionado = FuncMods.existsInstallation(allmoddata);
+	}
+
+	public void setModData() {
+		// Get all txt mod files
+		ArrayList<String> txtmodfiles = FuncMods.getAllFiles("mod_list//*.txt");
+
+		// Count txt mod files
+		int quantmods = txtmodfiles.size();
+
+		String[][] allmodsvalues = new String[quantmods][3];
+		String[] moddata = new String[3];
+		int counter = 0;
+		for (String arq : txtmodfiles) {
+
+			// Get mod data (folder, title and author)
+			moddata = FuncMods.readTxt(arq);
+			allmodsvalues[counter][0] = moddata[0];
+			allmodsvalues[counter][1] = moddata[1];
+			allmodsvalues[counter][2] = moddata[2];
+
+			counter++;
+		}
+		allmoddata = allmodsvalues;
+	}
+	
+	public String[][] getModData(){
+		return allmoddata;
+	}
 
 	/**
 	 * 
@@ -67,32 +119,13 @@ public class Janela extends JFrame {
 
 		// Search for important files and folders
 		FuncMods.importantFiles();
-
-		// Get all txt mod files
-		ArrayList<String> txtmodfiles = FuncMods.getAllFiles("mod_list//*.txt");
-
-		// Count txt mod files
-		int quantmods = txtmodfiles.size();
-
-		String[][] allmodsvalues = new String[quantmods][3];
-		String[] moddata = new String[3];
-		int counter = 0;
-		for (String arq : txtmodfiles) {
-
-			// Get mod data (folder, title and author)
-			moddata = FuncMods.readTxt(arq);
-			allmodsvalues[counter][0] = moddata[0];
-			allmodsvalues[counter][1] = moddata[1];
-			allmodsvalues[counter][2] = moddata[2];
-
-			counter++;
-		}
 		
+		// Get all mods values from txt
+		setModData();
+		String[][] allmodsvalues = getModData();
+
 		// create the model and add elements
 		DefaultListModel<SorrMod> myModel = Start.refreshModList(allmodsvalues);
-		
-		FuncMods.move("GMS.py", "mod");
-		
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
@@ -137,7 +170,6 @@ public class Janela extends JFrame {
 		listMod.setForeground(Color.BLACK);
 
 		// Adiciona a lista para a janela :)
-
 		listMod.setCellRenderer(new ModRenderer());
 
 		JPanel panel_char = new JPanel();
@@ -172,6 +204,69 @@ public class Janela extends JFrame {
 		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
 		lblNewLabel.setBounds(47, 174, 314, 14);
 		panel_option.add(lblNewLabel);
+
+		////////////// INSTALLED MOD //////////////////////////////////////////////////
+		JPanel pn_installed = new JPanel();
+		pn_installed.setBounds(10, 9, 374, 382);
+		panel_level.add(pn_installed);
+		pn_installed.setLayout(null);
+
+		JLabel lblTitleImg = new JLabel("");
+		lblTitleImg.setBounds(27, 11, 320, 240);
+		lblTitleImg.setIcon(new ImageIcon(Janela.class.getResource("/images/default_title.png")));
+		pn_installed.add(lblTitleImg);
+
+		JButton btPlay = new JButton("Start SorR");
+		btPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Runtime.getRuntime().exec("SorR.exe");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
+		btPlay.setBounds(27, 321, 118, 23);
+		pn_installed.add(btPlay);
+
+		String currentMod = FuncMods.existsInstallation(allmodsvalues);
+
+		if (currentMod == null) {
+			// Use isso para alternar de painel
+			pn_installed.setVisible(false);
+		} else {
+			btInstall.setVisible(false);
+			btFolder.setVisible(false);
+			scrollPane_mods.setVisible(false);
+			lblTitleImg.setIcon(new ImageIcon("mod//games//" + currentMod + "//title.png"));
+		}
+
+		JButton btUninstall = new JButton("Uninstall mod");
+		btUninstall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Verify installed mod
+				setInstalledMod();
+				
+				// Call method to uninstall the mod
+				FuncMods.uninstallMod(getInstalledMod());
+				
+				// Check if the mod is uninstalled
+				if (FuncMods.existsInstallation(allmodsvalues) == null) {
+					// Use isso para alternar de painel
+					pn_installed.setVisible(false);
+					btInstall.setVisible(true);
+					btFolder.setVisible(true);
+					scrollPane_mods.setVisible(true);
+				}
+
+			}
+		});
+		btUninstall.setBounds(212, 321, 135, 23);
+		pn_installed.add(btUninstall);
+
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -189,8 +284,18 @@ public class Janela extends JFrame {
 		});
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
-				FuncMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
+				setInstalledMod();
+				if (listMod.getSelectedIndex() != -1) { // There is a selected mod
+					System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
+					FuncMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
+					// Use isso para alternar de painel
+					pn_installed.setVisible(true);
+					btInstall.setVisible(false);
+					btFolder.setVisible(false);
+					scrollPane_mods.setVisible(false);
+					lblTitleImg.setIcon(
+							new ImageIcon("mod//games//" + FuncMods.existsInstallation(allmodsvalues) + "//title.png"));
+				}
 			}
 		});
 	}

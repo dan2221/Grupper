@@ -17,6 +17,51 @@ import java.nio.file.Files;
 public class FuncMods {
 
 	/**
+	 * Move desired file or folder. It works like the Batch Script move command.
+	 * 
+	 * @param origem
+	 * @param destino
+	 * 
+	 */
+	public static void move(String origem, String destino) {
+		// Getting the filename or folder
+		String[] tree = origem.split("//", 0);
+		String item = tree[tree.length - 1];
+
+		File param1 = new File(origem);
+		File param2 = new File(destino + "//" + item);
+		System.out.println("Origin: " + param1);
+		System.out.println("Destiny: " + param2);
+		try {
+			Files.move(param1.toPath(), param2.toPath());
+			System.out.println("\"" + item + "\" moved successfully.");
+		} catch (IOException ex) {
+			System.out.println("Error found!");
+			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Rename desired file or folder. It works like the Batch Script move command.
+	 * 
+	 * @param origin
+	 * @param newname
+	 * 
+	 */
+	public static void ren(String origin, String newname) {
+		// Getting the filename or folder
+		String[] tree = origin.split("//", 0);
+		String item = tree[tree.length - 1];
+		System.out.println("Renaming: " + origin);
+		System.out.println("To: " + newname);
+		new File(origin).renameTo(new File(origin.replace(item, newname)));
+	}
+
+	public static boolean exist(String arq) {
+		return new File(arq).exists();
+	}
+
+	/**
 	 * Search for files and folders needed for Grupper works correctly.
 	 */
 	public static void importantFiles() {
@@ -98,31 +143,6 @@ public class FuncMods {
 		}
 		// System.out.println(allfiles); // print array
 		return allfiles;
-	}
-
-	/**
-	 * Move desired file or folder. It works like the Batch Script move command.
-	 * 
-	 * @param origem
-	 * @param destino
-	 * 
-	 */
-	public static void move(String origem, String destino) {
-		// Getting the filename or folder
-		String[] tree = origem.split("//", 0);
-		String item = tree[tree.length - 1];
-
-		File param1 = new File(origem);
-		File param2 = new File(destino + "//" + item);
-		System.out.println("Origin: " + param1);
-		System.out.println("Destiny: " + param2);
-		try {
-			Files.move(param1.toPath(), param2.toPath());
-			System.out.println("\"" + item + "\" moved successfully.");
-		} catch (IOException ex) {
-			System.out.println("Error found!");
-			ex.printStackTrace();
-		}
 	}
 
 	/**
@@ -216,8 +236,13 @@ public class FuncMods {
 					FuncMods.move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
 				} else {
 					if (FuncMods.anyFile("palettes//sorr_enemies//*.pal")) {
-						System.out.println("The mod is installed!");
-						status = 1; // Installed mod
+						if (new File("mod//" + proj + ".txt").exists()) {
+							status = 1; // Installed mod
+							System.out.println("The mod is installed!");
+						} else {
+							status = 2; // Unavailable mod
+							System.out.println("mod txt file not found!");
+						}
 					} else {
 						System.out.println("The mod can't be installed!");
 						status = 2; // Unavaliable modd
@@ -231,12 +256,34 @@ public class FuncMods {
 		return status;
 	}
 
+	public static String existsInstallation(String[][] allmodsvalues) {
+		String installed = null;
+		for (int i = 0; i < allmodsvalues.length; i++) {
+			System.out.println();
+			for (int j = 0; j < allmodsvalues[i].length; j++) {
+				if (j == 2) {
+					if (scanMod(allmodsvalues[i][0]) == 1) {
+						System.out.println("Installed: " + allmodsvalues[i][0]);
+						installed = allmodsvalues[i][0];
+						break;
+					}
+				}
+			}
+		}
+		return installed;
+	}
+
 	/**
 	 * Install the mod
 	 * 
 	 * @param selectedMod
 	 */
 	public static void installMod(String selectedMod) {
+		if (new File("mod//games//" + selectedMod + "//palettes//enemies").exists()) {
+			ren("palettes//enemies", "sorr_enemies");
+			move("mod//games//" + selectedMod + "//palettes//enemies", "palettes");
+
+		}
 		// List all data files in a txt file
 		System.out.println("Installing " + selectedMod + "...");
 		if (new File("mod//games//" + selectedMod + "//data").exists()) {
@@ -245,18 +292,76 @@ public class FuncMods {
 				for (String item : datafiles) {
 					System.out.println(item);
 					writer.write(item + "\n");
+					if (new File("data//" + item).exists()) {
+						ren("mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
+						move("mod//games//" + selectedMod + "//data//[mod]" + item, "data");
+					}
+					move("mod//games//" + selectedMod + "//data//" + item, "data");
 				}
 				writer.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			new File("mod//sorr.txt").renameTo(new File("mod//" + selectedMod + ".txt"));
+			// Renaming the txt to identify mod installation
+			ren("mod//sorr.txt", selectedMod + ".txt");
 		}
+	}
+
+	public static void uninstallMod(String proj) {
+		System.out.println("Uninstalling \"" + proj + "\"...");
+
+		// Palettes
+		move("palettes//enemies", "mod//games//" + proj + "//palettes");
+		ren("palettes//sorr_enemies", "enemies");
+
+		try {
+			// Opens the file
+			FileReader stream = new FileReader("mod//" + proj + ".txt");
+			BufferedReader reader = new BufferedReader(stream);
+
+			// Method that reads a line from the file
+			String line = reader.readLine();
+			while (line != null) {
+
+				// Isolating mod folder name
+				String mfile = line.replace("\n", "");
+				if (new File("data//[mod]" + mfile).exists()) {
+					move("data//[mod]" + mfile, "mod//games//" + proj + "//data");
+				} else {
+					if (new File("data//" + mfile).exists()) {
+						move("data//" + mfile, "mod//games//" + proj + "//data");
+					}
+				}
+
+				// Reads next line of the file
+				line = reader.readLine();
+			}
+			reader.close(); // Closes the reading
+			stream.close(); // Closes the file
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		File filetodel = new File("mod//" + proj + ".txt");
+		if (filetodel.delete()) {
+			System.out.println("\"mod//" + proj + ".txt\" was deleted!");
+		} else {
+			System.out.println("Failed to delete the file.");
+		}
+		File makesor = new File("mod//sorr.txt");
+		try {
+			makesor.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Uninstalled!");
 	}
 
 	/**
 	 * Show an error message when an important file is missing.
+	 * 
 	 * @param file
 	 * @param additionalText
 	 */

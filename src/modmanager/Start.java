@@ -7,6 +7,7 @@ import javax.swing.DefaultListModel;
 public class Start {
 	/**
 	 * Scan all mods to update the mods Jlist.
+	 * 
 	 * @param allmodsvalues
 	 * @return
 	 */
