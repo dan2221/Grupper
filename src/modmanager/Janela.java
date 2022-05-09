@@ -228,19 +228,19 @@ public class Janela extends JFrame {
 				System.exit(0);
 			}
 		});
-		btPlay.setBounds(27, 321, 118, 23);
+		btPlay.setBounds(256, 321, 118, 23);
 		pn_installed.add(btPlay);
 
-		String currentMod = FuncMods.existsInstallation(allmodsvalues);
+		setInstalledMod();
 
-		if (currentMod == null) {
+		if (getInstalledMod() == null) {
 			// Use isso para alternar de painel
 			pn_installed.setVisible(false);
 		} else {
 			btInstall.setVisible(false);
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
-			lblTitleImg.setIcon(new ImageIcon("mod//games//" + currentMod + "//title.png"));
+			lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
 		}
 
 		JButton btUninstall = new JButton("Uninstall mod");
@@ -254,6 +254,7 @@ public class Janela extends JFrame {
 				FuncMods.uninstallMod(getInstalledMod());
 				
 				// Check if the mod is uninstalled
+				setInstalledMod();
 				if (FuncMods.existsInstallation(allmodsvalues) == null) {
 					// Use isso para alternar de painel
 					pn_installed.setVisible(false);
@@ -264,7 +265,7 @@ public class Janela extends JFrame {
 
 			}
 		});
-		btUninstall.setBounds(212, 321, 135, 23);
+		btUninstall.setBounds(10, 321, 135, 23);
 		pn_installed.add(btUninstall);
 
 		btFolder.addActionListener(new ActionListener() {
@@ -284,7 +285,6 @@ public class Janela extends JFrame {
 		});
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setInstalledMod();
 				if (listMod.getSelectedIndex() != -1) { // There is a selected mod
 					System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
 					FuncMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
@@ -293,8 +293,9 @@ public class Janela extends JFrame {
 					btInstall.setVisible(false);
 					btFolder.setVisible(false);
 					scrollPane_mods.setVisible(false);
+					setInstalledMod();
 					lblTitleImg.setIcon(
-							new ImageIcon("mod//games//" + FuncMods.existsInstallation(allmodsvalues) + "//title.png"));
+							new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
 				}
 			}
 		});

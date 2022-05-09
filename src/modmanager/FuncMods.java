@@ -153,6 +153,7 @@ public class FuncMods {
 	 */
 	public static String[] readTxt(String filename) {
 		String[] moddata = new String[3];
+		moddata[0] = filename.replace(".txt", "");
 
 		try {
 			// Opens the file
@@ -167,10 +168,10 @@ public class FuncMods {
 //			    if (linha.equals(testigual)) {
 //			    	System.out.println("Texto desejado encontrado!!!");
 //			    }
-				if (line.startsWith("Mod Folder:")) {
-					// Isolating mod folder name
-					moddata[0] = line.replace("Mod Folder:", "").replace("\n", "");
-				}
+//				if (line.startsWith("Mod Folder:")) {
+//					// Isolating mod folder name
+//					moddata[0] = line.replace("Mod Folder:", "").replace("\n", "");
+//				}
 				if (line.startsWith("Mod Title:")) {
 					// Isolating mod title
 					moddata[1] = line.replace("Mod Title:", "").replace("\n", "");

@@ -1,4 +1,3 @@
-Mod Folder:H.U.N.T.E.R MotY
 Author:Don Vecta
 
 [Data Files]
