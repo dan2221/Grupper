@@ -21,6 +21,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import javax.swing.ImageIcon;
+import javax.swing.JFormattedTextField;
 
 public class Janela extends JFrame {
 
@@ -30,6 +31,7 @@ public class Janela extends JFrame {
 
 	/**
 	 * Get title image of the installed mod.
+	 * 
 	 * @return imgmod
 	 */
 	public ImageIcon getModImage() {
@@ -70,8 +72,8 @@ public class Janela extends JFrame {
 		}
 		allmoddata = allmodsvalues;
 	}
-	
-	public String[][] getModData(){
+
+	public String[][] getModData() {
 		return allmoddata;
 	}
 
@@ -119,7 +121,7 @@ public class Janela extends JFrame {
 
 		// Search for important files and folders
 		FuncMods.importantFiles();
-		
+
 		// Get all mods values from txt
 		setModData();
 		String[][] allmodsvalues = getModData();
@@ -175,35 +177,26 @@ public class Janela extends JFrame {
 		JPanel panel_char = new JPanel();
 		tabbedPane.addTab("Characters", null, panel_char, null);
 
+		JFormattedTextField frmtdtxtfldThisSectionIs = new JFormattedTextField();
+		frmtdtxtfldThisSectionIs.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfldThisSectionIs.setEditable(false);
+		panel_char.add(frmtdtxtfldThisSectionIs);
+
 		JPanel panel_theme = new JPanel();
 		tabbedPane.addTab("Themes", null, panel_theme, null);
+
+		JFormattedTextField frmtdtxtfldThisSectionIs_1 = new JFormattedTextField();
+		frmtdtxtfldThisSectionIs_1.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfldThisSectionIs_1.setEditable(false);
+		panel_theme.add(frmtdtxtfldThisSectionIs_1);
 
 		JPanel panel_music = new JPanel();
 		tabbedPane.addTab("Music Player", null, panel_music, null);
 
-		JPanel panel_option = new JPanel();
-		tabbedPane.addTab("Options", null, panel_option, null);
-		panel_option.setLayout(null);
-
-		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
-		chckbxAvMods.setBounds(26, 38, 341, 23);
-		panel_option.add(chckbxAvMods);
-
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Use level mod menu images.");
-		chckbxNewCheckBox.setBounds(26, 88, 341, 23);
-		panel_option.add(chckbxNewCheckBox);
-
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \npalettes");
-		chckbxNewCheckBox_1.setBounds(26, 144, 341, 23);
-		panel_option.add(chckbxNewCheckBox_1);
-
-		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
-		chckbxNewCheckBox_2.setBounds(26, 214, 341, 23);
-		panel_option.add(chckbxNewCheckBox_2);
-
-		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
-		lblNewLabel.setBounds(47, 174, 314, 14);
-		panel_option.add(lblNewLabel);
+		JFormattedTextField frmtdtxtfldThisSectionIs_2 = new JFormattedTextField();
+		frmtdtxtfldThisSectionIs_2.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfldThisSectionIs_2.setEditable(false);
+		panel_music.add(frmtdtxtfldThisSectionIs_2);
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
 		JPanel pn_installed = new JPanel();
@@ -246,13 +239,13 @@ public class Janela extends JFrame {
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				// Verify installed mod
 				setInstalledMod();
-				
+
 				// Call method to uninstall the mod
 				FuncMods.uninstallMod(getInstalledMod());
-				
+
 				// Check if the mod is uninstalled
 				setInstalledMod();
 				if (FuncMods.existsInstallation(allmodsvalues) == null) {
@@ -267,6 +260,37 @@ public class Janela extends JFrame {
 		});
 		btUninstall.setBounds(10, 321, 135, 23);
 		pn_installed.add(btUninstall);
+
+		JPanel panel_option = new JPanel();
+		tabbedPane.addTab("Options", null, panel_option, null);
+		panel_option.setLayout(null);
+
+		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
+		chckbxAvMods.setBounds(26, 38, 341, 23);
+		panel_option.add(chckbxAvMods);
+
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker");
+		chckbxNewCheckBox.setBounds(26, 88, 341, 23);
+		panel_option.add(chckbxNewCheckBox);
+
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \r\npalettes");
+		chckbxNewCheckBox_1.setEnabled(false);
+		chckbxNewCheckBox_1.setBounds(26, 144, 341, 23);
+		panel_option.add(chckbxNewCheckBox_1);
+
+		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
+		chckbxNewCheckBox_2.setEnabled(false);
+		chckbxNewCheckBox_2.setBounds(26, 214, 341, 23);
+		panel_option.add(chckbxNewCheckBox_2);
+
+		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
+		lblNewLabel.setEnabled(false);
+		lblNewLabel.setBounds(47, 174, 314, 14);
+		panel_option.add(lblNewLabel);
+
+		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of mod folder name.");
+		lblListByAdding.setBounds(47, 118, 314, 14);
+		panel_option.add(lblListByAdding);
 
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -285,17 +309,20 @@ public class Janela extends JFrame {
 		});
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (listMod.getSelectedIndex() != -1) { // There is a selected mod
-					System.out.println(allmodsvalues[listMod.getSelectedIndex()][0]);
-					FuncMods.installMod(allmodsvalues[listMod.getSelectedIndex()][0]);
-					// Use isso para alternar de painel
-					pn_installed.setVisible(true);
-					btInstall.setVisible(false);
-					btFolder.setVisible(false);
-					scrollPane_mods.setVisible(false);
-					setInstalledMod();
-					lblTitleImg.setIcon(
-							new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
+				// Check if there are a selected item
+				if (listMod.getSelectedIndex() != -1) {
+					System.out.println("Selected mod:" + listMod.getSelectedValue());
+					// Check if the mod is available to install
+					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
+						FuncMods.installMod(listMod.getSelectedValue().toString());
+						// Use isso para alternar de painel
+						pn_installed.setVisible(true);
+						btInstall.setVisible(false);
+						btFolder.setVisible(false);
+						scrollPane_mods.setVisible(false);
+						setInstalledMod();
+						lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
+					}
 				}
 			}
 		});
