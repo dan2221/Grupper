@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
@@ -18,6 +20,10 @@ import java.awt.event.ActionEvent;
 
 public class AboutG extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**
@@ -46,15 +52,15 @@ public class AboutG extends JDialog {
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null); // Posição da janela
 
-		JLabel lblNewLabel = new JLabel("Grupper v1.0 by Chavyn (daniel2221)");
-		lblNewLabel.setBounds(55, 25, 281, 14);
+		JLabel lblNewLabel = new JLabel("Grupper (beta) v1.0 by Chavyn (daniel2221)", SwingConstants.CENTER);
+		lblNewLabel.setBounds(48, 11, 267, 14);
 		contentPanel.add(lblNewLabel);
 
 		JTextPane txtpnProgramCreatedTo = new JTextPane();
 		txtpnProgramCreatedTo.setEditable(false);
 		txtpnProgramCreatedTo
-				.setText("Grupper is a open source freeware created to facilitate the activation of SORR mods.");
-		txtpnProgramCreatedTo.setBounds(35, 62, 301, 52);
+				.setText("Grupper is a open source freeware created to facilitate the activation of SORR mods.\r\n\r\nThis software was Developed in Eclipse IDE (Java).\r\n\r\nThanks to Bombergames team and all mod creators.");
+		txtpnProgramCreatedTo.setBounds(34, 36, 307, 104);
 		contentPanel.add(txtpnProgramCreatedTo);
 		{
 			JPanel buttonPane = new JPanel();
@@ -70,6 +76,8 @@ public class AboutG extends JDialog {
 						// default browser
 						try {
 							desk.browse(new URI("https://github.com/dan2221/Grupper"));
+							// tente e veja se ainda aparece aviso de licença.
+							// Desktop.getDesktop().browse(new URL("https://github.com/dan2221/Grupper").toURI());
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
