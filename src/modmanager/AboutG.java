@@ -3,20 +3,19 @@ package modmanager;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
-
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class AboutG extends JDialog {
 
@@ -50,7 +49,7 @@ public class AboutG extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		setLocationRelativeTo(null); // Posição da janela
+		setLocationRelativeTo(null); // PosiÃ§Ã£o da janela
 
 		JLabel lblNewLabel = new JLabel("Grupper (beta) v1.0 by Chavyn (daniel2221)", SwingConstants.CENTER);
 		lblNewLabel.setBounds(48, 11, 267, 14);
@@ -58,8 +57,8 @@ public class AboutG extends JDialog {
 
 		JTextPane txtpnProgramCreatedTo = new JTextPane();
 		txtpnProgramCreatedTo.setEditable(false);
-		txtpnProgramCreatedTo
-				.setText("Grupper is a open source freeware created to facilitate the activation of SORR mods.\r\n\r\nThis software was Developed in Eclipse IDE (Java).\r\n\r\nThanks to Bombergames team and all mod creators.");
+		txtpnProgramCreatedTo.setText(
+				"Grupper is a open source freeware created to facilitate the activation of SORR mods.\r\n\r\nThis software was Developed in Eclipse IDE (Java).\r\n\r\nThanks to Bombergames team and all mod creators.");
 		txtpnProgramCreatedTo.setBounds(34, 36, 307, 104);
 		contentPanel.add(txtpnProgramCreatedTo);
 		{
@@ -76,8 +75,9 @@ public class AboutG extends JDialog {
 						// default browser
 						try {
 							desk.browse(new URI("https://github.com/dan2221/Grupper"));
-							// tente e veja se ainda aparece aviso de licença.
-							// Desktop.getDesktop().browse(new URL("https://github.com/dan2221/Grupper").toURI());
+							// tente e veja se ainda aparece aviso de licenï¿½a.
+							// Desktop.getDesktop().browse(new
+							// URL("https://github.com/dan2221/Grupper").toURI());
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
