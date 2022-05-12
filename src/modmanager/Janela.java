@@ -28,6 +28,26 @@ public class Janela extends JFrame {
 	ImageIcon imgmod;
 	String[][] allmoddata;
 	String modselecionado;
+	boolean[] allconfig = Start.getConfig();
+	JList<SorrMod> listMod;
+	
+	public void updateModList() {
+		setModData();
+		// create the model and add elements
+		DefaultListModel<SorrMod> myModel = Start.refreshModList(allmoddata);
+		listMod = new JList<SorrMod>(myModel);
+		// // List Background color
+		listMod.setBackground(new Color(90, 90, 90));
+		// // Foreground color
+		listMod.setForeground(Color.white);
+		//
+		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
+		listMod.setBackground(UIManager.getColor("textInactiveText"));
+		listMod.setForeground(Color.BLACK);
+
+		// Adiciona a lista para a janela :)
+		listMod.setCellRenderer(new ModRenderer());
+	}
 
 	/**
 	 * Get title image of the installed mod.
@@ -71,10 +91,6 @@ public class Janela extends JFrame {
 			counter++;
 		}
 		allmoddata = allmodsvalues;
-	}
-
-	public String[][] getModData() {
-		return allmoddata;
 	}
 
 	/**
@@ -124,10 +140,7 @@ public class Janela extends JFrame {
 
 		// Get all mods values from txt
 		setModData();
-		String[][] allmodsvalues = getModData();
-
-		// create the model and add elements
-		DefaultListModel<SorrMod> myModel = Start.refreshModList(allmodsvalues);
+		String[][] allmodsvalues = allmoddata;
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
@@ -151,28 +164,17 @@ public class Janela extends JFrame {
 		btFolder.setBackground(UIManager.getColor("Button.background"));
 
 		JScrollPane scrollPane_mods = new JScrollPane();
-		scrollPane_mods.setBounds(10, 9, 374, 308);
+		scrollPane_mods.setBounds(10, 9, 374, 326);
 		panel_level.add(scrollPane_mods);
 
 		// Instanciando objeto personalizado
 
 		//////// LISTA DE MODS
 		//////// ////////////////////////////////////////////////////////////////////
+		updateModList();
 		// Create Jlist using a model
-		JList<SorrMod> listMod = new JList<SorrMod>(myModel);
 		scrollPane_mods.setViewportView(listMod);
 		// add(new JScrollPane(listMod));
-		// // List Background color
-		listMod.setBackground(new Color(90, 90, 90));
-		// // Foreground color
-		listMod.setForeground(Color.white);
-		//
-		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
-		listMod.setBackground(UIManager.getColor("textInactiveText"));
-		listMod.setForeground(Color.BLACK);
-
-		// Adiciona a lista para a janela :)
-		listMod.setCellRenderer(new ModRenderer());
 
 		JPanel panel_char = new JPanel();
 		tabbedPane.addTab("Characters", null, panel_char, null);
@@ -215,13 +217,12 @@ public class Janela extends JFrame {
 				try {
 					Runtime.getRuntime().exec("SorR.exe");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				System.exit(0);
 			}
 		});
-		btPlay.setBounds(256, 321, 118, 23);
+		btPlay.setBounds(256, 348, 118, 23);
 		pn_installed.add(btPlay);
 
 		setInstalledMod();
@@ -258,7 +259,7 @@ public class Janela extends JFrame {
 
 			}
 		});
-		btUninstall.setBounds(10, 321, 135, 23);
+		btUninstall.setBounds(10, 348, 135, 23);
 		pn_installed.add(btUninstall);
 
 		JPanel panel_option = new JPanel();
@@ -269,8 +270,33 @@ public class Janela extends JFrame {
 		chckbxAvMods.setBounds(26, 38, 341, 23);
 		panel_option.add(chckbxAvMods);
 
+		Start.scanConfig();
+		if (allconfig[0] == true) {
+			System.out.println("checkbox esta marcado!");
+			chckbxAvMods.setSelected(true);
+		}
+
+		
+		//
+		//
+		//
+		//
+		//
+		//
+		
+		chckbxAvMods.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Changing configuration 0...");
+				Start.changeConfig(0);
+				Start.refreshModList(allmodsvalues);
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
+			}
+		});
+
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker");
-		chckbxNewCheckBox.setBounds(26, 88, 341, 23);
+		chckbxNewCheckBox.setEnabled(false);
+		chckbxNewCheckBox.setBounds(26, 78, 341, 23);
 		panel_option.add(chckbxNewCheckBox);
 
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \r\npalettes");
@@ -280,7 +306,7 @@ public class Janela extends JFrame {
 
 		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
 		chckbxNewCheckBox_2.setEnabled(false);
-		chckbxNewCheckBox_2.setBounds(26, 214, 341, 23);
+		chckbxNewCheckBox_2.setBounds(26, 212, 341, 23);
 		panel_option.add(chckbxNewCheckBox_2);
 
 		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
@@ -288,9 +314,19 @@ public class Janela extends JFrame {
 		lblNewLabel.setBounds(47, 174, 314, 14);
 		panel_option.add(lblNewLabel);
 
-		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of mod folder name.");
-		lblListByAdding.setBounds(47, 118, 314, 14);
+		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of its folder name.");
+		lblListByAdding.setEnabled(false);
+		lblListByAdding.setBounds(47, 108, 314, 14);
 		panel_option.add(lblListByAdding);
+		
+		JButton btnNewButton = new JButton("About Grupper");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AboutG.main(null);
+			}
+		});
+		btnNewButton.setBounds(140, 317, 118, 23);
+		panel_option.add(btnNewButton);
 
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -302,12 +338,14 @@ public class Janela extends JFrame {
 				try {
 					Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
 		btInstall.addActionListener(new ActionListener() {
+			/**
+			 * @param e
+			 */
 			public void actionPerformed(ActionEvent e) {
 				// Check if there are a selected item
 				if (listMod.getSelectedIndex() != -1) {

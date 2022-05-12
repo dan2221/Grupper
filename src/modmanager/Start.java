@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.DefaultListModel;
 
 public class Start {
@@ -16,6 +18,10 @@ public class Start {
 	 * sormaker list.
 	 */
 	private static boolean[] configrupper = new boolean[2];
+	
+	public static boolean[] getConfig() {
+		return configrupper;
+	}
 
 	/**
 	 * Scan all mods to update the mods Jlist.
@@ -129,5 +135,73 @@ public class Start {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Change one value in the grupper.cfg.
+	 * 
+	 * @param option (0 to 1)
+	 */
+	public static void changeConfig(int option) {
+		FileReader stream;
+		String textofind;
+
+		// Get all content inside the grupper.cfg
+		try {
+			stream = new FileReader("grupper.cfg");
+			try (BufferedReader reader = new BufferedReader(stream)) {
+				String line = reader.readLine();
+				// File content
+				ArrayList<String> filebefore = new ArrayList<String>();
+				// Add each line to the array
+				while (line != null) {
+					if (!line.startsWith("//")) { // Ignore commented lines
+						filebefore.add(line);
+					}
+					line = reader.readLine(); // Next line of the file
+				}
+
+				// Write a new cfg file with the desired changes
+				FileWriter writer = new FileWriter("grupper.cfg");
+				writer.write("//Grupper configuration file//\n");
+				for (String item : filebefore) {
+					switch (option) {
+					case 0:
+						textofind = "hide_unavailable_mods=";
+						if (item.startsWith(textofind) && item.endsWith(";")) {
+							// Isolate value (1 or 0)
+							String linecontent = item.replace(textofind, "").replace(";", "");
+							if (linecontent.equals("1")) {
+								writer.write(textofind + "0;" + "\n");
+							} else {
+								writer.write(textofind + "1;" + "\n");
+							}
+						} else {
+							writer.write(item + "\n");
+						}
+						break;
+					case 1:
+						textofind = "installed_mod_first=";
+						if (item.startsWith(textofind) && item.endsWith(";")) {
+							// Isolate value (1 or 0)
+							String linecontent = item.replace(textofind, "").replace(";", "");
+							if (linecontent.equals("1")) {
+								writer.write(textofind + "0;" + "\n");
+							} else {
+								writer.write(textofind + "1;" + "\n");
+							}
+						} else {
+							writer.write(item + "\n");
+						}
+						break;
+					}
+				}
+				writer.close();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		scanConfig(); // Update all configuration variables
 	}
 }
