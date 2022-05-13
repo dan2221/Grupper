@@ -1,8 +1,6 @@
 # Grupper
 Tool created to install and uninstall mods for the game SorR. I developed this program as a hobby and at the same time a way to pratice Java. 
 
-GRUPPER (BETA) V1.0
-
 DESCRIPTION:
 
 • Grupper is a Tool created to facilite installing and uninstalling of mods for the game SorR. You can manage your mods by an easy way.
