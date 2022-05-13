@@ -44,5 +44,6 @@ Tools/
 
 bin/
 bugtrack.txt
+readme.txt
 *.html
 *.dat
