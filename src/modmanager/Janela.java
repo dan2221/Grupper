@@ -294,7 +294,7 @@ public class Janela extends JFrame {
 			}
 		});
 
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker");
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker\r\n");
 		chckbxNewCheckBox.setEnabled(false);
 		chckbxNewCheckBox.setBounds(26, 78, 341, 23);
 		panel_option.add(chckbxNewCheckBox);
