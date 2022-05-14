@@ -5,7 +5,7 @@ DESCRIPTION:
 * Grupper is a Tool created to facilite installing and uninstalling of mods for the game SorR. You can manage your mods by an easy way.
 
 
-REQUERIMENTS:
+REQUIREMENTS:
 
 • To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com";
 
