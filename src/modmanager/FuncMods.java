@@ -42,7 +42,7 @@ public class FuncMods {
 	}
 
 	/**
-	 * Rename desired file or folder. It works like the Batch Script move command.
+	 * Rename desired file or folder. It works like the Batch Script ren command.
 	 * 
 	 * @param origin
 	 * @param newname
