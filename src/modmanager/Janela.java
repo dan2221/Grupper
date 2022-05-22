@@ -26,11 +26,17 @@ import javax.swing.JFormattedTextField;
 public class Janela extends JFrame {
 
 	ImageIcon imgmod;
+	static int modquantity;
 	String[][] allmoddata;
 	String modselecionado;
 	boolean[] allconfig = Start.getConfig();
 	JList<SorrMod> listMod;
 	
+	
+	public static int getModQuantity() {
+		return modquantity;
+	}
+
 	public void updateModList() {
 		setModData();
 		// create the model and add elements
@@ -70,25 +76,28 @@ public class Janela extends JFrame {
 		modselecionado = FuncMods.existsInstallation(allmoddata);
 	}
 
+	/**
+	 * Define all mod values by scanning folders and files.
+	 */
 	public void setModData() {
-		// Get all txt mod files
-		ArrayList<String> txtmodfiles = FuncMods.getAllFiles("mod_list//*.txt");
+		ArrayList<String> modfolders = FuncMods.getAllFolders("mod//games");
+		modquantity = modfolders.size();
+		String[][] allmodsvalues = new String[modquantity][3];
+		
+		System.out.println("Tamanho: " + modquantity);
+		for (int i = 0; i < modfolders.size(); i++) {
+			String current = modfolders.get(i).toString();
+			allmodsvalues[i][0] = current;
+			if (FuncMods.exist("mod_list//" + current +".txt")) {
+				String[] moddata = new String[2];
+				moddata = FuncMods.readTxt(current + ".txt");
 
-		// Count txt mod files
-		int quantmods = txtmodfiles.size();
-
-		String[][] allmodsvalues = new String[quantmods][3];
-		String[] moddata = new String[3];
-		int counter = 0;
-		for (String arq : txtmodfiles) {
-
-			// Get mod data (folder, title and author)
-			moddata = FuncMods.readTxt(arq);
-			allmodsvalues[counter][0] = moddata[0];
-			allmodsvalues[counter][1] = moddata[1];
-			allmodsvalues[counter][2] = moddata[2];
-
-			counter++;
+				allmodsvalues[i][1] = moddata[1];
+				allmodsvalues[i][2] = moddata[2];
+			} else {
+				allmodsvalues[i][1] = current;
+				allmodsvalues[i][2] = "-";
+			}
 		}
 		allmoddata = allmodsvalues;
 	}
@@ -140,7 +149,6 @@ public class Janela extends JFrame {
 
 		// Get all mods values from txt
 		setModData();
-		String[][] allmodsvalues = allmoddata;
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
@@ -249,7 +257,7 @@ public class Janela extends JFrame {
 
 				// Check if the mod is uninstalled
 				setInstalledMod();
-				if (FuncMods.existsInstallation(allmodsvalues) == null) {
+				if (FuncMods.existsInstallation(allmoddata) == null) {
 					// Use isso para alternar de painel
 					pn_installed.setVisible(false);
 					btInstall.setVisible(true);
@@ -270,55 +278,72 @@ public class Janela extends JFrame {
 		chckbxAvMods.setBounds(26, 38, 341, 23);
 		panel_option.add(chckbxAvMods);
 
-		Start.scanConfig();
+		Start.scanConfig(); // Load configuration
+		
+		
 		if (allconfig[0] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckbxAvMods.setSelected(true);
 		}
 
-		
 		//
 		//
 		//
 		//
 		//
 		//
-		
+
 		chckbxAvMods.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Changing configuration 0...");
 				Start.changeConfig(0);
-				Start.refreshModList(allmodsvalues);
+				Start.refreshModList(allmoddata);
 				updateModList();
 				scrollPane_mods.setViewportView(listMod);
+			}
+		});
+		
+		JCheckBox chckAuthors = new JCheckBox("Hide authors in the mod list.");
+		chckAuthors.setBounds(26, 79, 314, 23);
+		panel_option.add(chckAuthors);
+		
+		if (allconfig[1] == true) {
+			System.out.println("checkbox esta marcado!");
+			chckAuthors.setSelected(true);
+		}
+		
+		chckAuthors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Changing configuration 1...");
+				Start.changeConfig(1);
 			}
 		});
 
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker\r\n");
 		chckbxNewCheckBox.setEnabled(false);
-		chckbxNewCheckBox.setBounds(26, 78, 341, 23);
+		chckbxNewCheckBox.setBounds(26, 118, 341, 23);
 		panel_option.add(chckbxNewCheckBox);
 
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \r\npalettes");
 		chckbxNewCheckBox_1.setEnabled(false);
-		chckbxNewCheckBox_1.setBounds(26, 144, 341, 23);
+		chckbxNewCheckBox_1.setBounds(26, 184, 341, 23);
 		panel_option.add(chckbxNewCheckBox_1);
 
 		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
 		chckbxNewCheckBox_2.setEnabled(false);
-		chckbxNewCheckBox_2.setBounds(26, 212, 341, 23);
+		chckbxNewCheckBox_2.setBounds(26, 252, 341, 23);
 		panel_option.add(chckbxNewCheckBox_2);
 
 		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
 		lblNewLabel.setEnabled(false);
-		lblNewLabel.setBounds(47, 174, 314, 14);
+		lblNewLabel.setBounds(47, 214, 314, 14);
 		panel_option.add(lblNewLabel);
 
 		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of its folder name.");
 		lblListByAdding.setEnabled(false);
-		lblListByAdding.setBounds(47, 108, 314, 14);
+		lblListByAdding.setBounds(47, 148, 314, 14);
 		panel_option.add(lblListByAdding);
-		
+
 		JButton btnNewButton = new JButton("About Grupper");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

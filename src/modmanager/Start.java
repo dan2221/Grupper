@@ -14,11 +14,12 @@ public class Start {
 	/**
 	 * Grupper configuration array:
 	 * 
-	 * 0: Hide unavailable mods; 1: Put the installed mod as the first one of the
-	 * sormaker list.
+	 * 0: Hide unavailable mods;
+	 * 1: Hide authors from the list;
+	 * 2: Put the installed mod as the first one of the sormaker list.
 	 */
-	private static boolean[] configrupper = new boolean[2];
-	
+	private static boolean[] configrupper = new boolean[3];
+
 	public static boolean[] getConfig() {
 		return configrupper;
 	}
@@ -33,26 +34,26 @@ public class Start {
 		scanConfig();
 		DefaultListModel<SorrMod> myModel = new DefaultListModel<>();
 		boolean installed = false;
-		for (int i = 0; i < allmodsvalues.length; i++) {
-			System.out.println();
-			for (int j = 0; j < allmodsvalues[i].length; j++) {
-				if (j == 2) {
-					// Add the mod to list {Mod Name},{Author},{status}
-					int modstatus = FuncMods.scanMod(allmodsvalues[i][1]);
-					if (modstatus == 2) {
-						if (configrupper[0] == false) {
-							myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
-						}
-					} else {
-						myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
-					}
+		for (int i = 0; i < Janela.getModQuantity(); i++) {
 
-					// Check if one of the mods is installed
-					if (modstatus == 1) {
-						installed = true;
-					}
+			// Add the mod to list {Mod Name},{Author},{status}
+			int modstatus = FuncMods.scanMod(allmodsvalues[i][1]);
+
+			// System.out.println("Curent mod data: " + allmodsvalues[i][0] + " " + allmodsvalues[i][2] + " " + modstatus);
+
+			if (modstatus == 2) {
+				if (configrupper[0] == false) {
+					myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
 				}
+			} else {
+				myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
 			}
+
+			// Check if one of the mods is installed
+			if (modstatus == 1) {
+				installed = true;
+			}
+
 		}
 		if (installed == false) {
 			try {
@@ -78,7 +79,7 @@ public class Start {
 		if (!new File("grupper.cfg").exists()) {
 			File makesor = new File("grupper.cfg");
 			String[] defaultconfig = { "//Grupper configuration file//\n", "hide_unavailable_mods=0;",
-					"installed_mod_first=0;" };
+					"installed_mod_first=0;", "list_without_authors=0;" };
 			try {
 				makesor.createNewFile();
 				try (FileWriter writer = new FileWriter("grupper.cfg")) {
@@ -94,7 +95,7 @@ public class Start {
 			}
 		}
 		// Reading the cfg file
-		System.out.println("Configuration ------------------------------");
+		System.out.println("----------------------\nYour configuration:");
 		try {
 			FileReader stream = new FileReader("grupper.cfg");
 			BufferedReader reader = new BufferedReader(stream);
@@ -111,16 +112,27 @@ public class Start {
 					}
 					System.out.println("hide_unavailable_mods=" + configrupper[0]);
 				}
-
-				if (line.startsWith("installed_mod_first=") && line.endsWith(";")) {
+				
+				if (line.startsWith("list_without_authors=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String linecontent = line.replace("installed_mod_first=", "").replace(";", "");
+					String linecontent = line.replace("list_without_authors=", "").replace(";", "");
 					if (linecontent.equals("1")) {
 						configrupper[1] = true;
 					} else {
 						configrupper[1] = false;
 					}
-					System.out.println("installed_mod_first=" + configrupper[1]);
+					System.out.println("list_without_authors=" + configrupper[1]);
+				}
+
+				if (line.startsWith("installed_mod_first=") && line.endsWith(";")) {
+					// Isolate value (1 or 0)
+					String linecontent = line.replace("installed_mod_first=", "").replace(";", "");
+					if (linecontent.equals("1")) {
+						configrupper[2] = true;
+					} else {
+						configrupper[2] = false;
+					}
+					System.out.println("installed_mod_first=" + configrupper[2]);
 				}
 
 				// Next line of the file
@@ -181,6 +193,20 @@ public class Start {
 						}
 						break;
 					case 1:
+						textofind = "list_without_authors=";
+						if (item.startsWith(textofind) && item.endsWith(";")) {
+							// Isolate value (1 or 0)
+							String linecontent = item.replace(textofind, "").replace(";", "");
+							if (linecontent.equals("1")) {
+								writer.write(textofind + "0;" + "\n");
+							} else {
+								writer.write(textofind + "1;" + "\n");
+							}
+						} else {
+							writer.write(item + "\n");
+						}
+						break;
+					case 2:
 						textofind = "installed_mod_first=";
 						if (item.startsWith(textofind) && item.endsWith(";")) {
 							// Isolate value (1 or 0)

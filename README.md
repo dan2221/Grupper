@@ -18,6 +18,7 @@ FEATURES:
 
 SOME FUTURE FEATURES:
 
+* Character mods support;
 * Option to shows the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
 * Music player for all mods, independent if the mod are listed in the Grupper mod list;
 * If you don't want to use playable character mods of level mods you can refuse this by activate an option.

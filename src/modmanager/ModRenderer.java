@@ -66,6 +66,9 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 //		Font currentFont = lbName.getFont();
 //		Font newFont = currentFont.deriveFont(currentFont.getSize() + 2);
 //		lbName.setFont(newFont);
+		
+		// Load conguration
+		Start.scanConfig();
 
 		// Custom colors using RGB values
 		Color backColorSel = new Color(55,55,55);
@@ -85,12 +88,18 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		if (isSelected) {
 			setBackground(backColorSel);
 			lbName.setBackground(backColorSel);
+			if (Start.getConfig()[1] == true) {
+				lbAuthor.setForeground(backColorSel);
+			}
 			lbAuthor.setBackground(backColorSel);
 			lbIcon.setBackground(backColorSel);
 			panelIcon.setBackground(backColorSel);
 		} else { // when don't select
 			setBackground(backColorNoSel);
 			lbName.setBackground(backColorNoSel);
+			if (Start.getConfig()[1] == true) {
+				lbAuthor.setForeground(backColorNoSel);
+			}
 			lbAuthor.setBackground(backColorNoSel);
 			lbIcon.setBackground(backColorNoSel);
 			panelIcon.setBackground(backColorNoSel);
@@ -98,14 +107,19 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		
         if (SorrMod.getStatus() == 2) { // Unavailable mod
 			lbName.setForeground(unavailableTextColor);
-			lbAuthor.setForeground(unColorAuthor);
+			if (Start.getConfig()[1] == false) {
+				lbAuthor.setForeground(unColorAuthor);
+			}
 			lbIcon.setForeground(unavailableTextColor);
         }
         else { // Available mod
 			lbName.setForeground(availableTextColor);
-			lbAuthor.setForeground(avColorAuthor);
+			if(Start.getConfig()[1] == false) {
+				lbAuthor.setForeground(avColorAuthor);
+			}
 			lbIcon.setForeground(availableTextColor);
         }
+      
 		
 		// when select item
 		Font myFont1 = new Font("Monospace", Font.BOLD, 14);

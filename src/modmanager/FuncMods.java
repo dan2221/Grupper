@@ -146,6 +146,32 @@ public class FuncMods {
 	}
 
 	/**
+	 * Get all folders inside a directory.
+	 * 
+	 * @param diretorio
+	 * @return list of folders as a ArrayList
+	 */
+	public static ArrayList<String> getAllFolders(String diretorio) {
+		System.out.println("\nGetting all mod foldes in \"" + diretorio + "\" directory...");
+		File folder = new File(diretorio);
+		File[] listofolders = folder.listFiles();
+		ArrayList<String> allfolders = new ArrayList<String>(); // Create an ArrayList object
+		int count = 0;
+
+		if (listofolders != null) {
+			for (File item : listofolders) {
+				if (item.isDirectory()) {
+					allfolders.add(item.getName().toString());
+					System.out.println(allfolders.get(count) + " added!");
+					count++;
+				}
+			}
+		}
+		// System.out.println(allfiles); // print array
+		return allfolders;
+	}
+
+	/**
 	 * Read a txt file to colect all mod data.
 	 * 
 	 * @param filename
@@ -154,6 +180,7 @@ public class FuncMods {
 	public static String[] readTxt(String filename) {
 		String[] moddata = new String[3];
 		moddata[0] = filename.replace(".txt", "");
+		System.out.println("-----------------------\nReading " + filename + "...");
 
 		try {
 			// Opens the file
@@ -164,14 +191,6 @@ public class FuncMods {
 			String line = reader.readLine();
 			while (line != null) {
 
-//				To compare a readline value it's necessary to use the equals method!
-//			    if (linha.equals(testigual)) {
-//			    	System.out.println("Texto desejado encontrado!!!");
-//			    }
-//				if (line.startsWith("Mod Folder:")) {
-//					// Isolating mod folder name
-//					moddata[0] = line.replace("Mod Folder:", "").replace("\n", "");
-//				}
 				if (line.startsWith("Mod Title:")) {
 					// Isolating mod title
 					moddata[1] = line.replace("Mod Title:", "").replace("\n", "");
@@ -217,37 +236,31 @@ public class FuncMods {
 		int status = 0;
 
 		System.out.println("Searching for " + proj + "...");
-		// Checks mod's folder and palette folder
-		if (!new File("mod//games//" + proj).exists()) {
-			System.out.println("Unavaliable mod!");
-			status = 2; // Unavaliable mod
+		// Creates a palette folder if it doesn't exists
+		if (!new File("mod//games//" + proj + "//palettes").exists()) {
+			new File("mod//games//" + proj + "//palettes").mkdirs();
+			System.out.println("\"palettes\" folder created ");
+		}
+		// Checking for enemie's palettes
+		if (FuncMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
+			System.out.println("Enemies palettes found!");
+			status = 0; // Disabled mod
 		} else {
-			// Creates a palette folder if it doesn't exists
-			if (!new File("mod//games//" + proj + "//palettes").exists()) {
-				new File("mod//games//" + proj + "//palettes").mkdirs();
-				System.out.println("\"palettes\" folder created ");
-			}
-			// Checking for enemie's palettes
-			if (FuncMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
-				System.out.println("Enemies palettes not found!");
-				status = 0; // Disabled mod
+			// Auto fix enemies palette folder path
+			if (FuncMods.anyFile("mod//games//" + proj + "//enemies//*.pal")) {
+				FuncMods.move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
 			} else {
-				// Auto fix enemies palette folder path
-				if (FuncMods.anyFile("mod//games//" + proj + "//enemies//*.pal")) {
-					FuncMods.move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
-				} else {
-					if (FuncMods.anyFile("palettes//sorr_enemies//*.pal")) {
-						if (new File("mod//" + proj + ".txt").exists()) {
-							status = 1; // Installed mod
-							System.out.println("The mod is installed!");
-						} else {
-							status = 2; // Unavailable mod
-							System.out.println("mod txt file not found!");
-						}
+				if (FuncMods.anyFile("palettes//sorr_enemies//*.pal")) {
+					if (FuncMods.exist("mod//" + proj + ".txt")) {
+						status = 1; // Installed mod
+						System.out.println("The mod is installed!");
 					} else {
-						System.out.println("The mod can't be installed!");
-						status = 2; // Unavaliable modd
+						status = 2; // Unavailable mod
+						System.out.println("Unavailable mod! Txt mod file not found!");
 					}
+				} else {
+					System.out.println("The mod can't be installed! \"sorr_enemies\" folder not found!");
+					status = 2; // Unavaliable modd
 				}
 			}
 		}
@@ -259,16 +272,12 @@ public class FuncMods {
 
 	public static String existsInstallation(String[][] allmodsvalues) {
 		String installed = null;
-		for (int i = 0; i < allmodsvalues.length; i++) {
+		for (int i = 0; i < Janela.getModQuantity(); i++) {
 			System.out.println();
-			for (int j = 0; j < allmodsvalues[i].length; j++) {
-				if (j == 2) {
-					if (scanMod(allmodsvalues[i][0]) == 1) {
-						System.out.println("Installed: " + allmodsvalues[i][0]);
-						installed = allmodsvalues[i][0];
-						break;
-					}
-				}
+			if (scanMod(allmodsvalues[i][0]) == 1) {
+				System.out.println("Installed: " + allmodsvalues[i][0]);
+				installed = allmodsvalues[i][0];
+				break;
 			}
 		}
 		return installed;
