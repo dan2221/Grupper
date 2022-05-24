@@ -27,12 +27,11 @@ public class Janela extends JFrame {
 
 	ImageIcon imgmod;
 	static int modquantity;
-	String[][] allmoddata;
+	static String[][] allmoddata;
 	String modselecionado;
 	boolean[] allconfig = Start.getConfig();
 	JList<SorrMod> listMod;
-	
-	
+
 	public static int getModQuantity() {
 		return modquantity;
 	}
@@ -64,16 +63,17 @@ public class Janela extends JFrame {
 		return imgmod;
 	}
 
-	public void setImageIcon(String[][] allmodsvalues) {
-		imgmod = new ImageIcon("mod//games//" + FuncMods.existsInstallation(allmodsvalues) + "//title.png");
+	public void setImageIcon() {
+		imgmod = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
 	}
 
 	public String getInstalledMod() {
 		return modselecionado;
+		
 	}
 
 	public void setInstalledMod() {
-		modselecionado = FuncMods.existsInstallation(allmoddata);
+		modselecionado = FuncMods.existsInstallation();
 	}
 
 	/**
@@ -83,12 +83,12 @@ public class Janela extends JFrame {
 		ArrayList<String> modfolders = FuncMods.getAllFolders("mod//games");
 		modquantity = modfolders.size();
 		String[][] allmodsvalues = new String[modquantity][3];
-		
+
 		System.out.println("Tamanho: " + modquantity);
 		for (int i = 0; i < modfolders.size(); i++) {
 			String current = modfolders.get(i).toString();
 			allmodsvalues[i][0] = current;
-			if (FuncMods.exist("mod_list//" + current +".txt")) {
+			if (FuncMods.exist("mod_list//" + current + ".txt")) {
 				String[] moddata = new String[2];
 				moddata = FuncMods.readTxt(current + ".txt");
 
@@ -100,6 +100,10 @@ public class Janela extends JFrame {
 			}
 		}
 		allmoddata = allmodsvalues;
+	}
+
+	public static String[][] getAllModData() {
+		return allmoddata;
 	}
 
 	/**
@@ -245,31 +249,6 @@ public class Janela extends JFrame {
 			lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
 		}
 
-		JButton btUninstall = new JButton("Uninstall mod");
-		btUninstall.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Verify installed mod
-				setInstalledMod();
-
-				// Call method to uninstall the mod
-				FuncMods.uninstallMod(getInstalledMod());
-
-				// Check if the mod is uninstalled
-				setInstalledMod();
-				if (FuncMods.existsInstallation(allmoddata) == null) {
-					// Use isso para alternar de painel
-					pn_installed.setVisible(false);
-					btInstall.setVisible(true);
-					btFolder.setVisible(true);
-					scrollPane_mods.setVisible(true);
-				}
-
-			}
-		});
-		btUninstall.setBounds(10, 348, 135, 23);
-		pn_installed.add(btUninstall);
-
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
 		panel_option.setLayout(null);
@@ -279,19 +258,11 @@ public class Janela extends JFrame {
 		panel_option.add(chckbxAvMods);
 
 		Start.scanConfig(); // Load configuration
-		
-		
+
 		if (allconfig[0] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckbxAvMods.setSelected(true);
 		}
-
-		//
-		//
-		//
-		//
-		//
-		//
 
 		chckbxAvMods.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -302,16 +273,16 @@ public class Janela extends JFrame {
 				scrollPane_mods.setViewportView(listMod);
 			}
 		});
-		
+
 		JCheckBox chckAuthors = new JCheckBox("Hide authors in the mod list.");
-		chckAuthors.setBounds(26, 79, 314, 23);
+		chckAuthors.setBounds(26, 79, 341, 23);
 		panel_option.add(chckAuthors);
-		
+
 		if (allconfig[1] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckAuthors.setSelected(true);
 		}
-		
+
 		chckAuthors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Changing configuration 1...");
@@ -319,10 +290,21 @@ public class Janela extends JFrame {
 			}
 		});
 
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Show installed mod as the first one of the sormaker\r\n");
-		chckbxNewCheckBox.setEnabled(false);
-		chckbxNewCheckBox.setBounds(26, 118, 341, 23);
-		panel_option.add(chckbxNewCheckBox);
+		JCheckBox chckFistMod = new JCheckBox("Show installed mod as the first one of the sormaker\r\n");
+		chckFistMod.setBounds(26, 118, 341, 23);
+		panel_option.add(chckFistMod);
+
+		if (allconfig[2] == true) {
+			System.out.println("checkbox esta marcado!");
+			chckFistMod.setSelected(true);
+		}
+
+		chckFistMod.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Changing configuration 2...");
+				Start.changeConfig(2);
+			}
+		});
 
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \r\npalettes");
 		chckbxNewCheckBox_1.setEnabled(false);
@@ -340,9 +322,15 @@ public class Janela extends JFrame {
 		panel_option.add(lblNewLabel);
 
 		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of its folder name.");
-		lblListByAdding.setEnabled(false);
 		lblListByAdding.setBounds(47, 148, 314, 14);
 		panel_option.add(lblListByAdding);
+		
+		boolean conditOption = true;
+		if(getInstalledMod() != null) {
+			conditOption = false;
+		}
+		chckFistMod.setEnabled(conditOption);
+		lblListByAdding.setEnabled(conditOption);
 
 		JButton btnNewButton = new JButton("About Grupper");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -383,11 +371,45 @@ public class Janela extends JFrame {
 						btInstall.setVisible(false);
 						btFolder.setVisible(false);
 						scrollPane_mods.setVisible(false);
+						setModData();
 						setInstalledMod();
 						lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
+						
+						chckFistMod.setEnabled(false);
+						lblListByAdding.setEnabled(false);
 					}
 				}
 			}
 		});
+		
+		JButton btUninstall = new JButton("Uninstall mod");
+		btUninstall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Verify installed mod
+				setInstalledMod();
+
+				// Call method to uninstall the mod
+				FuncMods.uninstallMod(getInstalledMod());
+
+				// Check if the mod is uninstalled
+				setModData();
+				if (FuncMods.existsInstallation() == null) {
+					// Use isso para alternar de painel
+					pn_installed.setVisible(false);
+					btInstall.setVisible(true);
+					btFolder.setVisible(true);
+					scrollPane_mods.setVisible(true);
+					chckFistMod.setEnabled(true);
+					lblListByAdding.setEnabled(true);
+				}
+				// Check if the mod is uninstalled
+				setModData();
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
+			}
+		});
+		btUninstall.setBounds(10, 348, 135, 23);
+		pn_installed.add(btUninstall);
 	}
 }

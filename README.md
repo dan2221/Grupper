@@ -14,12 +14,11 @@ FEATURES:
 
 * Install palletes and data files (.wav .fpg) from your favorite mods.
 * If you want to use your own data files, put them in your data folder before install. When you install a mod, your files will not be replaced by mod's files, because the mod's files receives "[mod]" in their names when exists files with the same names in SorR data folder.
-
+* Option to shows the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
 
 SOME FUTURE FEATURES:
 
 * Character mods support;
-* Option to shows the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
 * Music player for all mods, independent if the mod are listed in the Grupper mod list;
 * If you don't want to use playable character mods of level mods you can refuse this by activate an option.
 * If you want to use playable character palettes from level mods you can acept this by activate an option. But you won't able to use mod characters.

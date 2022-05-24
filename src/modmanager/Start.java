@@ -14,9 +14,8 @@ public class Start {
 	/**
 	 * Grupper configuration array:
 	 * 
-	 * 0: Hide unavailable mods;
-	 * 1: Hide authors from the list;
-	 * 2: Put the installed mod as the first one of the sormaker list.
+	 * 0: Hide unavailable mods; 1: Hide authors from the list; 2: Put the installed
+	 * mod as the first one of the sormaker list.
 	 */
 	private static boolean[] configrupper = new boolean[3];
 
@@ -39,7 +38,8 @@ public class Start {
 			// Add the mod to list {Mod Name},{Author},{status}
 			int modstatus = FuncMods.scanMod(allmodsvalues[i][1]);
 
-			// System.out.println("Curent mod data: " + allmodsvalues[i][0] + " " + allmodsvalues[i][2] + " " + modstatus);
+			// System.out.println("Curent mod data: " + allmodsvalues[i][0] + " " +
+			// allmodsvalues[i][2] + " " + modstatus);
 
 			if (modstatus == 2) {
 				if (configrupper[0] == false) {
@@ -79,7 +79,7 @@ public class Start {
 		if (!new File("grupper.cfg").exists()) {
 			File makesor = new File("grupper.cfg");
 			String[] defaultconfig = { "//Grupper configuration file//\n", "hide_unavailable_mods=0;",
-					"installed_mod_first=0;", "list_without_authors=0;" };
+					"list_without_authors=0;", "installed_mod_first=0;" };
 			try {
 				makesor.createNewFile();
 				try (FileWriter writer = new FileWriter("grupper.cfg")) {
@@ -95,7 +95,7 @@ public class Start {
 			}
 		}
 		// Reading the cfg file
-		System.out.println("----------------------\nYour configuration:");
+		System.out.println("\nYour configuration:");
 		try {
 			FileReader stream = new FileReader("grupper.cfg");
 			BufferedReader reader = new BufferedReader(stream);
@@ -112,7 +112,7 @@ public class Start {
 					}
 					System.out.println("hide_unavailable_mods=" + configrupper[0]);
 				}
-				
+
 				if (line.startsWith("list_without_authors=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
 					String linecontent = line.replace("list_without_authors=", "").replace(";", "");
@@ -147,6 +147,7 @@ public class Start {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("----------------------");
 	}
 
 	/**

@@ -24,6 +24,7 @@ public class FuncMods {
 	 * 
 	 */
 	public static void move(String origem, String destino) {
+		System.out.println("\nMoving file...");
 		// Getting the filename or folder
 		String[] tree = origem.split("//", 0);
 		String item = tree[tree.length - 1];
@@ -34,7 +35,7 @@ public class FuncMods {
 		System.out.println("Destiny: " + param2);
 		try {
 			Files.move(param1.toPath(), param2.toPath());
-			System.out.println("\"" + item + "\" moved successfully.");
+			System.out.println("\"" + item + "\" moved successfully!");
 		} catch (IOException ex) {
 			System.out.println("Error found!");
 			ex.printStackTrace();
@@ -52,9 +53,13 @@ public class FuncMods {
 		// Getting the filename or folder
 		String[] tree = origin.split("//", 0);
 		String item = tree[tree.length - 1];
-		System.out.println("Renaming: " + origin);
+		System.out.println("\nRenaming: " + origin);
 		System.out.println("To: " + newname);
-		new File(origin).renameTo(new File(origin.replace(item, newname)));
+		if (new File(origin.replace(item, newname)).exists()) {
+			System.err.println("Impossible to rename! Already exists a file or folder with the same name!");
+		} else {
+			new File(origin).renameTo(new File(origin.replace(item, newname)));
+		}
 	}
 
 	public static boolean exist(String arq) {
@@ -235,11 +240,11 @@ public class FuncMods {
 	public static int scanMod(String proj) {
 		int status = 0;
 
-		System.out.println("Searching for " + proj + "...");
+		System.out.println("\nSearching for " + proj + "...");
 		// Creates a palette folder if it doesn't exists
 		if (!new File("mod//games//" + proj + "//palettes").exists()) {
 			new File("mod//games//" + proj + "//palettes").mkdirs();
-			System.out.println("\"palettes\" folder created ");
+			System.out.println("\"palettes\" folder created in \"" + proj + "\" project!");
 		}
 		// Checking for enemie's palettes
 		if (FuncMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
@@ -270,12 +275,12 @@ public class FuncMods {
 		return status;
 	}
 
-	public static String existsInstallation(String[][] allmodsvalues) {
+	public static String existsInstallation() {
+		String[][] allmodsvalues = Janela.getAllModData();
 		String installed = null;
 		for (int i = 0; i < Janela.getModQuantity(); i++) {
-			System.out.println();
 			if (scanMod(allmodsvalues[i][0]) == 1) {
-				System.out.println("Installed: " + allmodsvalues[i][0]);
+				System.out.println("\nInstalled: " + allmodsvalues[i][0]);
 				installed = allmodsvalues[i][0];
 				break;
 			}
@@ -289,31 +294,45 @@ public class FuncMods {
 	 * @param selectedMod
 	 */
 	public static void installMod(String selectedMod) {
+		// This is for "First mod of the list" configuration
+		if (Start.getConfig()[2]) {
+			FuncMods.ren("mod//games//" + selectedMod, "- " + selectedMod);
+			selectedMod = "- " + selectedMod;
+		}
+
+		System.out.println("Installing " + selectedMod + "...");
+
+		// Palettes
 		if (new File("mod//games//" + selectedMod + "//palettes//enemies").exists()) {
 			ren("palettes//enemies", "sorr_enemies");
 			move("mod//games//" + selectedMod + "//palettes//enemies", "palettes");
 
 		}
+
 		// List all data files in a txt file
-		System.out.println("Installing " + selectedMod + "...");
 		if (new File("mod//games//" + selectedMod + "//data").exists()) {
 			ArrayList<String> datafiles = getAllFiles("mod//games//" + selectedMod + "//data//*.*");
 			try (FileWriter writer = new FileWriter("mod//sorr.txt")) {
 				for (String item : datafiles) {
 					System.out.println(item);
 					writer.write(item + "\n");
+
+					// Your data files will not be replaced by mod's files, because the mod's files
+					// receives "[mod]" in their names when exists files with the same names in SorR
+					// data folder.
 					if (new File("data//" + item).exists()) {
 						ren("mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
 						move("mod//games//" + selectedMod + "//data//[mod]" + item, "data");
+					} else {
+						move("mod//games//" + selectedMod + "//data//" + item, "data");
 					}
-					move("mod//games//" + selectedMod + "//data//" + item, "data");
 				}
 				writer.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// Renaming the txt to identify mod installation
+			// Renaming the txt for identify mod installation
 			ren("mod//sorr.txt", selectedMod + ".txt");
 		}
 	}
@@ -334,10 +353,14 @@ public class FuncMods {
 			String line = reader.readLine();
 			while (line != null) {
 
-				// Isolating mod folder name
+				// Isolating mod file name
 				String mfile = line.replace("\n", "");
+
+				// If a file has "[mod]" in its name, these characters will be removed
+				// during the uninstalling.
 				if (new File("data//[mod]" + mfile).exists()) {
 					move("data//[mod]" + mfile, "mod//games//" + proj + "//data");
+					ren("mod//games//" + proj + "//data//" + "[mod]" + mfile, mfile);
 				} else {
 					if (new File("data//" + mfile).exists()) {
 						move("data//" + mfile, "mod//games//" + proj + "//data");
@@ -355,9 +378,9 @@ public class FuncMods {
 
 		File filetodel = new File("mod//" + proj + ".txt");
 		if (filetodel.delete()) {
-			System.out.println("\"mod//" + proj + ".txt\" was deleted!");
+			System.out.println("\"mod//" + proj + ".txt\" deleted!");
 		} else {
-			System.out.println("Failed to delete the file.");
+			System.err.println("Failed to delete \"mod//" + proj + ".txt\"");
 		}
 		File makesor = new File("mod//sorr.txt");
 		try {
@@ -365,6 +388,16 @@ public class FuncMods {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		// Remove "- " from the mod folder if the configuration for set
+		// installed mod as the first one of the list is activated.
+		if (Start.getConfig()[2]) {
+			if (proj.startsWith("- ")) {
+				// Remove 2 first characters of the folder.
+				FuncMods.ren("mod//games//" + proj, proj.substring(2));
+				System.out.println("Renamed to " + proj.substring(2));
+			}
 		}
 		System.out.println("Uninstalled!");
 	}

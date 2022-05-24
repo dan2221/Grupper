@@ -73,9 +73,12 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		// Custom colors using RGB values
 		Color backColorSel = new Color(55,55,55);
 		Color backColorNoSel = new Color(34,34,34);
+		
+		// Font colors for authors
 		Color avColorAuthor = new Color(64,150,255);
 		Color unColorAuthor = new Color(87,109,169);
 		
+		// Font colots for mod names
 		Color availableTextColor = new Color(220,220,220);
 		Color unavailableTextColor = new Color(180,80,82);
 		
@@ -84,11 +87,13 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		
 		// Assumes the stuff in the list has a pretty toString
         //setName(value.toString());
+		
+		boolean hideauthor = Start.getConfig()[1];
 
 		if (isSelected) {
 			setBackground(backColorSel);
 			lbName.setBackground(backColorSel);
-			if (Start.getConfig()[1] == true) {
+			if (hideauthor) {
 				lbAuthor.setForeground(backColorSel);
 			}
 			lbAuthor.setBackground(backColorSel);
@@ -97,7 +102,7 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		} else { // when don't select
 			setBackground(backColorNoSel);
 			lbName.setBackground(backColorNoSel);
-			if (Start.getConfig()[1] == true) {
+			if (hideauthor) {
 				lbAuthor.setForeground(backColorNoSel);
 			}
 			lbAuthor.setBackground(backColorNoSel);
@@ -107,14 +112,14 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		
         if (SorrMod.getStatus() == 2) { // Unavailable mod
 			lbName.setForeground(unavailableTextColor);
-			if (Start.getConfig()[1] == false) {
+			if (!hideauthor) {
 				lbAuthor.setForeground(unColorAuthor);
 			}
 			lbIcon.setForeground(unavailableTextColor);
         }
         else { // Available mod
 			lbName.setForeground(availableTextColor);
-			if(Start.getConfig()[1] == false) {
+			if(!hideauthor) {
 				lbAuthor.setForeground(avColorAuthor);
 			}
 			lbIcon.setForeground(availableTextColor);
