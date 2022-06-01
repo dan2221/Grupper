@@ -37,7 +37,7 @@ public class FuncMods {
 			Files.move(param1.toPath(), param2.toPath());
 			System.out.println("\"" + item + "\" moved successfully!");
 		} catch (IOException ex) {
-			System.out.println("Error found!");
+			System.err.println("Error found!");
 			ex.printStackTrace();
 		}
 	}
@@ -119,7 +119,7 @@ public class FuncMods {
 	 * Get all files inside a folder.
 	 * 
 	 * @param diretorio
-	 * @return list of files as a ArrayList
+	 * @return list of files as an ArrayList
 	 */
 	public static ArrayList<String> getAllFiles(String diretorio) {
 		String[] params = diretorio.split("\\*");
@@ -155,7 +155,7 @@ public class FuncMods {
 	 * Get all folders inside a directory.
 	 * 
 	 * @param diretorio
-	 * @return list of folders as a ArrayList
+	 * @return list of folders as an ArrayList
 	 */
 	public static ArrayList<String> getAllFolders(String diretorio) {
 		System.out.println("\nGetting all mod foldes in \"" + diretorio + "\" directory...");
@@ -211,7 +211,7 @@ public class FuncMods {
 			if (modData[1] == null) {
 				modData[1] = modData[0];
 			}
-			// If a mod doesn't have an declared author on its txt, the string below
+			// If a mod doesn't have a declared author on its txt, the string below
 			// will be used.
 			if (modData[2] == null) {
 				modData[2] = " - ";
@@ -247,16 +247,16 @@ public class FuncMods {
 			System.out.println("\"palettes\" folder created in \"" + proj + "\" project!");
 		}
 		// Checking for enemie's palettes
-		if (FuncMods.anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
+		if (anyFile("mod//games//" + proj + "//palettes//enemies//*.pal")) {
 			System.out.println("Enemies palettes found!");
 			status = 0; // Disabled mod
 		} else {
 			// Auto fix enemies palette folder path
-			if (FuncMods.anyFile("mod//games//" + proj + "//enemies//*.pal")) {
-				FuncMods.move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
+			if (anyFile("mod//games//" + proj + "//enemies//*.pal")) {
+				move("mod//games//" + proj + "//enemies", "mod//games//" + proj + "//palettes");
 			} else {
-				if (FuncMods.anyFile("palettes//sorr_enemies//*.pal")) {
-					if (FuncMods.exist("mod//" + proj + ".txt")) {
+				if (anyFile("palettes//sorr_enemies//*.pal")) {
+					if (exist("mod//" + proj + ".txt")) {
 						status = 1; // Installed mod
 						System.out.println("The mod is installed!");
 					} else {
@@ -296,7 +296,7 @@ public class FuncMods {
 	public static void installMod(String selectedMod) {
 		// This is for "First mod of the list" configuration
 		if (Start.getConfig()[2]) {
-			FuncMods.ren("mod//games//" + selectedMod, "- " + selectedMod);
+			ren("mod//games//" + selectedMod, "- " + selectedMod);
 			selectedMod = "- " + selectedMod;
 		}
 
@@ -395,7 +395,7 @@ public class FuncMods {
 		if (Start.getConfig()[2]) {
 			if (proj.startsWith("- ")) {
 				// Remove 2 first characters of the folder.
-				FuncMods.ren("mod//games//" + proj, proj.substring(2));
+				ren("mod//games//" + proj, proj.substring(2));
 				System.out.println("Renamed to " + proj.substring(2));
 			}
 		}
