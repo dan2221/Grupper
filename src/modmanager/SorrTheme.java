@@ -1,27 +1,27 @@
 package modmanager;
 
-public class Atributes {
+public class SorrTheme {
 
-    private String modname;
+    private String name;
     private String author;
     // 0 -> Avaliable (no installed)
     // 1 -> Installed
     // 2 -> Unavaliable
     private int status;
 
-    public Atributes(String name, String author, int status) {
+    public SorrTheme(String name, String author, int status) {
         super();
-    	this.modname = name;
+    	this.name = name;
         this.author = author;
         this.status = status;
     }
 
     public String getName() {
-        return modname;
+        return name;
     }
 
     public void setName(String name) {
-        this.modname = name;
+        this.name = name;
     }
 
     public String getAuthor() {
@@ -42,6 +42,6 @@ public class Atributes {
     
     @Override
     public String toString() { 
-        return modname; 
-    }   
+        return name; 
+    }    
 }

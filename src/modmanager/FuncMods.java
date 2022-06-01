@@ -70,22 +70,23 @@ public class FuncMods {
 	 * Search for files and folders needed for Grupper works correctly.
 	 */
 	public static void importantFiles() {
-		String[] folders2make = { "data", "mod//chars", "mod//themes", "mod//games" };
-		for (String i : folders2make) {
-			File selIndex = new File(i);
-			if (!selIndex.exists()) {
-				selIndex.mkdirs();
+		// Check for important folders which contains mods
+		String[] foldersToMake = { "data", "mod//chars", "mod//themes", "mod//games" };
+		for (String i : foldersToMake) {
+			File selectedFolder = new File(i);
+			if (!selectedFolder.exists()) {
+				selectedFolder.mkdirs();
 				System.out.println(String.format("Directory \"%s\" created!", i));
 			}
 		}
-		String[] pal_folders = { "palettes//chars", "palettes//backup_chars", "palettes//enemies",
-				"palettes//backup_enemies" };
-		for (String i : pal_folders) {
-			File selIndex = new File(i);
-			if (!selIndex.exists()) {
-				errorMsg(i, "folder");
+		// Check for SorR palette folders
+		String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
+		for (String i : palFolders) {
+			if (!new File("palettes//" + i).exists()) {
+				errorMsg("palettes//" + i, "folder");
 			}
 		}
+		// Check for SorR executable file
 		if (!new File("SorR.exe").exists()) {
 			errorMsg("SorR.exe", "file");
 		}
@@ -123,31 +124,31 @@ public class FuncMods {
 	public static ArrayList<String> getAllFiles(String diretorio) {
 		String[] params = diretorio.split("\\*");
 		File folder = new File(params[0]);
-		File[] listoffiles = folder.listFiles();
-		ArrayList<String> allfiles = new ArrayList<String>(); // Create an ArrayList object
+		File[] listOfFiles = folder.listFiles();
+		ArrayList<String> allFiles = new ArrayList<String>(); // Create an ArrayList object
 		int count = 0;
 
-		if (listoffiles != null) {
+		if (listOfFiles != null) {
 			if (diretorio.endsWith("*.*")) { // No extension defined
-				for (File file : listoffiles) {
+				for (File file : listOfFiles) {
 					if (file.isFile()) {
-						allfiles.add(file.getName().toString());
-						System.out.println(allfiles.get(count) + " added!");
+						allFiles.add(file.getName().toString());
+						System.out.println(allFiles.get(count) + " added!");
 						count++;
 					}
 				}
 			} else { // extension defined
-				for (File file : listoffiles) {
+				for (File file : listOfFiles) {
 					if (file.isFile() && file.getName().endsWith(params[1])) {
-						allfiles.add(file.getName().toString());
-						System.out.println(allfiles.get(count) + " added!");
+						allFiles.add(file.getName().toString());
+						System.out.println(allFiles.get(count) + " added!");
 						count++;
 					}
 				}
 			}
 		}
 		// System.out.println(allfiles); // print array
-		return allfiles;
+		return allFiles;
 	}
 
 	/**
@@ -159,21 +160,20 @@ public class FuncMods {
 	public static ArrayList<String> getAllFolders(String diretorio) {
 		System.out.println("\nGetting all mod foldes in \"" + diretorio + "\" directory...");
 		File folder = new File(diretorio);
-		File[] listofolders = folder.listFiles();
-		ArrayList<String> allfolders = new ArrayList<String>(); // Create an ArrayList object
+		File[] listOfFolders = folder.listFiles();
+		ArrayList<String> allFolders = new ArrayList<String>(); // Create an ArrayList object
 		int count = 0;
 
-		if (listofolders != null) {
-			for (File item : listofolders) {
+		if (listOfFolders != null) {
+			for (File item : listOfFolders) {
 				if (item.isDirectory()) {
-					allfolders.add(item.getName().toString());
-					System.out.println(allfolders.get(count) + " added!");
+					allFolders.add(item.getName().toString());
+					System.out.println(allFolders.get(count) + " added!");
 					count++;
 				}
 			}
 		}
-		// System.out.println(allfiles); // print array
-		return allfolders;
+		return allFolders;
 	}
 
 	/**
@@ -183,12 +183,12 @@ public class FuncMods {
 	 * @return
 	 */
 	public static String[] readTxt(String filename) {
-		String[] moddata = new String[3];
-		moddata[0] = filename.replace(".txt", "");
+		String[] modData = new String[3];
+		modData[0] = filename.replace(".txt", "");
 		System.out.println("-----------------------\nReading " + filename + "...");
 
 		try {
-			// Opens the file
+			// Open the file
 			FileReader stream = new FileReader("mod_list//".concat(filename));
 			BufferedReader reader = new BufferedReader(stream);
 
@@ -198,37 +198,37 @@ public class FuncMods {
 
 				if (line.startsWith("Mod Title:")) {
 					// Isolating mod title
-					moddata[1] = line.replace("Mod Title:", "").replace("\n", "");
+					modData[1] = line.replace("Mod Title:", "").replace("\n", "");
 				}
 				if (line.startsWith("Author:")) {
 					// Isolating mod author name
-					moddata[2] = line.replace("Author:", "").replace("\n", "");
+					modData[2] = line.replace("Author:", "").replace("\n", "");
 				}
-				// Reads next line of the file
+				// Read next line of the file
 				line = reader.readLine();
 			}
 			// If a mod doesn't have a title, its folder name will be its title
-			if (moddata[1] == null) {
-				moddata[1] = moddata[0];
+			if (modData[1] == null) {
+				modData[1] = modData[0];
 			}
 			// If a mod doesn't have an declared author on its txt, the string below
 			// will be used.
-			if (moddata[2] == null) {
-				moddata[2] = " - ";
+			if (modData[2] == null) {
+				modData[2] = " - ";
 			}
-			// Closes the reading
+			// Close the reading
 			reader.close();
-			// Closes the file
+			// Close the file
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Mod data ------------------");
-		System.out.println("Folder: " + moddata[0]);
-		System.out.println("Title: " + moddata[1]);
-		System.out.println("Author: " + moddata[2]);
+		System.out.println("Folder: " + modData[0]);
+		System.out.println("Title: " + modData[1]);
+		System.out.println("Author: " + modData[2]);
 
-		return moddata;
+		return modData;
 	}
 
 	/**
@@ -276,12 +276,12 @@ public class FuncMods {
 	}
 
 	public static String existsInstallation() {
-		String[][] allmodsvalues = Janela.getAllModData();
+		String[][] allModsValues = Janela.getAllModData();
 		String installed = null;
 		for (int i = 0; i < Janela.getModQuantity(); i++) {
-			if (scanMod(allmodsvalues[i][0]) == 1) {
-				System.out.println("\nInstalled: " + allmodsvalues[i][0]);
-				installed = allmodsvalues[i][0];
+			if (scanMod(allModsValues[i][0]) == 1) {
+				System.out.println("\nInstalled: " + allModsValues[i][0]);
+				installed = allModsValues[i][0];
 				break;
 			}
 		}
@@ -311,9 +311,9 @@ public class FuncMods {
 
 		// List all data files in a txt file
 		if (new File("mod//games//" + selectedMod + "//data").exists()) {
-			ArrayList<String> datafiles = getAllFiles("mod//games//" + selectedMod + "//data//*.*");
+			ArrayList<String> dataFiles = getAllFiles("mod//games//" + selectedMod + "//data//*.*");
 			try (FileWriter writer = new FileWriter("mod//sorr.txt")) {
-				for (String item : datafiles) {
+				for (String item : dataFiles) {
 					System.out.println(item);
 					writer.write(item + "\n");
 
@@ -353,38 +353,38 @@ public class FuncMods {
 			String line = reader.readLine();
 			while (line != null) {
 
-				// Isolating mod file name
-				String mfile = line.replace("\n", "");
+				// Isolating mod txt file name
+				String modFile = line.replace("\n", "");
 
 				// If a file has "[mod]" in its name, these characters will be removed
 				// during the uninstalling.
-				if (new File("data//[mod]" + mfile).exists()) {
-					move("data//[mod]" + mfile, "mod//games//" + proj + "//data");
-					ren("mod//games//" + proj + "//data//" + "[mod]" + mfile, mfile);
+				if (new File("data//[mod]" + modFile).exists()) {
+					move("data//[mod]" + modFile, "mod//games//" + proj + "//data");
+					ren("mod//games//" + proj + "//data//" + "[mod]" + modFile, modFile);
 				} else {
-					if (new File("data//" + mfile).exists()) {
-						move("data//" + mfile, "mod//games//" + proj + "//data");
+					if (new File("data//" + modFile).exists()) {
+						move("data//" + modFile, "mod//games//" + proj + "//data");
 					}
 				}
 
-				// Reads next line of the file
+				// Read next line of the file
 				line = reader.readLine();
 			}
-			reader.close(); // Closes the reading
-			stream.close(); // Closes the file
+			reader.close(); // Close the reading
+			stream.close(); // Close the file
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		File filetodel = new File("mod//" + proj + ".txt");
-		if (filetodel.delete()) {
+		File fileToDelete = new File("mod//" + proj + ".txt");
+		if (fileToDelete.delete()) {
 			System.out.println("\"mod//" + proj + ".txt\" deleted!");
 		} else {
 			System.err.println("Failed to delete \"mod//" + proj + ".txt\"");
 		}
-		File makesor = new File("mod//sorr.txt");
+		// Create sorr txt file		
 		try {
-			makesor.createNewFile();
+			new File("mod//sorr.txt").createNewFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -403,7 +403,7 @@ public class FuncMods {
 	}
 
 	/**
-	 * Show an error message when an important file is missing.
+	 * Show an error message when an important file or folder is missing.
 	 * 
 	 * @param file
 	 * @param additionalText

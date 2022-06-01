@@ -58,7 +58,7 @@ public class AboutG extends JDialog {
 		JTextPane txtpnProgramCreatedTo = new JTextPane();
 		txtpnProgramCreatedTo.setEditable(false);
 		txtpnProgramCreatedTo.setText(
-				"Grupper is a open source freeware created to facilitate the activation of SORR mods.\r\n\r\nHave fun with awesome projects by all mod creators!\r\n\r\nThis software was Developed in Eclipse IDE (Java).");
+				"Grupper is an open source freeware created to facilitate the activation of SORR mods.\r\n\r\nHave fun with awesome projects by all mod creators!\r\n\r\nThis software was Developed in Eclipse IDE (Java).");
 		txtpnProgramCreatedTo.setBounds(34, 36, 307, 104);
 		contentPanel.add(txtpnProgramCreatedTo);
 		{

@@ -25,21 +25,21 @@ import javax.swing.JFormattedTextField;
 
 public class Janela extends JFrame {
 
-	ImageIcon imgmod;
-	static int modquantity;
-	static String[][] allmoddata;
-	String modselecionado;
-	boolean[] allconfig = Start.getConfig();
+	ImageIcon modImage;
+	static int modQuantity;
+	static String[][] allModData;
+	String modSelecionado;
+	boolean[] allConfig = Start.getConfig();
 	JList<SorrMod> listMod;
 
 	public static int getModQuantity() {
-		return modquantity;
+		return modQuantity;
 	}
 
 	public void updateModList() {
 		setModData();
 		// create the model and add elements
-		DefaultListModel<SorrMod> myModel = Start.refreshModList(allmoddata);
+		DefaultListModel<SorrMod> myModel = Start.refreshModList(allModData);
 		listMod = new JList<SorrMod>(myModel);
 		// // List Background color
 		listMod.setBackground(new Color(90, 90, 90));
@@ -60,50 +60,50 @@ public class Janela extends JFrame {
 	 * @return imgmod
 	 */
 	public ImageIcon getModImage() {
-		return imgmod;
+		return modImage;
 	}
 
 	public void setImageIcon() {
-		imgmod = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
+		modImage = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
 	}
 
 	public String getInstalledMod() {
-		return modselecionado;
+		return modSelecionado;
 		
 	}
 
 	public void setInstalledMod() {
-		modselecionado = FuncMods.existsInstallation();
+		modSelecionado = FuncMods.existsInstallation();
 	}
 
 	/**
 	 * Define all mod values by scanning folders and files.
 	 */
 	public void setModData() {
-		ArrayList<String> modfolders = FuncMods.getAllFolders("mod//games");
-		modquantity = modfolders.size();
-		String[][] allmodsvalues = new String[modquantity][3];
+		ArrayList<String> modFolders = FuncMods.getAllFolders("mod//games");
+		modQuantity = modFolders.size();
+		String[][] allModsValues = new String[modQuantity][3];
 
-		System.out.println("Tamanho: " + modquantity);
-		for (int i = 0; i < modfolders.size(); i++) {
-			String current = modfolders.get(i).toString();
-			allmodsvalues[i][0] = current;
+		System.out.println("Tamanho: " + modQuantity);
+		for (int i = 0; i < modFolders.size(); i++) {
+			String current = modFolders.get(i).toString();
+			allModsValues[i][0] = current;
 			if (FuncMods.exist("mod_list//" + current + ".txt")) {
-				String[] moddata = new String[2];
-				moddata = FuncMods.readTxt(current + ".txt");
+				String[] modData = new String[2];
+				modData = FuncMods.readTxt(current + ".txt");
 
-				allmodsvalues[i][1] = moddata[1];
-				allmodsvalues[i][2] = moddata[2];
+				allModsValues[i][1] = modData[1];
+				allModsValues[i][2] = modData[2];
 			} else {
-				allmodsvalues[i][1] = current;
-				allmodsvalues[i][2] = "-";
+				allModsValues[i][1] = current;
+				allModsValues[i][2] = "-";
 			}
 		}
-		allmoddata = allmodsvalues;
+		allModData = allModsValues;
 	}
 
 	public static String[][] getAllModData() {
-		return allmoddata;
+		return allModData;
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class Janela extends JFrame {
 
 		Start.scanConfig(); // Load configuration
 
-		if (allconfig[0] == true) {
+		if (allConfig[0] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckbxAvMods.setSelected(true);
 		}
@@ -268,7 +268,7 @@ public class Janela extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Changing configuration 0...");
 				Start.changeConfig(0);
-				Start.refreshModList(allmoddata);
+				Start.refreshModList(allModData);
 				updateModList();
 				scrollPane_mods.setViewportView(listMod);
 			}
@@ -278,7 +278,7 @@ public class Janela extends JFrame {
 		chckAuthors.setBounds(26, 79, 341, 23);
 		panel_option.add(chckAuthors);
 
-		if (allconfig[1] == true) {
+		if (allConfig[1] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckAuthors.setSelected(true);
 		}
@@ -294,7 +294,7 @@ public class Janela extends JFrame {
 		chckFistMod.setBounds(26, 118, 341, 23);
 		panel_option.add(chckFistMod);
 
-		if (allconfig[2] == true) {
+		if (allConfig[2] == true) {
 			System.out.println("checkbox esta marcado!");
 			chckFistMod.setSelected(true);
 		}

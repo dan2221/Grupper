@@ -36,21 +36,21 @@ public class Start {
 		for (int i = 0; i < Janela.getModQuantity(); i++) {
 
 			// Add the mod to list {Mod Name},{Author},{status}
-			int modstatus = FuncMods.scanMod(allmodsvalues[i][1]);
+			int modStatus = FuncMods.scanMod(allmodsvalues[i][1]);
 
 			// System.out.println("Curent mod data: " + allmodsvalues[i][0] + " " +
 			// allmodsvalues[i][2] + " " + modstatus);
 
-			if (modstatus == 2) {
+			if (modStatus == 2) {
 				if (configrupper[0] == false) {
-					myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
+					myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modStatus));
 				}
 			} else {
-				myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modstatus));
+				myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modStatus));
 			}
 
 			// Check if one of the mods is installed
-			if (modstatus == 1) {
+			if (modStatus == 1) {
 				installed = true;
 			}
 
@@ -77,11 +77,12 @@ public class Start {
 	public static void scanConfig() {
 		// If there aren't a configuration file, it will be created.
 		if (!new File("grupper.cfg").exists()) {
-			File makesor = new File("grupper.cfg");
+			// Values to add to cfg file				
 			String[] defaultconfig = { "//Grupper configuration file//\n", "hide_unavailable_mods=0;",
 					"list_without_authors=0;", "installed_mod_first=0;" };
 			try {
-				makesor.createNewFile();
+				new File("grupper.cfg").createNewFile();
+				// Adding default values to the cfg file			
 				try (FileWriter writer = new FileWriter("grupper.cfg")) {
 					for (String item : defaultconfig) {
 						writer.write(item + "\n");
@@ -104,8 +105,8 @@ public class Start {
 			while (line != null) {
 				if (line.startsWith("hide_unavailable_mods=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String linecontent = line.replace("hide_unavailable_mods=", "").replace(";", "");
-					if (linecontent.equals("1")) {
+					String lineContent = line.replace("hide_unavailable_mods=", "").replace(";", "");
+					if (lineContent.equals("1")) {
 						configrupper[0] = true;
 					} else {
 						configrupper[0] = false;
@@ -115,8 +116,8 @@ public class Start {
 
 				if (line.startsWith("list_without_authors=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String linecontent = line.replace("list_without_authors=", "").replace(";", "");
-					if (linecontent.equals("1")) {
+					String lineContent = line.replace("list_without_authors=", "").replace(";", "");
+					if (lineContent.equals("1")) {
 						configrupper[1] = true;
 					} else {
 						configrupper[1] = false;
@@ -126,8 +127,8 @@ public class Start {
 
 				if (line.startsWith("installed_mod_first=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String linecontent = line.replace("installed_mod_first=", "").replace(";", "");
-					if (linecontent.equals("1")) {
+					String lineContent = line.replace("installed_mod_first=", "").replace(";", "");
+					if (lineContent.equals("1")) {
 						configrupper[2] = true;
 					} else {
 						configrupper[2] = false;
@@ -157,7 +158,7 @@ public class Start {
 	 */
 	public static void changeConfig(int option) {
 		FileReader stream;
-		String textofind;
+		String textToFind;
 
 		// Get all content inside the grupper.cfg
 		try {
@@ -165,11 +166,11 @@ public class Start {
 			try (BufferedReader reader = new BufferedReader(stream)) {
 				String line = reader.readLine();
 				// File content
-				ArrayList<String> filebefore = new ArrayList<String>();
+				ArrayList<String> fileBefore = new ArrayList<String>();
 				// Add each line to the array
 				while (line != null) {
 					if (!line.startsWith("//")) { // Ignore commented lines
-						filebefore.add(line);
+						fileBefore.add(line);
 					}
 					line = reader.readLine(); // Next line of the file
 				}
@@ -177,45 +178,45 @@ public class Start {
 				// Write a new cfg file with the desired changes
 				FileWriter writer = new FileWriter("grupper.cfg");
 				writer.write("//Grupper configuration file//\n");
-				for (String item : filebefore) {
+				for (String item : fileBefore) {
 					switch (option) {
 					case 0:
-						textofind = "hide_unavailable_mods=";
-						if (item.startsWith(textofind) && item.endsWith(";")) {
+						textToFind = "hide_unavailable_mods=";
+						if (item.startsWith(textToFind) && item.endsWith(";")) {
 							// Isolate value (1 or 0)
-							String linecontent = item.replace(textofind, "").replace(";", "");
-							if (linecontent.equals("1")) {
-								writer.write(textofind + "0;" + "\n");
+							String lineContent = item.replace(textToFind, "").replace(";", "");
+							if (lineContent.equals("1")) {
+								writer.write(textToFind + "0;" + "\n");
 							} else {
-								writer.write(textofind + "1;" + "\n");
+								writer.write(textToFind + "1;" + "\n");
 							}
 						} else {
 							writer.write(item + "\n");
 						}
 						break;
 					case 1:
-						textofind = "list_without_authors=";
-						if (item.startsWith(textofind) && item.endsWith(";")) {
+						textToFind = "list_without_authors=";
+						if (item.startsWith(textToFind) && item.endsWith(";")) {
 							// Isolate value (1 or 0)
-							String linecontent = item.replace(textofind, "").replace(";", "");
-							if (linecontent.equals("1")) {
-								writer.write(textofind + "0;" + "\n");
+							String lineContent = item.replace(textToFind, "").replace(";", "");
+							if (lineContent.equals("1")) {
+								writer.write(textToFind + "0;" + "\n");
 							} else {
-								writer.write(textofind + "1;" + "\n");
+								writer.write(textToFind + "1;" + "\n");
 							}
 						} else {
 							writer.write(item + "\n");
 						}
 						break;
 					case 2:
-						textofind = "installed_mod_first=";
-						if (item.startsWith(textofind) && item.endsWith(";")) {
+						textToFind = "installed_mod_first=";
+						if (item.startsWith(textToFind) && item.endsWith(";")) {
 							// Isolate value (1 or 0)
-							String linecontent = item.replace(textofind, "").replace(";", "");
-							if (linecontent.equals("1")) {
-								writer.write(textofind + "0;" + "\n");
+							String lineContent = item.replace(textToFind, "").replace(";", "");
+							if (lineContent.equals("1")) {
+								writer.write(textToFind + "0;" + "\n");
 							} else {
-								writer.write(textofind + "1;" + "\n");
+								writer.write(textToFind + "1;" + "\n");
 							}
 						} else {
 							writer.write(item + "\n");
