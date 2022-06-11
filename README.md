@@ -26,9 +26,8 @@ SOME FUTURE FEATURES:
 
 IMPORTANT TOPICS:
 
-* The program is a beta yet, so maybe you find some bugs. If you found a bug you can report it;
-* To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com";
-* The program doesn't come with mods. You need to download them on internet;
+* This program is a beta yet, so maybe you find some bugs. If you found a bug you can report it;
+* Grupper doesn't come with mods. You need to download them on internet;
 * If some mod is not available to install, check if it has a "palettes/enemies" directory with ".pal" files inside.
 
 
