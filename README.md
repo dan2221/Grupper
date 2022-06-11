@@ -8,8 +8,7 @@ DESCRIPTION:
 
 REQUIREMENTS:
 
-• To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com";
-
+• To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com".
 
 FEATURES:
 
