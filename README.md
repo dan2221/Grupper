@@ -2,7 +2,7 @@
 
 DESCRIPTION:
 
-* Grupper is a Tool created to facilite installing and uninstalling of mods for the game SorR. You can manage your mods by an easy way.
+* Grupper is a Tool created to facilite installing and uninstalling of mods for the game SorRv5. You can manage your mods by an easy way.
 
 ![image](https://user-images.githubusercontent.com/36929636/173195818-204dea51-71d7-48ab-92ee-9dd4ee1677db.png)
 
