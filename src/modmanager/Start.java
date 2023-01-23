@@ -33,7 +33,7 @@ public class Start {
 		scanConfig();
 		DefaultListModel<SorrMod> myModel = new DefaultListModel<>();
 		boolean installed = false;
-		for (int i = 0; i < Janela.getModQuantity(); i++) {
+		for (int i = 0; i < Main.getModQuantity(); i++) {
 
 			// Add the mod to list {Mod Name},{Author},{status}
 			int modStatus = FuncMods.scanMod(allmodsvalues[i][1]);

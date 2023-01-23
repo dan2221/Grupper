@@ -276,9 +276,9 @@ public class FuncMods {
 	}
 
 	public static String existsInstallation() {
-		String[][] allModsValues = Janela.getAllModData();
+		String[][] allModsValues = Main.getAllModData();
 		String installed = null;
-		for (int i = 0; i < Janela.getModQuantity(); i++) {
+		for (int i = 0; i < Main.getModQuantity(); i++) {
 			if (scanMod(allModsValues[i][0]) == 1) {
 				System.out.println("\nInstalled: " + allModsValues[i][0]);
 				installed = allModsValues[i][0];

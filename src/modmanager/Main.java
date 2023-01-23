@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel; // Lista padrão
+import javax.swing.DefaultListModel; // Lista padrï¿½o
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 
-public class Janela extends JFrame {
+public class Main extends JFrame {
 
 	ImageIcon modImage;
 	static int modQuantity;
@@ -120,7 +120,7 @@ public class Janela extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Janela frame = new Janela();
+					Main frame = new Main();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -132,15 +132,15 @@ public class Janela extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Janela() {
+	public Main() {
 		setTitle("Grupper");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 413, 457);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(20, 20, 20));
 		contentPane.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
-		setLocationRelativeTo(null); // Posição da janela
-		setResizable(false); // Não pode ser redimensionada
+		setLocationRelativeTo(null); // Posiï¿½ï¿½o da janela
+		setResizable(false); // Nï¿½o pode ser redimensionada
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -168,7 +168,7 @@ public class Janela extends JFrame {
 		btInstall.setBounds(247, 357, 137, 23);
 		panel_level.add(btInstall);
 
-		///////// Botão para ESCOLHER MOD
+		///////// Botï¿½o para ESCOLHER MOD
 		///////// /////////////////////////////////////////////////////////
 		JButton btFolder = new JButton("Open SorR Folder");
 		btFolder.setBounds(21, 357, 146, 23);
@@ -220,7 +220,7 @@ public class Janela extends JFrame {
 
 		JLabel lblTitleImg = new JLabel("");
 		lblTitleImg.setBounds(27, 11, 320, 240);
-		lblTitleImg.setIcon(new ImageIcon(Janela.class.getResource("/images/default_title.png")));
+		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
 
 		JButton btPlay = new JButton("Start SorR");
