@@ -23,41 +23,54 @@ import javax.swing.JCheckBox;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 
+/**
+ * The main class and the program's window.
+ */
 public class Main extends JFrame {
 
 	ImageIcon modImage;
 	static int modQuantity;
+	/**
+	 * This multidimensional array contais values of all mods. Index 1: mod index;
+	 * Index 2: mod folder (0), mod title (1), mod author (2).
+	 */
 	static String[][] allModData;
 	String modSelecionado;
 	boolean[] allConfig = Start.getConfig();
 	JList<SorrMod> listMod;
 
+	/**
+	 * Return the mod quantity.
+	 */
 	public static int getModQuantity() {
 		return modQuantity;
 	}
 
 	public void updateModList() {
 		setModData();
-		// create the model and add elements
+
+		// Create model with attributes based on SorrMod class and add the elements.
 		DefaultListModel<SorrMod> myModel = Start.refreshModList(allModData);
 		listMod = new JList<SorrMod>(myModel);
-		// // List Background color
+
+		// List Background color
 		listMod.setBackground(new Color(90, 90, 90));
-		// // Foreground color
+
+		// Foreground color
 		listMod.setForeground(Color.white);
 		//
 		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
 		listMod.setBackground(UIManager.getColor("textInactiveText"));
 		listMod.setForeground(Color.BLACK);
 
-		// Adiciona a lista para a janela :)
+		// Add the list to the window
 		listMod.setCellRenderer(new ModRenderer());
 	}
 
 	/**
 	 * Get title image of the installed mod.
 	 * 
-	 * @return imgmod
+	 * @return mod title screen file.
 	 */
 	public ImageIcon getModImage() {
 		return modImage;
@@ -67,6 +80,11 @@ public class Main extends JFrame {
 		modImage = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
 	}
 
+	/**
+	 * Get instaled mod.
+	 * 
+	 * @return instaled mod name
+	 */
 	public String getInstalledMod() {
 		return modSelecionado;
 		
@@ -77,7 +95,7 @@ public class Main extends JFrame {
 	}
 
 	/**
-	 * Define all mod values by scanning folders and files.
+	 * Set all mod values by scanning folders and files.
 	 */
 	public void setModData() {
 		ArrayList<String> modFolders = FuncMods.getAllFolders("mod//games");
@@ -139,8 +157,8 @@ public class Main extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(20, 20, 20));
 		contentPane.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
-		setLocationRelativeTo(null); // Posi��o da janela
-		setResizable(false); // N�o pode ser redimensionada
+		setLocationRelativeTo(null); // Window position
+		setResizable(false); // Cannot be resized
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -163,13 +181,12 @@ public class Main extends JFrame {
 		tabbedPane.addTab("   Levels    ", null, panel_level, null);
 		panel_level.setLayout(null);
 
-		/////// Instalar Mod ///////////////////////////////////////////////////////
+		/////// Install Mod ///////////////////////////////////////////////////////
 		JButton btInstall = new JButton("Install mod");
 		btInstall.setBounds(247, 357, 137, 23);
 		panel_level.add(btInstall);
 
-		///////// Bot�o para ESCOLHER MOD
-		///////// /////////////////////////////////////////////////////////
+		///////// Button for choosing a mod ///////////////////////////////////////
 		JButton btFolder = new JButton("Open SorR Folder");
 		btFolder.setBounds(21, 357, 146, 23);
 		panel_level.add(btFolder);
@@ -179,10 +196,9 @@ public class Main extends JFrame {
 		scrollPane_mods.setBounds(10, 9, 374, 326);
 		panel_level.add(scrollPane_mods);
 
-		// Instanciando objeto personalizado
+		// Instancing custom object //////////////////////////////////////////////
 
-		//////// LISTA DE MODS
-		//////// ////////////////////////////////////////////////////////////////////
+		// Mod List
 		updateModList();
 		// Create Jlist using a model
 		scrollPane_mods.setViewportView(listMod);
@@ -344,7 +360,7 @@ public class Main extends JFrame {
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// Use isso para alternar de painel
+				// Use the code below for swapping a panel
 				// scrollPane_mods.setVisible(false);
 
 				// Show current directory
@@ -366,7 +382,7 @@ public class Main extends JFrame {
 					// Check if the mod is available to install
 					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
 						FuncMods.installMod(listMod.getSelectedValue().toString());
-						// Use isso para alternar de painel
+						// swapping a panel
 						pn_installed.setVisible(true);
 						btInstall.setVisible(false);
 						btFolder.setVisible(false);

@@ -14,10 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * This class edits individual mod itens displayed on mod list.
+ */
 public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private JLabel lbIcon = new JLabel();
 	private JLabel lbName = new JLabel();
@@ -44,15 +45,12 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 	public Component getListCellRendererComponent(JList<? extends SorrMod> list, SorrMod SorrMod, int index, boolean isSelected,
 			boolean cellHasFocus) {
 		
-		// System.out.println("String do getclass:" + getClass());
-		// System.out.println("ÍCONE: " + System.getProperty("user.dir") + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png");
-		
+		// insert mod logo file.
 		if  (new File("mod//games//"+ SorrMod.getName() + "//logo.png").exists()) {
 			lbIcon.setIcon(new ImageIcon(System.getProperty("user.dir") + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png"));
 		} else {
 			lbIcon.setIcon(new ImageIcon(getClass().getResource("/images/default_logo.png")));
-		}
-		
+		}		
 		
 		lbName.setText(SorrMod.getName());
 		lbAuthor.setText(SorrMod.getAuthor());
@@ -126,7 +124,7 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
         }
       
 		
-		// when select item
+		// When select an item
 		Font myFont1 = new Font("Monospace", Font.BOLD, 14);
 		lbName.setFont(myFont1);
 		return this;

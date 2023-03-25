@@ -17,11 +17,11 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * A window that shows program's information, like version, author website.
+ */
 public class AboutG extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
@@ -71,7 +71,7 @@ public class AboutG extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						Desktop desk = Desktop.getDesktop();
 
-						// now we enter our URL that we want to open in our
+						// Now we enter our URL that we want to open in our
 						// default browser
 						try {
 							desk.browse(new URI("https://github.com/dan2221/Grupper"));

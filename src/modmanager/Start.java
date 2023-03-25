@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 
+/**
+ * Class used for load program configuration and refresh mod list.
+ */
 public class Start {
 
 	/**
@@ -24,7 +27,8 @@ public class Start {
 	}
 
 	/**
-	 * Scan all mods to update the mods Jlist.
+	 * Scan all mods for getting attributes to SorrMod Class and update the
+	 * mod Jlist.
 	 * 
 	 * @param allmodsvalues
 	 * @return
@@ -82,6 +86,7 @@ public class Start {
 					"list_without_authors=0;", "installed_mod_first=0;" };
 			try {
 				new File("grupper.cfg").createNewFile();
+				
 				// Adding default values to the cfg file			
 				try (FileWriter writer = new FileWriter("grupper.cfg")) {
 					for (String item : defaultconfig) {

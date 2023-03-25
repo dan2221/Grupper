@@ -14,6 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * This class has methods related to file manipulation.
+ */
 public class FuncMods {
 
 	/**
@@ -62,6 +65,9 @@ public class FuncMods {
 		}
 	}
 
+	/**
+	 * Method that checks if a file exists.
+	 */
 	public static boolean exist(String arq) {
 		return new File(arq).exists();
 	}
