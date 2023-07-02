@@ -22,6 +22,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
+import javax.swing.Box;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
 
 /**
  * The main class and the program's window.
@@ -38,6 +43,7 @@ public class Main extends JFrame {
 	String modSelecionado;
 	boolean[] allConfig = Start.getConfig();
 	JList<SorrMod> listMod;
+	static String sorrPath;
 
 	/**
 	 * Return the mod quantity.
@@ -87,7 +93,7 @@ public class Main extends JFrame {
 	 */
 	public String getInstalledMod() {
 		return modSelecionado;
-		
+
 	}
 
 	public void setInstalledMod() {
@@ -98,11 +104,11 @@ public class Main extends JFrame {
 	 * Set all mod values by scanning folders and files.
 	 */
 	public void setModData() {
-		ArrayList<String> modFolders = FuncMods.getAllFolders("mod//games");
+		ArrayList<String> modFolders = FuncMods.getAllFolders(Main.sorrPath + "mod//games");
 		modQuantity = modFolders.size();
 		String[][] allModsValues = new String[modQuantity][3];
 
-		System.out.println("Tamanho: " + modQuantity);
+		System.out.println("Size: " + modQuantity);
 		for (int i = 0; i < modFolders.size(); i++) {
 			String current = modFolders.get(i).toString();
 			allModsValues[i][0] = current;
@@ -166,10 +172,30 @@ public class Main extends JFrame {
 		String dir_atual = System.getProperty("user.dir");
 		System.out.println("Grupper directory: " + dir_atual);
 
-		// Search for important files and folders
+		// Load path configuration
+		Start.scanConfig();
+		System.out.println("Variavel Main:" + Main.sorrPath);
+		System.out.println("PAUSA!");
+
+		// Open dialog to choose SorR executable if there isn't one.
+		if (Main.sorrPath == null) {
+			MyDialog dial = new MyDialog();
+			dial.setVisible(true);
+			Start.changeConfig(3, Main.sorrPath);
+			System.out.println("Variavel Main:" + Main.sorrPath);
+			System.out.println("PAUSA!");
+		}
+
+		// Check configuration (cfg) file.
+		Start.scanConfig();
+
+		// Save executable path to cfg file.
+		Start.changeConfig(3, Main.sorrPath);
+
+		// Search for important files and folders.
 		FuncMods.importantFiles();
 
-		// Get all mods values from txt
+		// Get all mod values from txt.
 		setModData();
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -236,6 +262,7 @@ public class Main extends JFrame {
 
 		JLabel lblTitleImg = new JLabel("");
 		lblTitleImg.setBounds(27, 11, 320, 240);
+		// Getting image from the .jar file
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
 
@@ -243,7 +270,8 @@ public class Main extends JFrame {
 		btPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Runtime.getRuntime().exec("SorR.exe");
+					// Run SorR executable
+					Runtime.getRuntime().exec(Main.sorrPath + "SorR.exe");
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -262,7 +290,7 @@ public class Main extends JFrame {
 			btInstall.setVisible(false);
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
-			lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
+			lblTitleImg.setIcon(new ImageIcon(Main.sorrPath + "mod//games//" + getInstalledMod() + "//title.png"));
 		}
 
 		JPanel panel_option = new JPanel();
@@ -270,10 +298,8 @@ public class Main extends JFrame {
 		panel_option.setLayout(null);
 
 		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
-		chckbxAvMods.setBounds(26, 38, 341, 23);
+		chckbxAvMods.setBounds(10, 7, 341, 23);
 		panel_option.add(chckbxAvMods);
-
-		Start.scanConfig(); // Load configuration
 
 		if (allConfig[0] == true) {
 			System.out.println("checkbox esta marcado!");
@@ -291,7 +317,7 @@ public class Main extends JFrame {
 		});
 
 		JCheckBox chckAuthors = new JCheckBox("Hide authors in the mod list.");
-		chckAuthors.setBounds(26, 79, 341, 23);
+		chckAuthors.setBounds(10, 33, 341, 23);
 		panel_option.add(chckAuthors);
 
 		if (allConfig[1] == true) {
@@ -306,8 +332,8 @@ public class Main extends JFrame {
 			}
 		});
 
-		JCheckBox chckFistMod = new JCheckBox("Show installed mod as the first one of the sormaker\r\n");
-		chckFistMod.setBounds(26, 118, 341, 23);
+		JCheckBox chckFistMod = new JCheckBox("Show installed mod as the first one of the sormaker\r\n list");
+		chckFistMod.setBounds(10, 59, 341, 23);
 		panel_option.add(chckFistMod);
 
 		if (allConfig[2] == true) {
@@ -322,27 +348,27 @@ public class Main extends JFrame {
 			}
 		});
 
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use level mod playable characters\r \r\npalettes");
+		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use \r\npalettes from mods playable characters (you can't");
 		chckbxNewCheckBox_1.setEnabled(false);
-		chckbxNewCheckBox_1.setBounds(26, 184, 341, 23);
+		chckbxNewCheckBox_1.setBounds(10, 125, 341, 23);
 		panel_option.add(chckbxNewCheckBox_1);
 
-		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use level mod chars (you cannot use another chars).");
+		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use playable chars from mods (you cannot use another");
 		chckbxNewCheckBox_2.setEnabled(false);
-		chckbxNewCheckBox_2.setBounds(26, 252, 341, 23);
+		chckbxNewCheckBox_2.setBounds(10, 176, 341, 23);
 		panel_option.add(chckbxNewCheckBox_2);
 
-		JLabel lblNewLabel = new JLabel("(you cannot use characters mods).");
+		JLabel lblNewLabel = new JLabel("use characters mods).");
 		lblNewLabel.setEnabled(false);
-		lblNewLabel.setBounds(47, 214, 314, 14);
+		lblNewLabel.setBounds(31, 155, 314, 14);
 		panel_option.add(lblNewLabel);
 
-		JLabel lblListByAdding = new JLabel("list by adding \"-\" to the begining of its folder name.");
-		lblListByAdding.setBounds(47, 148, 314, 14);
+		JLabel lblListByAdding = new JLabel("by adding \"-\" to the begining of its folder name.");
+		lblListByAdding.setBounds(31, 89, 314, 14);
 		panel_option.add(lblListByAdding);
-		
+
 		boolean conditOption = true;
-		if(getInstalledMod() != null) {
+		if (getInstalledMod() != null) {
 			conditOption = false;
 		}
 		chckFistMod.setEnabled(conditOption);
@@ -356,6 +382,33 @@ public class Main extends JFrame {
 		});
 		btnNewButton.setBounds(140, 317, 118, 23);
 		panel_option.add(btnNewButton);
+		
+		JLabel lblUseCharactersMods = new JLabel("characters mods).");
+		lblUseCharactersMods.setEnabled(false);
+		lblUseCharactersMods.setBounds(31, 206, 314, 14);
+		panel_option.add(lblUseCharactersMods);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 112, 374, 2);
+		panel_option.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(10, 231, 374, 2);
+		panel_option.add(separator_1);
+		
+		JButton btnNewButton_1 = new JButton("Browse...");
+		btnNewButton_1.setBounds(290, 273, 94, 23);
+		panel_option.add(btnNewButton_1);
+		
+		JLabel lblNewLabel_1 = new JLabel("SorR path:");
+		lblNewLabel_1.setBounds(10, 248, 94, 14);
+		panel_option.add(lblNewLabel_1);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.setBounds(10, 273, 269, 20);
+		panel_option.add(textPane);
+		textPane.setText(Main.sorrPath + "SorR.exe");
 
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -389,15 +442,16 @@ public class Main extends JFrame {
 						scrollPane_mods.setVisible(false);
 						setModData();
 						setInstalledMod();
-						lblTitleImg.setIcon(new ImageIcon("mod//games//" + getInstalledMod() + "//title.png"));
-						
+						lblTitleImg.setIcon(
+								new ImageIcon(Main.sorrPath + "mod//games//" + getInstalledMod() + "//title.png"));
+
 						chckFistMod.setEnabled(false);
 						lblListByAdding.setEnabled(false);
 					}
 				}
 			}
 		});
-		
+
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

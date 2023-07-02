@@ -46,8 +46,8 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 			boolean cellHasFocus) {
 		
 		// insert mod logo file.
-		if  (new File("mod//games//"+ SorrMod.getName() + "//logo.png").exists()) {
-			lbIcon.setIcon(new ImageIcon(System.getProperty("user.dir") + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png"));
+		if  (new File(Main.sorrPath + "mod//games//"+ SorrMod.getName() + "//logo.png").exists()) {
+			lbIcon.setIcon(new ImageIcon(Main.sorrPath + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png"));
 		} else {
 			lbIcon.setIcon(new ImageIcon(getClass().getResource("/images/default_logo.png")));
 		}		
