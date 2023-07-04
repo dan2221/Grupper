@@ -10,23 +10,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel; // Lista padr�o
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-import javax.swing.JTabbedPane;
-import javax.swing.JCheckBox;
-import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSeparator;
-import javax.swing.JTextPane;
-import javax.swing.ListSelectionModel;
-import java.awt.FlowLayout;
+import javax.swing.JTextField;
+import java.awt.Font;
 
 /**
  * The main class and the program's window.
@@ -42,6 +42,7 @@ public class Main extends JFrame {
 	static String[][] allModData;
 	String modSelecionado;
 	boolean[] allConfig = Start.getConfig();
+	JList<SorrMod> listMod;
 	static String sorrPath;
 
 	/**
@@ -62,6 +63,20 @@ public class Main extends JFrame {
 
 		// Create model with attributes based on SorrMod class and add the elements.
 		DefaultListModel<SorrMod> myModel = Start.refreshModList(allModData);
+		listMod = new JList<SorrMod>(myModel);
+
+		// List Background color
+		listMod.setBackground(new Color(90, 90, 90));
+
+		// Foreground color
+		listMod.setForeground(Color.white);
+		//
+		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
+		listMod.setBackground(UIManager.getColor("textInactiveText"));
+		listMod.setForeground(Color.BLACK);
+
+		// Add the list to the window
+		listMod.setCellRenderer(new ModRenderer());
 	}
 
 	/**
@@ -141,6 +156,7 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	// DefaultListModel model;
 	private JPanel contentPane;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -164,7 +180,7 @@ public class Main extends JFrame {
 	public Main() {
 		setTitle("Grupper");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 413, 510);
+		setBounds(100, 100, 413, 457);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(20, 20, 20));
 		contentPane.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
@@ -201,7 +217,7 @@ public class Main extends JFrame {
 		// Check for SorR palette folders
 		String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
 		for (String i : palFolders) {
-			if (!new File(Main.sorrPath + "//palettes//" + i).exists()) {
+			if (!new File(sorrPath + "//palettes//" + i).exists()) {
 
 				String message = "The directory \" palettes/" + i.replace("//", "/") + "\" was not found!\n"
 						+ "The program needs that to work. Please select a different path or check your folder manually.";
@@ -214,7 +230,7 @@ public class Main extends JFrame {
 		// Check for important folders which contains mods
 		String[] foldersToMake = { "data", "mod//chars", "mod//themes", "mod//games" };
 		for (String i : foldersToMake) {
-			File selectedFolder = new File(Main.sorrPath + "//" + i);
+			File selectedFolder = new File(sorrPath + "//" + i);
 			if (!selectedFolder.exists()) {
 				selectedFolder.mkdirs();
 				System.out.println(String.format("Directory \"%s\" created!", i));
@@ -226,17 +242,34 @@ public class Main extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
-		tabbedPane.setBounds(0, 0, 399, 471);
+		tabbedPane.setBounds(0, 0, 399, 419);
 		contentPane.add(tabbedPane);
 
 		JPanel panel_level = new JPanel();
 		tabbedPane.addTab("   Levels    ", null, panel_level, null);
 		panel_level.setLayout(null);
 
+		/////// Install Mod ///////////////////////////////////////////////////////
+		JButton btInstall = new JButton("Install mod");
+		btInstall.setBounds(247, 357, 137, 23);
+		panel_level.add(btInstall);
+
+		///////// Button for choosing a mod ///////////////////////////////////////
+		JButton btFolder = new JButton("Open SorR Folder");
+		btFolder.setBounds(10, 357, 146, 23);
+		panel_level.add(btFolder);
+		btFolder.setBackground(UIManager.getColor("Button.background"));
+
+		JScrollPane scrollPane_mods = new JScrollPane();
+		scrollPane_mods.setBounds(10, 9, 374, 326);
+		panel_level.add(scrollPane_mods);
+
 		// Instancing custom object //////////////////////////////////////////////
 
 		// Mod List
 		updateModList();
+		// Create Jlist using a model
+		scrollPane_mods.setViewportView(listMod);
 		// add(new JScrollPane(listMod));
 
 		JPanel panel_char = new JPanel();
@@ -265,26 +298,42 @@ public class Main extends JFrame {
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
 		JPanel pn_installed = new JPanel();
-		pn_installed.setBounds(10, 9, 374, 423);
+		pn_installed.setBounds(10, 9, 374, 382);
 		panel_level.add(pn_installed);
-						pn_installed.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-				
-						JPanel panelButtons2 = new JPanel();
-						panelButtons2.setBackground(Color.RED);
-						pn_installed.add(panelButtons2);
-		
-				JPanel panelButtons1 = new JPanel();
-				panelButtons1.setBackground(Color.BLUE);
-				pn_installed.add(panelButtons1);
+		pn_installed.setLayout(null);
 
 		JLabel lblTitleImg = new JLabel("");
+		lblTitleImg.setBounds(27, 11, 320, 240);
 		// Getting image from the .jar file
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
 
+		JButton btPlay = new JButton("Start SorR");
+		btPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Run SorR executable
+					Runtime.getRuntime().exec(sorrPath + "//SorR.exe");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
+		btPlay.setBounds(256, 348, 118, 23);
+		pn_installed.add(btPlay);
+
 		setInstalledMod();
-		
-		
+
+		if (getInstalledMod() == null) {
+			// Use isso para alternar de painel
+			pn_installed.setVisible(false);
+		} else {
+			btInstall.setVisible(false);
+			btFolder.setVisible(false);
+			scrollPane_mods.setVisible(false);
+			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
+		}
 
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
@@ -299,7 +348,15 @@ public class Main extends JFrame {
 			chckbxAvMods.setSelected(true);
 		}
 
-	
+		chckbxAvMods.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Changing configuration 0...");
+				Start.changeConfig(0);
+				Start.refreshModList(allModData);
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
+			}
+		});
 
 		JCheckBox chckAuthors = new JCheckBox("Hide authors in the mod list.");
 		chckAuthors.setBounds(10, 33, 341, 23);
@@ -365,7 +422,7 @@ public class Main extends JFrame {
 				AboutG.main(null);
 			}
 		});
-		btnNewButton.setBounds(140, 317, 118, 23);
+		btnNewButton.setBounds(266, 357, 118, 23);
 		panel_option.add(btnNewButton);
 
 		JLabel lblUseCharactersMods = new JLabel("characters mods).");
@@ -381,25 +438,90 @@ public class Main extends JFrame {
 		separator_1.setBounds(10, 231, 374, 2);
 		panel_option.add(separator_1);
 
-		JButton btnNewButton_1 = new JButton("Browse...");
-		btnNewButton_1.setBounds(290, 273, 94, 23);
+		JButton btnNewButton_1 = new JButton("Change...");
+		btnNewButton_1.setBounds(295, 268, 89, 23);
 		panel_option.add(btnNewButton_1);
 
-		JLabel lblNewLabel_1 = new JLabel("SorR path:");
-		lblNewLabel_1.setBounds(10, 248, 94, 14);
+		JLabel lblNewLabel_1 = new JLabel("Executable path:");
+		lblNewLabel_1.setBounds(10, 244, 94, 14);
 		panel_option.add(lblNewLabel_1);
 
-		JTextPane textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setBounds(10, 273, 269, 20);
-		panel_option.add(textPane);
-		textPane.setText(sorrPath + "\"SorR.exe");
-		
-		if(panelButtons1.isShowing()) {
-			System.out.println("pane1 está ativo!");
-		}
-		if(panelButtons1.isVisible()) {
-			System.out.println("pane1 está visível!");
-		}
+		textField = new JTextField(sorrPath + "\\SorR.exe");
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		textField.setBounds(10, 269, 275, 20);
+		panel_option.add(textField);
+		textField.setColumns(10);
+
+		btFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Use the code below for swapping a panel
+				// scrollPane_mods.setVisible(false);
+
+				// Show current directory
+				try {
+					Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btInstall.addActionListener(new ActionListener() {
+			/**
+			 * @param e
+			 */
+			public void actionPerformed(ActionEvent e) {
+				// Check if there are a selected item
+				if (listMod.getSelectedIndex() != -1) {
+					System.out.println("Selected mod:" + listMod.getSelectedValue());
+					// Check if the mod is available to install
+					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
+						FuncMods.installMod(listMod.getSelectedValue().toString());
+						// swapping a panel
+						pn_installed.setVisible(true);
+						btInstall.setVisible(false);
+						btFolder.setVisible(false);
+						scrollPane_mods.setVisible(false);
+						setModData();
+						setInstalledMod();
+						lblTitleImg.setIcon(
+								new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
+
+						chckFistMod.setEnabled(false);
+						lblListByAdding.setEnabled(false);
+					}
+				}
+			}
+		});
+
+		JButton btUninstall = new JButton("Uninstall mod");
+		btUninstall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Verify installed mod
+				setInstalledMod();
+
+				// Call method to uninstall the mod
+				FuncMods.uninstallMod(getInstalledMod());
+
+				// Check if the mod is uninstalled
+				setModData();
+				if (FuncMods.existsInstallation() == null) {
+					// Use isso para alternar de painel
+					pn_installed.setVisible(false);
+					btInstall.setVisible(true);
+					btFolder.setVisible(true);
+					scrollPane_mods.setVisible(true);
+					chckFistMod.setEnabled(true);
+					lblListByAdding.setEnabled(true);
+				}
+				// Check if the mod is uninstalled
+				setModData();
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
+			}
+		});
+		btUninstall.setBounds(10, 348, 135, 23);
+		pn_installed.add(btUninstall);
 	}
 }
