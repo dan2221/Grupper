@@ -73,36 +73,8 @@ public class FuncMods {
 	}
 
 	/**
-	 * Search for files and folders needed for Grupper works correctly.
-	 */
-	public static void importantFiles() {
-		// Check for SorR palette folders
-		String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
-		for (String i : palFolders) {
-			if (!new File(Main.sorrPath + "palettes//" + i).exists()) {
-				errorMsg(Main.sorrPath + "palettes//" + i, "folder");
-			}
-		}
-
-		// Check for SorR executable file
-		if (!new File(Main.sorrPath + "SorR.exe").exists()) {
-			errorMsg("SorR.exe", "file");
-		}
-
-		// Check for important folders which contains mods
-		String[] foldersToMake = { "data", "mod//chars", "mod//themes", "mod//games" };
-		for (String i : foldersToMake) {
-			File selectedFolder = new File(Main.sorrPath + i);
-			if (!selectedFolder.exists()) {
-				selectedFolder.mkdirs();
-				System.out.println(String.format("Directory \"%s\" created!", i));
-			}
-		}
-	}
-
-	/**
-	 * Checks if exists any file with the desired extension. It works like
-	 * like the exist command in Batch Script
+	 * Checks if exists any file with the desired extension. It works like like the
+	 * exist command in Batch Script
 	 * 
 	 * @param directory
 	 * @return boolean value
@@ -251,22 +223,22 @@ public class FuncMods {
 
 		System.out.println("\nSearching for " + proj + "...");
 		// Creates a palette folder if it doesn't exists
-		if (!new File(Main.sorrPath + "mod//games//" + proj + "//palettes").exists()) {
-			new File(Main.sorrPath + "mod//games//" + proj + "//palettes").mkdirs();
+		if (!new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").exists()) {
+			new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").mkdirs();
 			System.out.println("\"palettes\" folder created in \"" + Main.sorrPath + proj + "\" project!");
 		}
 		// Checking for enemie's palettes
-		if (anyFile(Main.sorrPath + "mod//games//" + proj + "//palettes//enemies//*.pal")) {
+		if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//palettes//enemies//*.pal")) {
 			System.out.println("Enemies palettes found!");
 			status = 0; // Disabled mod
 		} else {
 			// Auto fix enemies palette folder path
-			if (anyFile(Main.sorrPath + "mod//games//" + proj + "//enemies//*.pal")) {
-				move(Main.sorrPath + "mod//games//" + proj + "//enemies",
-						Main.sorrPath + "mod//games//" + proj + "//palettes");
+			if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//enemies//*.pal")) {
+				move(Main.sorrPath + "//mod//games//" + proj + "//enemies",
+						Main.sorrPath + "//mod//games//" + proj + "//palettes");
 			} else {
-				if (anyFile(Main.sorrPath + "palettes//sorr_enemies//*.pal")) {
-					if (exist(Main.sorrPath + "mod//" + proj + ".txt")) {
+				if (anyFile(Main.sorrPath + "//palettes//sorr_enemies//*.pal")) {
+					if (exist(Main.sorrPath + "//mod//" + proj + ".txt")) {
 						status = 1; // Installed mod
 						System.out.println("The mod is installed!");
 					} else {
@@ -306,23 +278,23 @@ public class FuncMods {
 	public static void installMod(String selectedMod) {
 		// This is for "First mod of the list" configuration
 		if (Start.getConfig()[2]) {
-			ren(Main.sorrPath + "mod//games//" + selectedMod, "- " + selectedMod);
+			ren(Main.sorrPath + "//mod//games//" + selectedMod, "- " + selectedMod);
 			selectedMod = "- " + selectedMod;
 		}
 
 		System.out.println("Installing " + selectedMod + "...");
 
 		// Palettes
-		if (new File(Main.sorrPath + "mod//games//" + selectedMod + "//palettes//enemies").exists()) {
-			ren(Main.sorrPath + "palettes//enemies", "sorr_enemies");
-			move(Main.sorrPath + "mod//games//" + selectedMod + "//palettes//enemies", Main.sorrPath + "palettes");
+		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies").exists()) {
+			ren(Main.sorrPath + "//palettes//enemies", "sorr_enemies");
+			move(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies", Main.sorrPath + "//palettes");
 
 		}
 
 		// List all data files in a txt file
-		if (new File(Main.sorrPath + "mod//games//" + selectedMod + "//data").exists()) {
-			ArrayList<String> dataFiles = getAllFiles(Main.sorrPath + "mod//games//" + selectedMod + "//data//*.*");
-			try (FileWriter writer = new FileWriter(Main.sorrPath + "mod//sorr.txt")) {
+		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//data").exists()) {
+			ArrayList<String> dataFiles = getAllFiles(Main.sorrPath + "//mod//games//" + selectedMod + "//data//*.*");
+			try (FileWriter writer = new FileWriter(Main.sorrPath + "//mod//sorr.txt")) {
 				for (String item : dataFiles) {
 					System.out.println(item);
 					writer.write(item + "\n");
@@ -330,11 +302,13 @@ public class FuncMods {
 					// Your data files will not be replaced by mod's files, because the mod's files
 					// receives "[mod]" in their names when exists files with the same names in SorR
 					// data folder.
-					if (new File(Main.sorrPath + "data//" + item).exists()) {
-						ren(Main.sorrPath + "mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
-						move(Main.sorrPath + "mod//games//" + selectedMod + "//data//[mod]" + item, Main.sorrPath + "data");
+					if (new File(Main.sorrPath + "//data//" + item).exists()) {
+						ren(Main.sorrPath + "//mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
+						move(Main.sorrPath + "//mod//games//" + selectedMod + "//data//[mod]" + item,
+								Main.sorrPath + "//data");
 					} else {
-						move(Main.sorrPath + "mod//games//" + selectedMod + "//data//" + item, Main.sorrPath + "data");
+						move(Main.sorrPath + "//mod//games//" + selectedMod + "//data//" + item,
+								Main.sorrPath + "//data");
 					}
 				}
 				writer.close();
@@ -351,12 +325,12 @@ public class FuncMods {
 		System.out.println("Uninstalling \"" + proj + "\"...");
 
 		// Palettes
-		move(Main.sorrPath + "palettes//enemies", Main.sorrPath + "mod//games//" + proj + "//palettes");
-		ren(Main.sorrPath + "palettes//sorr_enemies", "enemies");
+		move(Main.sorrPath + "//palettes//enemies", Main.sorrPath + "//mod//games//" + proj + "//palettes");
+		ren(Main.sorrPath + "//palettes//sorr_enemies", "enemies");
 
 		try {
 			// Opens the file
-			FileReader stream = new FileReader(Main.sorrPath + "mod//" + proj + ".txt");
+			FileReader stream = new FileReader(Main.sorrPath + "//mod//" + proj + ".txt");
 			BufferedReader reader = new BufferedReader(stream);
 
 			// Method that reads a line from the file
@@ -368,12 +342,12 @@ public class FuncMods {
 
 				// If a file has "[mod]" in its name, these characters will be removed
 				// during the uninstalling.
-				if (new File(Main.sorrPath + "data//[mod]" + modFile).exists()) {
-					move(Main.sorrPath + "data//[mod]" + modFile, Main.sorrPath + "mod//games//" + proj + "//data");
-					ren(Main.sorrPath + "mod//games//" + proj + "//data//" + "[mod]" + modFile, modFile);
+				if (new File(Main.sorrPath + "//data//[mod]" + modFile).exists()) {
+					move(Main.sorrPath + "//data//[mod]" + modFile, Main.sorrPath + "//mod//games//" + proj + "//data");
+					ren(Main.sorrPath + "//mod//games//" + proj + "//data//" + "[mod]" + modFile, modFile);
 				} else {
-					if (new File(Main.sorrPath + "data//" + modFile).exists()) {
-						move(Main.sorrPath + "data//" + modFile, Main.sorrPath + "mod//games//" + proj + "//data");
+					if (new File(Main.sorrPath + "//data//" + modFile).exists()) {
+						move(Main.sorrPath + "//data//" + modFile, Main.sorrPath + "//mod//games//" + proj + "//data");
 					}
 				}
 
@@ -386,7 +360,7 @@ public class FuncMods {
 			e.printStackTrace();
 		}
 
-		File fileToDelete = new File(Main.sorrPath + "mod//" + proj + ".txt");
+		File fileToDelete = new File(Main.sorrPath + "//mod//" + proj + ".txt");
 		if (fileToDelete.delete()) {
 			System.out.println("\"mod//" + proj + ".txt\" deleted!");
 		} else {
@@ -394,7 +368,7 @@ public class FuncMods {
 		}
 		// Create sorr txt file
 		try {
-			new File(Main.sorrPath + "mod//sorr.txt").createNewFile();
+			new File(Main.sorrPath + "//mod//sorr.txt").createNewFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -405,7 +379,7 @@ public class FuncMods {
 		if (Start.getConfig()[2]) {
 			if (proj.startsWith("- ")) {
 				// Remove 2 first characters of the folder.
-				ren(Main.sorrPath + "mod//games//" + proj, proj.substring(2));
+				ren(Main.sorrPath + "//mod//games//" + proj, proj.substring(2));
 				System.out.println("Renamed to " + proj.substring(2));
 			}
 		}
@@ -419,8 +393,8 @@ public class FuncMods {
 	 * @param additionalText
 	 */
 	public static void errorMsg(String file, String additionalText) {
-		String message = "The " + additionalText + " \"" + file.replace("//", "/") + "\" was not found!\n"
-				+ "The program needs that to work.";
+		String message = "The directory \"" + file.replace("//", "/") + "\" was not found!\n"
+				+ "The program needs that to work. Please select a different path or check your folder manually.";
 		JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
 	}

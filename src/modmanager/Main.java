@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
@@ -22,11 +23,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JCheckBox;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
-import javax.swing.Box;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 
 /**
  * The main class and the program's window.
@@ -46,6 +45,12 @@ public class Main extends JFrame {
 	static String sorrPath;
 
 	/**
+	 * This variable is necessary to close the whole program when you closed certain
+	 * popups, instand of only close the popup itself.
+	 */
+	static boolean closeJVM = true;
+
+	/**
 	 * Return the mod quantity.
 	 */
 	public static int getModQuantity() {
@@ -58,6 +63,7 @@ public class Main extends JFrame {
 		// Create model with attributes based on SorrMod class and add the elements.
 		DefaultListModel<SorrMod> myModel = Start.refreshModList(allModData);
 		listMod = new JList<SorrMod>(myModel);
+		listMod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// List Background color
 		listMod.setBackground(new Color(90, 90, 90));
@@ -86,11 +92,6 @@ public class Main extends JFrame {
 		modImage = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
 	}
 
-	/**
-	 * Get instaled mod.
-	 * 
-	 * @return instaled mod name
-	 */
 	public String getInstalledMod() {
 		return modSelecionado;
 
@@ -104,7 +105,7 @@ public class Main extends JFrame {
 	 * Set all mod values by scanning folders and files.
 	 */
 	public void setModData() {
-		ArrayList<String> modFolders = FuncMods.getAllFolders(Main.sorrPath + "mod//games");
+		ArrayList<String> modFolders = FuncMods.getAllFolders(sorrPath + "//mod//games");
 		modQuantity = modFolders.size();
 		String[][] allModsValues = new String[modQuantity][3];
 
@@ -128,6 +129,25 @@ public class Main extends JFrame {
 
 	public static String[][] getAllModData() {
 		return allModData;
+	}
+
+	public void openFileDialog() {
+		System.out.println("Opening a window for selecting a SorR path...");
+		SorrChooser dial = new SorrChooser();
+		dial.setVisible(true);
+
+		// If you close the dialog instead of click on the "confirm" button, the entire
+		// program will be closed.
+		if (closeJVM) {
+			System.out.println("--------------------------------------------------");
+			System.out.println("Software closed!");
+			System.out.print("--------------------------------------------------");
+			System.exit(-1);
+		}
+
+		// Save the selected path in the configuration
+		Start.changeConfig(3, sorrPath);
+		System.out.println("Path you choosed:" + sorrPath);
 	}
 
 	/**
@@ -172,28 +192,49 @@ public class Main extends JFrame {
 		String dir_atual = System.getProperty("user.dir");
 		System.out.println("Grupper directory: " + dir_atual);
 
-		// Load path configuration
+		// Load configuration to found the sorr path.
 		Start.scanConfig();
-		System.out.println("Variavel Main:" + Main.sorrPath);
-		System.out.println("PAUSA!");
 
-		// Open dialog to choose SorR executable if there isn't one.
-		if (Main.sorrPath == null) {
-			MyDialog dial = new MyDialog();
-			dial.setVisible(true);
-			Start.changeConfig(3, Main.sorrPath);
-			System.out.println("Variavel Main:" + Main.sorrPath);
-			System.out.println("PAUSA!");
+		// Checking if the executable path exists.
+		if (sorrPath != null && !sorrPath.equals("null")) {
+			if (!FuncMods.exist(sorrPath + "//SorR.exe")) {
+				String message = sorrPath + "\\SorR.exe was not found!\n"
+						+ "CLick in \"OK\" to Select a different path.";
+				JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
+				// Assign the null value to sorrPath for fulfulling the next conditional
+				// statement.
+				sorrPath = null;
+			}
 		}
 
-		// Check configuration (cfg) file.
-		Start.scanConfig();
-
-		// Save executable path to cfg file.
-		Start.changeConfig(3, Main.sorrPath);
+		// Open dialog to set SorR executable if there isn't one.
+		if (sorrPath == null || Start.getPendingExecStatus() == true) {
+			openFileDialog();
+		}
 
 		// Search for important files and folders.
-		FuncMods.importantFiles();
+		// Check for SorR palette folders
+		String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
+		for (String i : palFolders) {
+			if (!new File(Main.sorrPath + "//palettes//" + i).exists()) {
+
+				String message = "The directory \" palettes/" + i.replace("//", "/") + "\" was not found!\n"
+						+ "The program needs that to work. Please select a different path or check your folder manually.";
+				JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
+
+				openFileDialog();
+			}
+		}
+
+		// Check for important folders which contains mods
+		String[] foldersToMake = { "data", "mod//chars", "mod//themes", "mod//games" };
+		for (String i : foldersToMake) {
+			File selectedFolder = new File(Main.sorrPath + "//" + i);
+			if (!selectedFolder.exists()) {
+				selectedFolder.mkdirs();
+				System.out.println(String.format("Directory \"%s\" created!", i));
+			}
+		}
 
 		// Get all mod values from txt.
 		setModData();
@@ -211,12 +252,6 @@ public class Main extends JFrame {
 		JButton btInstall = new JButton("Install mod");
 		btInstall.setBounds(247, 357, 137, 23);
 		panel_level.add(btInstall);
-
-		///////// Button for choosing a mod ///////////////////////////////////////
-		JButton btFolder = new JButton("Open SorR Folder");
-		btFolder.setBounds(21, 357, 146, 23);
-		panel_level.add(btFolder);
-		btFolder.setBackground(UIManager.getColor("Button.background"));
 
 		JScrollPane scrollPane_mods = new JScrollPane();
 		scrollPane_mods.setBounds(10, 9, 374, 326);
@@ -259,7 +294,11 @@ public class Main extends JFrame {
 		pn_installed.setBounds(10, 9, 374, 382);
 		panel_level.add(pn_installed);
 		pn_installed.setLayout(null);
-
+		
+		JButton btFolder = new JButton("Open SorR folder");
+		btFolder.setBounds(0, 348, 135, 23);
+		pn_installed.add(btFolder);
+		
 		JLabel lblTitleImg = new JLabel("");
 		lblTitleImg.setBounds(27, 11, 320, 240);
 		// Getting image from the .jar file
@@ -271,7 +310,7 @@ public class Main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Run SorR executable
-					Runtime.getRuntime().exec(Main.sorrPath + "SorR.exe");
+					Runtime.getRuntime().exec(sorrPath + "//SorR.exe");
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -290,7 +329,7 @@ public class Main extends JFrame {
 			btInstall.setVisible(false);
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
-			lblTitleImg.setIcon(new ImageIcon(Main.sorrPath + "mod//games//" + getInstalledMod() + "//title.png"));
+			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
 		}
 
 		JPanel panel_option = new JPanel();
@@ -382,48 +421,33 @@ public class Main extends JFrame {
 		});
 		btnNewButton.setBounds(140, 317, 118, 23);
 		panel_option.add(btnNewButton);
-		
+
 		JLabel lblUseCharactersMods = new JLabel("characters mods).");
 		lblUseCharactersMods.setEnabled(false);
 		lblUseCharactersMods.setBounds(31, 206, 314, 14);
 		panel_option.add(lblUseCharactersMods);
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 112, 374, 2);
 		panel_option.add(separator);
-		
+
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 231, 374, 2);
 		panel_option.add(separator_1);
-		
+
 		JButton btnNewButton_1 = new JButton("Browse...");
 		btnNewButton_1.setBounds(290, 273, 94, 23);
 		panel_option.add(btnNewButton_1);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("SorR path:");
 		lblNewLabel_1.setBounds(10, 248, 94, 14);
 		panel_option.add(lblNewLabel_1);
-		
+
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
 		textPane.setBounds(10, 273, 269, 20);
 		panel_option.add(textPane);
-		textPane.setText(Main.sorrPath + "SorR.exe");
-
-		btFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Use the code below for swapping a panel
-				// scrollPane_mods.setVisible(false);
-
-				// Show current directory
-				try {
-					Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+		textPane.setText(sorrPath + "\"SorR.exe");
 		btInstall.addActionListener(new ActionListener() {
 			/**
 			 * @param e
@@ -443,7 +467,7 @@ public class Main extends JFrame {
 						setModData();
 						setInstalledMod();
 						lblTitleImg.setIcon(
-								new ImageIcon(Main.sorrPath + "mod//games//" + getInstalledMod() + "//title.png"));
+								new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
 
 						chckFistMod.setEnabled(false);
 						lblListByAdding.setEnabled(false);
@@ -479,7 +503,10 @@ public class Main extends JFrame {
 				scrollPane_mods.setViewportView(listMod);
 			}
 		});
-		btUninstall.setBounds(10, 348, 135, 23);
+		btUninstall.setBounds(0, 348, 135, 23);
 		pn_installed.add(btUninstall);
+		
+		
+
 	}
 }

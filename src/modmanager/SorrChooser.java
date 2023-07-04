@@ -3,17 +3,24 @@ package modmanager;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileFilter;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class MyDialog extends JDialog {
+/**
+ * 
+ * This class is contais a dialog that appears when you have no no executable
+ * path defined.
+ */
+public class SorrChooser extends JDialog {
 
 	/**
 	 * 
@@ -27,7 +34,7 @@ public class MyDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			MyDialog dialog = new MyDialog();
+			SorrChooser dialog = new SorrChooser();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -38,7 +45,7 @@ public class MyDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public MyDialog() {
+	public SorrChooser() {
 		setTitle("Grupper");
 		setBounds(100, 100, 450, 145);
 		// The command below is responsible for "preventing" code execution
@@ -63,20 +70,50 @@ public class MyDialog extends JDialog {
 		panel.setBounds(10, 65, 414, 33);
 		contentPanel.add(panel);
 
+		// Confirm Button
 		JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Add game path to global variables
-				Main.sorrPath = selectedDir;
+				boolean fulfilled = true;
+				String selectedPath = lblPath.getText();
 
-				// Close dialog
-				dispose();
+				// The game doesn't work if you use an executable name different than "sorr.exe",
+				// this is why any other name won't be accepted here.
+				if (!selectedPath.toLowerCase().endsWith("sorr.exe")) {
+					String message = "The executable you selected must has the name of \"SorR.exe\"!";
+					JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.WARNING_MESSAGE);
+					fulfilled = false;
+				} else {
+					int pathSize = selectedPath.length();
+					String cutPath = selectedPath.substring(0, pathSize - 9);
+					System.out.println("Checking folders in:" + cutPath);
+					String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
+					for (String i : palFolders) {
+						if (!new File(cutPath + "//palettes//" + i).exists()) {
+							fulfilled = false;
+							errorMsg(cutPath + "\\palettes\\" + i, "folder");
+							break;
+						}
+					}
+					// With all conditions accomplished, the path can be chose.
+					if (fulfilled) {
+						// Add game path to global variables
+						Main.sorrPath = selectedDir;
+
+						// The program will not closed
+						Main.closeJVM = false;
+
+						// Close dialog
+						dispose();
+					}
+				}
 			}
 		});
 		btnConfirm.setEnabled(false);
 		panel.add(btnConfirm);
 
 		{
+			// Botão path
 			JButton btnPath = new JButton("Browse...");
 			btnPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -92,8 +129,9 @@ public class MyDialog extends JDialog {
 					int result = sorChooser.showOpenDialog(null);
 					if (result == JFileChooser.APPROVE_OPTION) {
 						// User selected a file
-						selectedDir = sorChooser.getSelectedFile().getParent() + "\"";
+						selectedDir = sorChooser.getSelectedFile().getParent();
 						lblPath.setText(sorChooser.getSelectedFile().toString());
+						lblPath.setToolTipText(sorChooser.getSelectedFile().toString());
 						btnConfirm.setEnabled(true);
 
 					}
@@ -102,5 +140,17 @@ public class MyDialog extends JDialog {
 			btnPath.setBounds(10, 36, 101, 23);
 			contentPanel.add(btnPath);
 		}
+	}
+
+	/**
+	 * Show an error message when an important file or folder is missing.
+	 * 
+	 * @param file
+	 * @param additionalText
+	 */
+	public static void errorMsg(String file, String additionalText) {
+		String message = "The " + additionalText + " \"" + file.replace("//", "/") + "\" was not found!\n"
+				+ "The program needs that to work.";
+		JOptionPane.showMessageDialog(new JFrame(), message, "WARNING", JOptionPane.WARNING_MESSAGE);
 	}
 }

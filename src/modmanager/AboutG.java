@@ -51,7 +51,7 @@ public class AboutG extends JDialog {
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null); // Posição da janela
 
-		JLabel lblNewLabel = new JLabel("Grupper (beta 3) v1.0 by Chavyn (daniel2221)", SwingConstants.CENTER);
+		JLabel lblNewLabel = new JLabel("Grupper (beta 4) v1.0 by Chavyn", SwingConstants.CENTER);
 		lblNewLabel.setBounds(48, 11, 267, 14);
 		contentPanel.add(lblNewLabel);
 
@@ -70,14 +70,9 @@ public class AboutG extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Desktop desk = Desktop.getDesktop();
-
-						// Now we enter our URL that we want to open in our
-						// default browser
 						try {
+							// URL to open in the default browser
 							desk.browse(new URI("https://github.com/dan2221/Grupper"));
-							// tente e veja se ainda aparece aviso de licen�a.
-							// Desktop.getDesktop().browse(new
-							// URL("https://github.com/dan2221/Grupper").toURI());
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -87,6 +82,24 @@ public class AboutG extends JDialog {
 						}
 					}
 				});
+
+				JButton btnNewButton = new JButton("♥ Donate");
+				btnNewButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Desktop desk = Desktop.getDesktop();
+						try {
+							// URL to open in the default browser
+							desk.browse(new URI("https://github.com/dan2221/Grupper"));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				});
+				buttonPane.add(btnNewButton);
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
