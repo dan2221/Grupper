@@ -26,6 +26,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
+import java.awt.FlowLayout;
 
 /**
  * The main class and the program's window.
@@ -41,7 +42,6 @@ public class Main extends JFrame {
 	static String[][] allModData;
 	String modSelecionado;
 	boolean[] allConfig = Start.getConfig();
-	JList<SorrMod> listMod;
 	static String sorrPath;
 
 	/**
@@ -62,21 +62,6 @@ public class Main extends JFrame {
 
 		// Create model with attributes based on SorrMod class and add the elements.
 		DefaultListModel<SorrMod> myModel = Start.refreshModList(allModData);
-		listMod = new JList<SorrMod>(myModel);
-		listMod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		// List Background color
-		listMod.setBackground(new Color(90, 90, 90));
-
-		// Foreground color
-		listMod.setForeground(Color.white);
-		//
-		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
-		listMod.setBackground(UIManager.getColor("textInactiveText"));
-		listMod.setForeground(Color.BLACK);
-
-		// Add the list to the window
-		listMod.setCellRenderer(new ModRenderer());
 	}
 
 	/**
@@ -179,7 +164,7 @@ public class Main extends JFrame {
 	public Main() {
 		setTitle("Grupper");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 413, 457);
+		setBounds(100, 100, 413, 510);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(20, 20, 20));
 		contentPane.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
@@ -241,23 +226,17 @@ public class Main extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setToolTipText("");
-		tabbedPane.setBounds(0, 0, 399, 419);
+		tabbedPane.setBounds(0, 0, 399, 471);
 		contentPane.add(tabbedPane);
 
 		JPanel panel_level = new JPanel();
 		tabbedPane.addTab("   Levels    ", null, panel_level, null);
 		panel_level.setLayout(null);
 
-		JScrollPane scrollPane_mods = new JScrollPane();
-		scrollPane_mods.setBounds(10, 9, 374, 326);
-		panel_level.add(scrollPane_mods);
-
 		// Instancing custom object //////////////////////////////////////////////
 
 		// Mod List
 		updateModList();
-		// Create Jlist using a model
-		scrollPane_mods.setViewportView(listMod);
 		// add(new JScrollPane(listMod));
 
 		JPanel panel_char = new JPanel();
@@ -286,50 +265,26 @@ public class Main extends JFrame {
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
 		JPanel pn_installed = new JPanel();
-		pn_installed.setBounds(10, 9, 374, 382);
+		pn_installed.setBounds(10, 9, 374, 423);
 		panel_level.add(pn_installed);
-		pn_installed.setLayout(null);
+						pn_installed.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+				
+						JPanel panelButtons2 = new JPanel();
+						panelButtons2.setBackground(Color.RED);
+						pn_installed.add(panelButtons2);
+		
+				JPanel panelButtons1 = new JPanel();
+				panelButtons1.setBackground(Color.BLUE);
+				pn_installed.add(panelButtons1);
 
 		JLabel lblTitleImg = new JLabel("");
-		lblTitleImg.setBounds(27, 11, 320, 240);
 		// Getting image from the .jar file
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
 
-		JPanel panelButtons2 = new JPanel();
-		panelButtons2.setBackground(Color.RED);
-		panelButtons2.setBounds(0, 337, 374, 34);
-		pn_installed.add(panelButtons2);
-
-		JButton btUninstall = new JButton("Uninstall mod");
-		panelButtons2.add(btUninstall);
-
-		JButton btStart = new JButton("Start SorR");
-
-		panelButtons2.add(btStart);
-
-		JPanel panelButtons1 = new JPanel();
-		panelButtons1.setBackground(Color.BLUE);
-		panelButtons1.setBounds(0, 337, 374, 34);
-		pn_installed.add(panelButtons1);
-
-		JButton btFolder = new JButton("Open SorR folder");
-		panelButtons1.add(btFolder);
-
-		JButton btInstall = new JButton("Install mod");
-		panelButtons1.add(btInstall);
-
 		setInstalledMod();
 		
-		if (getInstalledMod() == null) {
-			// Use isso para alternar de painel
-			pn_installed.setVisible(false);
-		} else {
-			panelButtons1.setVisible(false);
-			panelButtons2.setVisible(true);
-			scrollPane_mods.setVisible(false);
-			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
-		}
+		
 
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
@@ -344,15 +299,7 @@ public class Main extends JFrame {
 			chckbxAvMods.setSelected(true);
 		}
 
-		chckbxAvMods.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Changing configuration 0...");
-				Start.changeConfig(0);
-				Start.refreshModList(allModData);
-				updateModList();
-				scrollPane_mods.setViewportView(listMod);
-			}
-		});
+	
 
 		JCheckBox chckAuthors = new JCheckBox("Hide authors in the mod list.");
 		chckAuthors.setBounds(10, 33, 341, 23);
@@ -454,86 +401,5 @@ public class Main extends JFrame {
 		if(panelButtons1.isVisible()) {
 			System.out.println("pane1 está visível!");
 		}
-
-		// Action Listeners //////////////////////////////////////////
-
-		btStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Run SorR executable
-					Runtime.getRuntime().exec(sorrPath + "//SorR.exe");
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				System.exit(0);
-			}
-		});
-
-		btInstall.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Check if there is a selected item
-				if (listMod.getSelectedIndex() != -1) {
-					System.out.println("Selected mod:" + listMod.getSelectedValue());
-					// Check if the mod is available to install
-					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
-						FuncMods.installMod(listMod.getSelectedValue().toString());
-						// swapping a panel
-						pn_installed.setVisible(true);
-						panelButtons1.setVisible(false);
-						panelButtons2.setVisible(true);
-						scrollPane_mods.setVisible(false);
-						setModData();
-						setInstalledMod();
-						lblTitleImg.setIcon(
-								new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
-
-						chckFistMod.setEnabled(false);
-						lblListByAdding.setEnabled(false);
-					}
-				}
-			}
-		});
-
-		btUninstall.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Verify installed mod
-				setInstalledMod();
-
-				// Call method to uninstall the mod
-				FuncMods.uninstallMod(getInstalledMod());
-
-				// Check if the mod is uninstalled
-				setModData();
-				if (FuncMods.existsInstallation() == null) {
-					// Use isso para alternar de painel
-					pn_installed.setVisible(false);
-					panelButtons1.setVisible(true);
-					panelButtons2.setVisible(false);
-					scrollPane_mods.setVisible(true);
-					chckFistMod.setEnabled(true);
-					lblListByAdding.setEnabled(true);
-				}
-				// Check if the mod is uninstalled
-				setModData();
-				updateModList();
-				scrollPane_mods.setViewportView(listMod);
-			}
-		});
-		
-		btFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				// Use the code below for swapping a panel
-				// scrollPane_mods.setVisible(false);
-
-				try {
-					// Using explorer to open a directory
-					Desktop.getDesktop().open(new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
 	}
 }
