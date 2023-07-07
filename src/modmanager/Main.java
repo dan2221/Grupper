@@ -27,6 +27,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
 import java.awt.Font;
+import javax.swing.JToggleButton;
+import java.awt.TextArea;
 
 /**
  * The main class and the program's window.
@@ -448,7 +450,7 @@ public class Main extends JFrame {
 
 		textField = new JTextField(sorrPath + "\\SorR.exe");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		textField.setBounds(10, 269, 275, 20);
+		textField.setBounds(10, 270, 275, 20);
 		panel_option.add(textField);
 		textField.setColumns(10);
 
@@ -523,5 +525,12 @@ public class Main extends JFrame {
 		});
 		btUninstall.setBounds(10, 348, 135, 23);
 		pn_installed.add(btUninstall);
+
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openFileDialog();
+				textField.setText(sorrPath + "SorR.exe");
+			}
+		});
 	}
 }
