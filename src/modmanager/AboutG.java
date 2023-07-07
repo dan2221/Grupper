@@ -66,7 +66,7 @@ public class AboutG extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Github page");
+				JButton okButton = new JButton("🌐 Github page");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Desktop desk = Desktop.getDesktop();
@@ -83,13 +83,13 @@ public class AboutG extends JDialog {
 					}
 				});
 
-				JButton btnNewButton = new JButton("♥ Donate");
-				btnNewButton.addActionListener(new ActionListener() {
+				JButton btDonate = new JButton("♥ Donate");
+				btDonate.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Desktop desk = Desktop.getDesktop();
 						try {
 							// URL to open in the default browser
-							desk.browse(new URI("https://github.com/dan2221/Grupper"));
+							desk.browse(new URI("https://www.paypal.com/donate/?business=K3ED4TGS7FTYS&no_recurring=0&currency_code=BRL"));
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -99,7 +99,7 @@ public class AboutG extends JDialog {
 						}
 					}
 				});
-				buttonPane.add(btnNewButton);
+				buttonPane.add(btDonate);
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);

@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel; // Lista padr�o
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,13 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
 import java.awt.Font;
-import javax.swing.JToggleButton;
-import java.awt.TextArea;
 
 /**
  * The main class and the program's window.
@@ -72,7 +69,6 @@ public class Main extends JFrame {
 
 		// Foreground color
 		listMod.setForeground(Color.white);
-		//
 		listMod.setBorder(new LineBorder(UIManager.getColor("inactiveCaptionText")));
 		listMod.setBackground(UIManager.getColor("textInactiveText"));
 		listMod.setForeground(Color.BLACK);
@@ -158,7 +154,7 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
 	// DefaultListModel model;
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtPath;
 
 	/**
 	 * Launch the application.
@@ -215,24 +211,23 @@ public class Main extends JFrame {
 			openFileDialog();
 		}
 
-		// Search for important files and folders.
-		// Check for SorR palette folders
+		// Search for SorR palette folders. These folders are importants for Grupper.
 		String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
 		for (String i : palFolders) {
 			if (!new File(sorrPath + "//palettes//" + i).exists()) {
-
 				String message = "The directory \" palettes/" + i.replace("//", "/") + "\" was not found!\n"
 						+ "The program needs that to work. Please select a different path or check your folder manually.";
 				JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
-
+				// In the absence of these files, the program will prompt for a new path.
 				openFileDialog();
 			}
 		}
 
-		// Check for important folders which contains mods
+		// Checking for folders which contains mods.
 		String[] foldersToMake = { "data", "mod//chars", "mod//themes", "mod//games" };
 		for (String i : foldersToMake) {
 			File selectedFolder = new File(sorrPath + "//" + i);
+			// If those folders don't exist, they will be created.
 			if (!selectedFolder.exists()) {
 				selectedFolder.mkdirs();
 				System.out.println(String.format("Directory \"%s\" created!", i));
@@ -335,6 +330,11 @@ public class Main extends JFrame {
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
 			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
+
+			// For now this option won't be enabled when a mod is installed. I can enable
+			// later. To do this I have to review some parts of the code.
+			txtPath.setEnabled(false);
+			btChangePath.setEnabled(false);
 		}
 
 		JPanel panel_option = new JPanel();
@@ -397,10 +397,10 @@ public class Main extends JFrame {
 		chckbxNewCheckBox_1.setBounds(10, 125, 341, 23);
 		panel_option.add(chckbxNewCheckBox_1);
 
-		JCheckBox chckbxNewCheckBox_2 = new JCheckBox("Use playable chars from mods (you cannot use another");
-		chckbxNewCheckBox_2.setEnabled(false);
-		chckbxNewCheckBox_2.setBounds(10, 176, 341, 23);
-		panel_option.add(chckbxNewCheckBox_2);
+		JCheckBox chckPlayableChars = new JCheckBox("Use playable chars from mods (you cannot use another");
+		chckPlayableChars.setEnabled(false);
+		chckPlayableChars.setBounds(10, 176, 341, 23);
+		panel_option.add(chckPlayableChars);
 
 		JLabel lblNewLabel = new JLabel("use characters mods).");
 		lblNewLabel.setEnabled(false);
@@ -418,14 +418,14 @@ public class Main extends JFrame {
 		chckFistMod.setEnabled(conditOption);
 		lblListByAdding.setEnabled(conditOption);
 
-		JButton btnNewButton = new JButton("About Grupper");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btAbout = new JButton("🛈 About");
+		btAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AboutG.main(null);
 			}
 		});
-		btnNewButton.setBounds(266, 357, 118, 23);
-		panel_option.add(btnNewButton);
+		btAbout.setBounds(290, 357, 94, 23);
+		panel_option.add(btAbout);
 
 		JLabel lblUseCharactersMods = new JLabel("characters mods).");
 		lblUseCharactersMods.setEnabled(false);
@@ -440,19 +440,19 @@ public class Main extends JFrame {
 		separator_1.setBounds(10, 231, 374, 2);
 		panel_option.add(separator_1);
 
-		JButton btnNewButton_1 = new JButton("Change...");
-		btnNewButton_1.setBounds(295, 268, 89, 23);
-		panel_option.add(btnNewButton_1);
+		JButton btChangePath = new JButton("Change...");
+		btChangePath.setBounds(295, 268, 89, 23);
+		panel_option.add(btChangePath);
 
 		JLabel lblNewLabel_1 = new JLabel("Executable path:");
 		lblNewLabel_1.setBounds(10, 244, 94, 14);
 		panel_option.add(lblNewLabel_1);
 
-		textField = new JTextField(sorrPath + "\\SorR.exe");
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		textField.setBounds(10, 270, 275, 20);
-		panel_option.add(textField);
-		textField.setColumns(10);
+		txtPath = new JTextField(sorrPath + "\\SorR.exe");
+		txtPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		txtPath.setBounds(10, 270, 275, 20);
+		panel_option.add(txtPath);
+		txtPath.setColumns(10);
 
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -497,6 +497,8 @@ public class Main extends JFrame {
 		});
 
 		JButton btUninstall = new JButton("Uninstall mod");
+		btUninstall.setBounds(10, 348, 135, 23);
+		pn_installed.add(btUninstall);
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -509,13 +511,17 @@ public class Main extends JFrame {
 				// Check if the mod is uninstalled
 				setModData();
 				if (FuncMods.existsInstallation() == null) {
-					// Use isso para alternar de painel
+					// jerry-rigged way to change the panel
 					pn_installed.setVisible(false);
 					btInstall.setVisible(true);
 					btFolder.setVisible(true);
 					scrollPane_mods.setVisible(true);
 					chckFistMod.setEnabled(true);
 					lblListByAdding.setEnabled(true);
+
+					// The 2 lines below will be changed in the future.
+					txtPath.setEnabled(true);
+					btChangePath.setEnabled(true);
 				}
 				// Check if the mod is uninstalled
 				setModData();
@@ -523,13 +529,16 @@ public class Main extends JFrame {
 				scrollPane_mods.setViewportView(listMod);
 			}
 		});
-		btUninstall.setBounds(10, 348, 135, 23);
-		pn_installed.add(btUninstall);
 
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btChangePath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				closeJVM = false;
 				openFileDialog();
-				textField.setText(sorrPath + "SorR.exe");
+				closeJVM = true;
+				txtPath.setText(sorrPath + "\\SorR.exe");
+				Start.refreshModList(allModData);
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
 			}
 		});
 	}

@@ -22,9 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class SorrChooser extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	static String selectedDir;
