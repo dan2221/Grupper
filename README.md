@@ -8,7 +8,7 @@ DESCRIPTION:
 
 REQUIREMENTS:
 
-• To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com".
+• To run Grupper you need to install Java in your operation system. If you don't have yet, you can download it on "www.java.com". After install it you just have to do a double click on Grupper.jar.
 
 FEATURES:
 
@@ -36,3 +36,7 @@ WARNINGS:
 * Do not delete the folder of an installed mod. Uninstall it first and then delete its folder;
 * It's recommended that you don't change manually the files in the SORR folder and subfolders while a mod is installed;
 * When you are going to replace Grupper to a new version, uninstall all mods and chars first.
+
+OPTIONAL DONATION:
+
+* If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://www.paypal.com/donate/?business=K3ED4TGS7FTYS&no_recurring=0&currency_code=USD
