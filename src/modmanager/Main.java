@@ -32,17 +32,11 @@ import java.awt.Font;
  */
 public class Main extends JFrame {
 
-	ImageIcon modImage;
-	static int modQuantity;
 	/**
 	 * This multidimensional array contais values of all mods. Index 1: mod index;
 	 * Index 2: mod folder (0), mod title (1), mod author (2).
 	 */
 	static String[][] allModData;
-	String modSelecionado;
-	boolean[] allConfig = Start.getConfig();
-	JList<SorrMod> listMod;
-	static String sorrPath;
 
 	/**
 	 * This variable is necessary to close the whole program when you closed certain
@@ -51,11 +45,15 @@ public class Main extends JFrame {
 	static boolean closeJVM = true;
 
 	/**
-	 * Return the mod quantity.
+	 * This array contains some configurations.
 	 */
-	public static int getModQuantity() {
-		return modQuantity;
-	}
+	boolean[] allConfig = Start.getConfig();
+
+	// The rest of the global variables are self-explanatory.
+	static int modQuantity;
+	static String selectedMod, sorrPath;
+	JList<SorrMod> listMod;
+	ImageIcon modImage;
 
 	public void updateModList() {
 		setModData();
@@ -90,13 +88,8 @@ public class Main extends JFrame {
 		modImage = new ImageIcon("mod//games//" + FuncMods.existsInstallation() + "//title.png");
 	}
 
-	public String getInstalledMod() {
-		return modSelecionado;
-
-	}
-
 	public void setInstalledMod() {
-		modSelecionado = FuncMods.existsInstallation();
+		selectedMod = FuncMods.existsInstallation();
 	}
 
 	/**
@@ -148,10 +141,8 @@ public class Main extends JFrame {
 		System.out.println("Path you choosed:" + sorrPath);
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	// DefaultListModel model;
 	private JPanel contentPane;
 	private JTextField txtPath;
@@ -246,12 +237,10 @@ public class Main extends JFrame {
 		tabbedPane.addTab("   Levels    ", null, panel_level, null);
 		panel_level.setLayout(null);
 
-		/////// Install Mod ///////////////////////////////////////////////////////
 		JButton btInstall = new JButton("Install mod");
 		btInstall.setBounds(247, 357, 137, 23);
 		panel_level.add(btInstall);
 
-		///////// Button for choosing a mod ///////////////////////////////////////
 		JButton btFolder = new JButton("Open SorR Folder");
 		btFolder.setBounds(10, 357, 146, 23);
 		panel_level.add(btFolder);
@@ -260,8 +249,6 @@ public class Main extends JFrame {
 		JScrollPane scrollPane_mods = new JScrollPane();
 		scrollPane_mods.setBounds(10, 9, 374, 326);
 		panel_level.add(scrollPane_mods);
-
-		// Instancing custom object //////////////////////////////////////////////
 
 		// Mod List
 		updateModList();
@@ -272,26 +259,26 @@ public class Main extends JFrame {
 		JPanel panel_char = new JPanel();
 		tabbedPane.addTab("Characters", null, panel_char, null);
 
-		JFormattedTextField frmtdtxtfldThisSectionIs = new JFormattedTextField();
-		frmtdtxtfldThisSectionIs.setText("This section is not available yet. Please wait for an update.");
-		frmtdtxtfldThisSectionIs.setEditable(false);
-		panel_char.add(frmtdtxtfldThisSectionIs);
+		JFormattedTextField frmtdtxtfld01 = new JFormattedTextField();
+		frmtdtxtfld01.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfld01.setEditable(false);
+		panel_char.add(frmtdtxtfld01);
 
 		JPanel panel_theme = new JPanel();
 		tabbedPane.addTab("Themes", null, panel_theme, null);
 
-		JFormattedTextField frmtdtxtfldThisSectionIs_1 = new JFormattedTextField();
-		frmtdtxtfldThisSectionIs_1.setText("This section is not available yet. Please wait for an update.");
-		frmtdtxtfldThisSectionIs_1.setEditable(false);
-		panel_theme.add(frmtdtxtfldThisSectionIs_1);
+		JFormattedTextField frmtdtxtfld02 = new JFormattedTextField();
+		frmtdtxtfld02.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfld02.setEditable(false);
+		panel_theme.add(frmtdtxtfld02);
 
 		JPanel panel_music = new JPanel();
 		tabbedPane.addTab("Music Player", null, panel_music, null);
 
-		JFormattedTextField frmtdtxtfldThisSectionIs_2 = new JFormattedTextField();
-		frmtdtxtfldThisSectionIs_2.setText("This section is not available yet. Please wait for an update.");
-		frmtdtxtfldThisSectionIs_2.setEditable(false);
-		panel_music.add(frmtdtxtfldThisSectionIs_2);
+		JFormattedTextField frmtdtxtfld03 = new JFormattedTextField();
+		frmtdtxtfld03.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfld03.setEditable(false);
+		panel_music.add(frmtdtxtfld03);
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
 		JPanel pn_installed = new JPanel();
@@ -301,7 +288,7 @@ public class Main extends JFrame {
 
 		JLabel lblTitleImg = new JLabel("");
 		lblTitleImg.setBounds(27, 11, 320, 240);
-		// Getting image from the .jar file
+		// Getting image from project resources
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
 
@@ -309,48 +296,56 @@ public class Main extends JFrame {
 		btPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					// Run SorR executable
-					Runtime.getRuntime().exec(sorrPath + "//SorR.exe");
+					// Run SorR executable through the exec method.
+					Runtime.getRuntime().exec(sorrPath + "//SorR.exe", null, new File(sorrPath));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				System.exit(0);
+				System.exit(-1);
 			}
 		});
 		btPlay.setBounds(256, 348, 118, 23);
 		pn_installed.add(btPlay);
 
+		JPanel panel_option = new JPanel();
+		tabbedPane.addTab("Options", null, panel_option, null);
+		panel_option.setLayout(null);
+
+		JButton btPath = new JButton("Change...");
+		btPath.setBounds(295, 268, 89, 23);
+		panel_option.add(btPath);
+
+		JLabel lblNewLabel_1 = new JLabel("Executable path:");
+		lblNewLabel_1.setBounds(10, 244, 94, 14);
+		panel_option.add(lblNewLabel_1);
+
+		txtPath = new JTextField(sorrPath + "\\SorR.exe");
+		txtPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		txtPath.setBounds(10, 270, 275, 20);
+		panel_option.add(txtPath);
+		txtPath.setColumns(10);
+
 		setInstalledMod();
 
-		if (getInstalledMod() == null) {
-			// Use isso para alternar de painel
+		if (selectedMod == null) {
 			pn_installed.setVisible(false);
 		} else {
 			btInstall.setVisible(false);
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
-			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
+			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
 
 			// For now this option won't be enabled when a mod is installed. I can enable
 			// later. To do this I have to review some parts of the code.
 			txtPath.setEnabled(false);
-			btChangePath.setEnabled(false);
+			btPath.setEnabled(false);
 		}
 
-		JPanel panel_option = new JPanel();
-		tabbedPane.addTab("Options", null, panel_option, null);
-		panel_option.setLayout(null);
+		JCheckBox chckAvailable = new JCheckBox("Show only available mods.");
+		chckAvailable.setBounds(10, 7, 341, 23);
+		panel_option.add(chckAvailable);
 
-		JCheckBox chckbxAvMods = new JCheckBox("Show only available mods.");
-		chckbxAvMods.setBounds(10, 7, 341, 23);
-		panel_option.add(chckbxAvMods);
-
-		if (allConfig[0] == true) {
-			System.out.println("checkbox esta marcado!");
-			chckbxAvMods.setSelected(true);
-		}
-
-		chckbxAvMods.addActionListener(new ActionListener() {
+		chckAvailable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Changing configuration 0...");
 				Start.changeConfig(0);
@@ -364,11 +359,6 @@ public class Main extends JFrame {
 		chckAuthors.setBounds(10, 33, 341, 23);
 		panel_option.add(chckAuthors);
 
-		if (allConfig[1] == true) {
-			System.out.println("checkbox esta marcado!");
-			chckAuthors.setSelected(true);
-		}
-
 		chckAuthors.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Changing configuration 1...");
@@ -380,8 +370,14 @@ public class Main extends JFrame {
 		chckFistMod.setBounds(10, 59, 341, 23);
 		panel_option.add(chckFistMod);
 
+		// Fill checkboxes according to class variable.
+		if (allConfig[0] == true) {
+			chckAvailable.setSelected(true);
+		}
+		if (allConfig[1] == true) {
+			chckAuthors.setSelected(true);
+		}
 		if (allConfig[2] == true) {
-			System.out.println("checkbox esta marcado!");
 			chckFistMod.setSelected(true);
 		}
 
@@ -392,27 +388,27 @@ public class Main extends JFrame {
 			}
 		});
 
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Use \r\npalettes from mods playable characters (you can't");
-		chckbxNewCheckBox_1.setEnabled(false);
-		chckbxNewCheckBox_1.setBounds(10, 125, 341, 23);
-		panel_option.add(chckbxNewCheckBox_1);
+		JCheckBox chckPalettes = new JCheckBox("Use player palettes from mods (you can't use custom");
+		chckPalettes.setEnabled(false);
+		chckPalettes.setBounds(10, 125, 341, 23);
+		panel_option.add(chckPalettes);
+
+		JLabel lblNewLabel = new JLabel("chars).");
+		lblNewLabel.setEnabled(false);
+		lblNewLabel.setBounds(31, 155, 314, 14);
+		panel_option.add(lblNewLabel);
 
 		JCheckBox chckPlayableChars = new JCheckBox("Use playable chars from mods (you cannot use another");
 		chckPlayableChars.setEnabled(false);
 		chckPlayableChars.setBounds(10, 176, 341, 23);
 		panel_option.add(chckPlayableChars);
 
-		JLabel lblNewLabel = new JLabel("use characters mods).");
-		lblNewLabel.setEnabled(false);
-		lblNewLabel.setBounds(31, 155, 314, 14);
-		panel_option.add(lblNewLabel);
-
 		JLabel lblListByAdding = new JLabel("by adding \"-\" to the begining of its folder name.");
 		lblListByAdding.setBounds(31, 89, 314, 14);
 		panel_option.add(lblListByAdding);
 
 		boolean conditOption = true;
-		if (getInstalledMod() != null) {
+		if (selectedMod != null) {
 			conditOption = false;
 		}
 		chckFistMod.setEnabled(conditOption);
@@ -440,38 +436,17 @@ public class Main extends JFrame {
 		separator_1.setBounds(10, 231, 374, 2);
 		panel_option.add(separator_1);
 
-		JButton btChangePath = new JButton("Change...");
-		btChangePath.setBounds(295, 268, 89, 23);
-		panel_option.add(btChangePath);
-
-		JLabel lblNewLabel_1 = new JLabel("Executable path:");
-		lblNewLabel_1.setBounds(10, 244, 94, 14);
-		panel_option.add(lblNewLabel_1);
-
-		txtPath = new JTextField(sorrPath + "\\SorR.exe");
-		txtPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		txtPath.setBounds(10, 270, 275, 20);
-		panel_option.add(txtPath);
-		txtPath.setColumns(10);
-
 		btFolder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				// Use the code below for swapping a panel
-				// scrollPane_mods.setVisible(false);
-
 				// Show current directory
 				try {
-					Desktop.getDesktop().open(new File(System.getProperty("user.dir")));
+					Desktop.getDesktop().open(new File(sorrPath));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 		btInstall.addActionListener(new ActionListener() {
-			/**
-			 * @param e
-			 */
 			public void actionPerformed(ActionEvent e) {
 				// Check if there are a selected item
 				if (listMod.getSelectedIndex() != -1) {
@@ -479,16 +454,14 @@ public class Main extends JFrame {
 					// Check if the mod is available to install
 					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
 						FuncMods.installMod(listMod.getSelectedValue().toString());
-						// swapping a panel
+						// Swapping a panel
 						pn_installed.setVisible(true);
 						btInstall.setVisible(false);
 						btFolder.setVisible(false);
 						scrollPane_mods.setVisible(false);
 						setModData();
 						setInstalledMod();
-						lblTitleImg.setIcon(
-								new ImageIcon(sorrPath + "//mod//games//" + getInstalledMod() + "//title.png"));
-
+						lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
 						chckFistMod.setEnabled(false);
 						lblListByAdding.setEnabled(false);
 					}
@@ -501,15 +474,17 @@ public class Main extends JFrame {
 		pn_installed.add(btUninstall);
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				// Verify installed mod
 				setInstalledMod();
 
 				// Call method to uninstall the mod
-				FuncMods.uninstallMod(getInstalledMod());
+				FuncMods.uninstallMod(selectedMod);
 
-				// Check if the mod is uninstalled
+				// Check if the mod was really uninstalled
 				setModData();
+				setInstalledMod();
+
+				// Disable and enable GUI components
 				if (FuncMods.existsInstallation() == null) {
 					// jerry-rigged way to change the panel
 					pn_installed.setVisible(false);
@@ -521,16 +496,14 @@ public class Main extends JFrame {
 
 					// The 2 lines below will be changed in the future.
 					txtPath.setEnabled(true);
-					btChangePath.setEnabled(true);
+					btPath.setEnabled(true);
 				}
-				// Check if the mod is uninstalled
-				setModData();
 				updateModList();
 				scrollPane_mods.setViewportView(listMod);
 			}
 		});
 
-		btChangePath.addActionListener(new ActionListener() {
+		btPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				closeJVM = false;
 				openFileDialog();

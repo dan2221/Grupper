@@ -22,6 +22,10 @@ public class Start {
 	 */
 	private static boolean[] configrupper = new boolean[3];
 	private static String sorrPath;
+
+	/**
+	 * This is the directory where the Jar executable is located.
+	 */
 	static String dirJar = System.getProperty("user.dir") + "//";
 	static boolean pendingExecSetting;
 
@@ -48,7 +52,7 @@ public class Start {
 		scanConfig();
 		DefaultListModel<SorrMod> myModel = new DefaultListModel<>();
 		boolean installed = false;
-		for (int i = 0; i < Main.getModQuantity(); i++) {
+		for (int i = 0; i < Main.modQuantity; i++) {
 
 			// Add mod to list {Mod Name},{Author},{status}
 			int modStatus = FuncMods.scanMod(allmodsvalues[i][1]);
@@ -71,7 +75,7 @@ public class Start {
 		}
 		if (installed == false) {
 			try {
-				File myObj = new File("mod//sorr.txt");
+				File myObj = new File(sorrPath + "//mod//sorr.txt");
 				if (myObj.createNewFile()) {
 					System.out.println("File created: " + myObj.getName());
 				} else {

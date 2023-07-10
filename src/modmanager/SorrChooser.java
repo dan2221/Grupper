@@ -1,6 +1,7 @@
 package modmanager;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -56,6 +57,7 @@ public class SorrChooser extends JDialog {
 		{
 			JLabel lblNewLabel = new JLabel("Select your SorR Executable path:");
 			lblNewLabel.setBounds(10, 11, 233, 14);
+			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 10));
 			contentPanel.add(lblNewLabel);
 		}
 

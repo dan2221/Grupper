@@ -74,7 +74,7 @@ public class FuncMods {
 
 	/**
 	 * Checks if exists any file with the desired extension. It works like like the
-	 * exist command in Batch Script
+	 * exist command in Batch Script.
 	 * 
 	 * @param directory
 	 * @return boolean value
@@ -161,7 +161,7 @@ public class FuncMods {
 	 * Read a txt file to colect all mod data.
 	 * 
 	 * @param filename
-	 * @return
+	 * @return All mod data form txts.
 	 */
 	public static String[] readTxt(String filename) {
 		String[] modData = new String[3];
@@ -225,14 +225,14 @@ public class FuncMods {
 		// Creates a palette folder if it doesn't exists
 		if (!new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").exists()) {
 			new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").mkdirs();
-			System.out.println("\"palettes\" folder created in \"" + Main.sorrPath + proj + "\" project!");
+			System.out.println("\"palettes\" folder created in \"" + Main.sorrPath + "\\" + proj + "\" project!");
 		}
 		// Checking for enemie's palettes
 		if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//palettes//enemies//*.pal")) {
 			System.out.println("Enemies palettes found!");
 			status = 0; // Disabled mod
 		} else {
-			// Auto fix enemies palette folder path
+			// Auto-fix enemies palette folder path
 			if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//enemies//*.pal")) {
 				move(Main.sorrPath + "//mod//games//" + proj + "//enemies",
 						Main.sorrPath + "//mod//games//" + proj + "//palettes");
@@ -247,31 +247,39 @@ public class FuncMods {
 					}
 				} else {
 					System.out.println("The mod can't be installed! \"sorr_enemies\" folder not found!");
-					status = 2; // Unavaliable modd
+					status = 2; // Unavaliable mod
 				}
 			}
 		}
-
 		System.out.println("Scanning completed!");
 		System.out.println("--------------------------------------------------");
 		return status;
 	}
 
+	/**
+	 * This method detects whether any level mod is installed, regardless of the
+	 * mod.
+	 * 
+	 * @return mod's name
+	 */
 	public static String existsInstallation() {
 		String[][] allModsValues = Main.getAllModData();
 		String installed = null;
-		for (int i = 0; i < Main.getModQuantity(); i++) {
+		for (int i = 0; i < Main.modQuantity; i++) {
 			if (scanMod(allModsValues[i][0]) == 1) {
 				System.out.println("\nInstalled: " + allModsValues[i][0]);
 				installed = allModsValues[i][0];
 				break;
 			}
 		}
+		if (installed == null) {
+			System.out.println("There isn't any installed mods!");
+		}
 		return installed;
 	}
 
 	/**
-	 * Install the mod
+	 * Install the modification
 	 * 
 	 * @param selectedMod
 	 */
@@ -282,25 +290,25 @@ public class FuncMods {
 			selectedMod = "- " + selectedMod;
 		}
 
-		System.out.println("Installing " + selectedMod + "...");
+		System.out.println("------------------------------\nInstalling \"" + selectedMod + "\"...");
 
 		// Palettes
 		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies").exists()) {
 			ren(Main.sorrPath + "//palettes//enemies", "sorr_enemies");
 			move(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies", Main.sorrPath + "//palettes");
-
 		}
 
 		// List all data files in a txt file
 		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//data").exists()) {
 			ArrayList<String> dataFiles = getAllFiles(Main.sorrPath + "//mod//games//" + selectedMod + "//data//*.*");
 			try (FileWriter writer = new FileWriter(Main.sorrPath + "//mod//sorr.txt")) {
+				System.out.println("Handling with data files...");
 				for (String item : dataFiles) {
-					System.out.println(item);
+					System.out.println("--------------------\n" + item);
 					writer.write(item + "\n");
 
-					// Your data files will not be replaced by mod's files, because the mod's files
-					// receives "[mod]" in their names when exists files with the same names in SorR
+					// Your data files won't be replaced by mod's files, because the mod's files
+					// receives "[mod]" in their names when exists files with the same names in the
 					// data folder.
 					if (new File(Main.sorrPath + "//data//" + item).exists()) {
 						ren(Main.sorrPath + "//mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
@@ -316,9 +324,10 @@ public class FuncMods {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// Renaming the txt for identify mod installation
-			ren("mod//sorr.txt", selectedMod + ".txt");
 		}
+		// Renaming the txt for identifying mod installation
+		ren(Main.sorrPath + "//mod//sorr.txt", selectedMod + ".txt");
+		System.out.println("Successfully installed!");
 	}
 
 	public static void uninstallMod(String proj) {
@@ -350,7 +359,6 @@ public class FuncMods {
 						move(Main.sorrPath + "//data//" + modFile, Main.sorrPath + "//mod//games//" + proj + "//data");
 					}
 				}
-
 				// Read next line of the file
 				line = reader.readLine();
 			}
@@ -374,13 +382,12 @@ public class FuncMods {
 			e.printStackTrace();
 		}
 
-		// Remove "- " from the mod folder if the configuration for set
+		// Remove "- " from the mod folder if the configuration for setting
 		// installed mod as the first one of the list is activated.
 		if (Start.getConfig()[2]) {
 			if (proj.startsWith("- ")) {
-				// Remove 2 first characters of the folder.
+				// Remove the 2 first characters of the folder name.
 				ren(Main.sorrPath + "//mod//games//" + proj, proj.substring(2));
-				System.out.println("Renamed to " + proj.substring(2));
 			}
 		}
 		System.out.println("Uninstalled!");
