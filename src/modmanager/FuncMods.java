@@ -1,23 +1,37 @@
 package modmanager;
 
-import java.util.ArrayList; // import the ArrayList class
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import java.io.BufferedReader;
-
 // Libraries for file checking
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList; // import the ArrayList class
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * This class has methods related to file manipulation.
  */
 public class FuncMods {
+
+	public void copyResource() {
+		String location = "/images/default_logo.png";
+		String destiny = "/myfolder/new_image.png";
+		try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(destiny)) {
+			Files.copy(is, Paths.get(location));
+		} catch (IOException e) {
+			// An error occurred copying the resource
+		}
+	}
 
 	/**
 	 * Move desired file or folder. It works like the Batch Script move command.
@@ -27,18 +41,42 @@ public class FuncMods {
 	 * 
 	 */
 	public static void move(String origem, String destino) {
-		System.out.println("\nMoving file...");
 		// Getting the filename or folder
 		String[] tree = origem.split("//", 0);
 		String item = tree[tree.length - 1];
 
 		File param1 = new File(origem);
 		File param2 = new File(destino + "//" + item);
-		System.out.println("Origin: " + param1);
-		System.out.println("Destiny: " + param2);
+		System.out.println("Moving: " + param1);
+		System.out.println("To:     " + param2);
 		try {
 			Files.move(param1.toPath(), param2.toPath());
-			System.out.println("\"" + item + "\" moved successfully!");
+			System.out.println("\"" + item + "\" successfully moved!");
+		} catch (IOException ex) {
+			System.err.println("Error found!");
+			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Move desired file or folder. It works like the Batch Script move command.
+	 * 
+	 * @param origem
+	 * @param destino
+	 * 
+	 */
+	public static void copy(String origem, String destino) {
+		// Getting the filename or folder
+		String[] tree = origem.split("//", 0);
+		String item = tree[tree.length - 1];
+
+		File param1 = new File(origem);
+		File param2 = new File(destino + "//" + item);
+		System.out.println("Moving: " + param1);
+		System.out.println("To:     " + param2);
+		try {
+			Files.copy(param1.toPath(), param2.toPath());
+			System.out.println("\"" + item + "\" successfully copied!");
 		} catch (IOException ex) {
 			System.err.println("Error found!");
 			ex.printStackTrace();
@@ -166,7 +204,8 @@ public class FuncMods {
 	public static String[] readTxt(String filename) {
 		String[] modData = new String[3];
 		modData[0] = filename.replace(".txt", "");
-		System.out.println("-----------------------\nReading " + filename + "...");
+		System.out.println("-----------------------");
+		System.out.println("Getting data from " + filename + "...\n");
 
 		try {
 			// Open the file
@@ -204,7 +243,6 @@ public class FuncMods {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Mod data ------------------");
 		System.out.println("Folder: " + modData[0]);
 		System.out.println("Title: " + modData[1]);
 		System.out.println("Author: " + modData[2]);
@@ -399,10 +437,38 @@ public class FuncMods {
 	 * @param file
 	 * @param additionalText
 	 */
-	public static void errorMsg(String file, String additionalText) {
+	public static void errorMsg(String file) {
 		String message = "The directory \"" + file.replace("//", "/") + "\" was not found!\n"
 				+ "The program needs that to work. Please select a different path or check your folder manually.";
 		JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
+	}
+
+	/**
+	 * Method to unzip files
+	 * 
+	 * @param zipFile
+	 * @param destFolder
+	 * @throws IOException
+	 */
+	public static void unzip(String zipFile, String destFolder) throws IOException {
+		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
+			ZipEntry entry;
+			byte[] buffer = new byte[1024];
+			while ((entry = zis.getNextEntry()) != null) {
+				File newFile = new File(destFolder + File.separator + entry.getName());
+				if (entry.isDirectory()) {
+					newFile.mkdirs();
+				} else {
+					new File(newFile.getParent()).mkdirs();
+					try (FileOutputStream fos = new FileOutputStream(newFile)) {
+						int length;
+						while ((length = zis.read(buffer)) > 0) {
+							fos.write(buffer, 0, length);
+						}
+					}
+				}
+			}
+		}
 	}
 }

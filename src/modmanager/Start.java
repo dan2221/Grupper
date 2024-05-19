@@ -93,7 +93,7 @@ public class Start {
 	 * Get all configuration variables from the cfg file.
 	 */
 	public static void scanConfig() {
-		// If there aren't a configuration file, it will be created.
+		// If there isn't a configuration file, it'll be created.
 		if (!new File(dirJar + "grupper.cfg").exists()) {
 
 			// Values to add to cfg file

@@ -3,10 +3,12 @@ package modmanager;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -22,10 +24,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
-import java.awt.Font;
+import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 /**
  * The main class and the program's window.
@@ -40,7 +43,7 @@ public class Main extends JFrame {
 
 	/**
 	 * This variable is necessary to close the whole program when you closed certain
-	 * popups, instand of only close the popup itself.
+	 * popups, instead of only close the popup itself.
 	 */
 	static boolean closeJVM = true;
 
@@ -209,7 +212,7 @@ public class Main extends JFrame {
 				String message = "The directory \" palettes/" + i.replace("//", "/") + "\" was not found!\n"
 						+ "The program needs that to work. Please select a different path or check your folder manually.";
 				JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
-				// In the absence of these files, the program will prompt for a new path.
+				// In the absence of these folders, the program will prompt for a new path.
 				openFileDialog();
 			}
 		}
@@ -234,7 +237,7 @@ public class Main extends JFrame {
 		contentPane.add(tabbedPane);
 
 		JPanel panel_level = new JPanel();
-		tabbedPane.addTab("   Levels    ", null, panel_level, null);
+		tabbedPane.addTab("Levels", null, panel_level, null);
 		panel_level.setLayout(null);
 
 		JButton btInstall = new JButton("Install mod");
@@ -264,21 +267,115 @@ public class Main extends JFrame {
 		frmtdtxtfld01.setEditable(false);
 		panel_char.add(frmtdtxtfld01);
 
-		JPanel panel_theme = new JPanel();
-		tabbedPane.addTab("Themes", null, panel_theme, null);
+		JPanel panel_music = new JPanel();
+		tabbedPane.addTab("Music Player", null, panel_music, null);
 
 		JFormattedTextField frmtdtxtfld02 = new JFormattedTextField();
 		frmtdtxtfld02.setText("This section is not available yet. Please wait for an update.");
 		frmtdtxtfld02.setEditable(false);
-		panel_theme.add(frmtdtxtfld02);
+		panel_music.add(frmtdtxtfld02);
 
-		JPanel panel_music = new JPanel();
-		tabbedPane.addTab("Music Player", null, panel_music, null);
+		JPanel panel_tools = new JPanel();
+		tabbedPane.addTab("Tools", null, panel_tools, null);
+		panel_tools.setLayout(null);
 
-		JFormattedTextField frmtdtxtfld03 = new JFormattedTextField();
-		frmtdtxtfld03.setText("This section is not available yet. Please wait for an update.");
-		frmtdtxtfld03.setEditable(false);
-		panel_music.add(frmtdtxtfld03);
+		JLabel lblNewLabel_2_1 = new JLabel("Use a new save file with everyting unlocked.");
+		lblNewLabel_2_1.setBounds(21, 106, 352, 21);
+		panel_tools.add(lblNewLabel_2_1);
+
+		JLabel lblNewLabel_2 = new JLabel("Restore the default backup palettes.");
+		lblNewLabel_2.setBounds(21, 29, 352, 21);
+		panel_tools.add(lblNewLabel_2);
+
+		JButton btnRestorePal = new JButton("Restore");
+		btnRestorePal.setEnabled(false);
+		btnRestorePal.setBounds(232, 60, 141, 21);
+		panel_tools.add(btnRestorePal);
+		btnRestorePal.addActionListener(new ActionListener() {
+			/**
+			 * Restore palettes
+			 * 
+			 * @param e
+			 */
+			public void actionPerformed(ActionEvent e) {
+				if (FuncMods.exist("resources.zip")) {
+					try {
+						FuncMods.unzip("resources.zip", "unzipped");
+						FuncMods.move("unzipped//palettes//backup_chars", sorrPath + "//palettes");
+						FuncMods.move("unzipped//palettes//backup_enemies", sorrPath + "//palettes");
+						Files.delete(new File("unizipped").toPath());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "The file \"resources.zip\" was not found!\n", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		JCheckBox chckChars = new JCheckBox("Chars");
+		chckChars.setBounds(102, 60, 87, 21);
+		panel_tools.add(chckChars);
+
+		JCheckBox chckEnemies = new JCheckBox("Enemies");
+		chckEnemies.setBounds(15, 60, 87, 21);
+		panel_tools.add(chckEnemies);
+
+		chckChars.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckChars.isSelected()) {
+					System.out.println("I'm selected!");
+				} else {
+					System.out.println("I'm not selected!");
+				}
+				if (!chckChars.isSelected() && !chckEnemies.isSelected()) {
+					btnRestorePal.setEnabled(false);
+					System.out.println("FALSE");
+				} else {
+					btnRestorePal.setEnabled(true);
+					System.out.println("TRUE");
+				}
+			}
+		});
+
+		chckEnemies.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckChars.isSelected()) {
+					System.out.println("I'm selected!");
+				} else {
+					System.out.println("I'm not selected!");
+				}
+				if (!chckChars.isSelected() && !chckEnemies.isSelected()) {
+					btnRestorePal.setEnabled(false);
+					System.out.println("FALSE");
+				} else {
+					btnRestorePal.setEnabled(true);
+					System.out.println("TRUE");
+				}
+			}
+		});
+
+		JButton btnApply = new JButton("Apply");
+		btnApply.setBounds(232, 137, 141, 21);
+		panel_tools.add(btnApply);
+
+		JSeparator separator_2_1 = new JSeparator();
+		separator_2_1.setToolTipText("");
+		separator_2_1.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Savegame 100%", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		separator_2_1.setBounds(8, 91, 378, 82);
+		panel_tools.add(separator_2_1);
+
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBorder(
+				new TitledBorder(null, "Palette Recover", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		separator_2.setToolTipText("Palette recover");
+		separator_2.setBounds(8, 10, 378, 82);
+		panel_tools.add(separator_2);
+		// chckEnemies.addActionListener(BoxChecker("chars"));
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
 		JPanel pn_installed = new JPanel();
@@ -311,12 +408,12 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Options", null, panel_option, null);
 		panel_option.setLayout(null);
 
-		JButton btPath = new JButton("Change...");
+		JButton btPath = new JButton("Change");
 		btPath.setBounds(295, 268, 89, 23);
 		panel_option.add(btPath);
 
 		JLabel lblNewLabel_1 = new JLabel("Executable path:");
-		lblNewLabel_1.setBounds(10, 244, 94, 14);
+		lblNewLabel_1.setBounds(10, 244, 223, 14);
 		panel_option.add(lblNewLabel_1);
 
 		txtPath = new JTextField(sorrPath + "\\SorR.exe");
@@ -367,7 +464,7 @@ public class Main extends JFrame {
 		});
 
 		JCheckBox chckFistMod = new JCheckBox("Show installed mod as the first one of the sormaker\r\n list");
-		chckFistMod.setBounds(10, 59, 341, 23);
+		chckFistMod.setBounds(10, 59, 374, 23);
 		panel_option.add(chckFistMod);
 
 		// Fill checkboxes according to class variable.
@@ -390,7 +487,7 @@ public class Main extends JFrame {
 
 		JCheckBox chckPalettes = new JCheckBox("Use player palettes from mods (you can't use custom");
 		chckPalettes.setEnabled(false);
-		chckPalettes.setBounds(10, 125, 341, 23);
+		chckPalettes.setBounds(10, 125, 374, 23);
 		panel_option.add(chckPalettes);
 
 		JLabel lblNewLabel = new JLabel("chars).");
@@ -400,11 +497,11 @@ public class Main extends JFrame {
 
 		JCheckBox chckPlayableChars = new JCheckBox("Use playable chars from mods (you cannot use another");
 		chckPlayableChars.setEnabled(false);
-		chckPlayableChars.setBounds(10, 176, 341, 23);
+		chckPlayableChars.setBounds(10, 176, 374, 23);
 		panel_option.add(chckPlayableChars);
 
 		JLabel lblListByAdding = new JLabel("by adding \"-\" to the begining of its folder name.");
-		lblListByAdding.setBounds(31, 89, 314, 14);
+		lblListByAdding.setBounds(31, 89, 353, 14);
 		panel_option.add(lblListByAdding);
 
 		boolean conditOption = true;
