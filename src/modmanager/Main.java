@@ -358,6 +358,23 @@ public class Main extends JFrame {
 		});
 
 		JButton btnApply = new JButton("Apply");
+		btnApply.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (FuncMods.exist("resources.zip")) {
+					try {
+						FuncMods.unzip("resources.zip", "unzipped");
+						FuncMods.move("unzipped//savegame.sor", sorrPath + "//savegame");
+						Files.delete(new File("unizipped").toPath());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(), "The file \"resources.zip\" was not found!\n", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnApply.setBounds(232, 137, 141, 21);
 		panel_tools.add(btnApply);
 
