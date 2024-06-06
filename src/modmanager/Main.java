@@ -674,9 +674,12 @@ public class Main extends JFrame {
 				// Save the new path in the configuration
 				Start.changeConfig(3, sorrPath);
 				
-				updateModList();
-				Start.refreshModList(allModData);
+				System.out.println("SorR Directory changed! Looking for mods in the new folder...");
+				
 				setInstalledMod();
+				Start.refreshModList(allModData);				
+				updateModList();
+				scrollPane_mods.setViewportView(listMod);
 
 				// Show a panel if there is an installed mod.
 				if (selectedMod == null) {

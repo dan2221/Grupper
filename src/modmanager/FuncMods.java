@@ -177,7 +177,7 @@ public class FuncMods {
 	 * @return list of folders as an ArrayList
 	 */
 	public static ArrayList<String> getAllFolders(String diretorio) {
-		System.out.println("\nGetting all mod foldes in \"" + diretorio + "\" directory...");
+		System.out.println("\nGetting all folders in \"" + diretorio + "\"...");
 		File folder = new File(diretorio);
 		File[] listOfFolders = folder.listFiles();
 		ArrayList<String> allFolders = new ArrayList<String>(); // Create an ArrayList object
