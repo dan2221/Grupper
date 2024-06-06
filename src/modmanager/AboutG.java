@@ -89,7 +89,7 @@ public class AboutG extends JDialog {
 						Desktop desk = Desktop.getDesktop();
 						try {
 							// URL to open in the default browser
-							desk.browse(new URI("https://www.paypal.com/donate/?business=K3ED4TGS7FTYS&no_recurring=0&currency_code=USD"));
+							desk.browse(new URI("https://ko-fi.com/danchavyn"));
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
