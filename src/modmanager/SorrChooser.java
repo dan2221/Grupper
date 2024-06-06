@@ -76,7 +76,8 @@ public class SorrChooser extends JDialog {
 				boolean fulfilled = true;
 				String selectedPath = lblPath.getText();
 
-				// The game doesn't work if you use an executable name different than "sorr.exe",
+				// The game doesn't work if you use an executable name different than
+				// "sorr.exe",
 				// this is why any other name won't be accepted here.
 				if (!selectedPath.toLowerCase().endsWith("sorr.exe")) {
 					String message = "The executable you selected must has the name of \"SorR.exe\"!";

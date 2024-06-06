@@ -41,7 +41,7 @@ public class Confirmation extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("Chose the kind of palette below.");
 		lblNewLabel.setBounds(63, 27, 380, 13);
 		contentPanel.add(lblNewLabel);
@@ -50,11 +50,11 @@ public class Confirmation extends JDialog {
 			lblNewLabel_1.setBounds(8, 16, 47, 41);
 			contentPanel.add(lblNewLabel_1);
 		}
-		
+
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Enemies");
 		chckbxNewCheckBox.setBounds(8, 73, 124, 21);
 		contentPanel.add(chckbxNewCheckBox);
-		
+
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Characters");
 		chckbxNewCheckBox_1.setBounds(132, 73, 109, 21);
 		contentPanel.add(chckbxNewCheckBox_1);

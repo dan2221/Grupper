@@ -18,14 +18,14 @@ import javax.swing.border.EmptyBorder;
  * This class edits individual mod itens displayed on mod list.
  */
 public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private JLabel lbIcon = new JLabel();
 	private JLabel lbName = new JLabel();
 	private JLabel lbAuthor = new JLabel();
 	private JPanel panelText;
 	private JPanel panelIcon;
-	
+
 	public ModRenderer() {
 		setLayout(new BorderLayout(5, 5));
 
@@ -42,16 +42,16 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends SorrMod> list, SorrMod SorrMod, int index, boolean isSelected,
-			boolean cellHasFocus) {
-		
+	public Component getListCellRendererComponent(JList<? extends SorrMod> list, SorrMod SorrMod, int index,
+			boolean isSelected, boolean cellHasFocus) {
+
 		// insert mod logo file.
-		if  (new File(Main.sorrPath + "//mod//games//"+ SorrMod.getName() + "//logo.png").exists()) {
+		if (new File(Main.sorrPath + "//mod//games//" + SorrMod.getName() + "//logo.png").exists()) {
 			lbIcon.setIcon(new ImageIcon(Main.sorrPath + "\\mod\\games\\" + SorrMod.getName() + "\\logo.png"));
 		} else {
 			lbIcon.setIcon(new ImageIcon(getClass().getResource("/images/default_logo.png")));
-		}		
-		
+		}
+
 		lbName.setText(SorrMod.getName());
 		lbAuthor.setText(SorrMod.getAuthor());
 		lbAuthor.setForeground(Color.blue);
@@ -60,32 +60,31 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 		lbName.setOpaque(true);
 		lbAuthor.setOpaque(true);
 		lbIcon.setOpaque(true);
-		
+
 //		Font currentFont = lbName.getFont();
 //		Font newFont = currentFont.deriveFont(currentFont.getSize() + 2);
 //		lbName.setFont(newFont);
-		
+
 		// Load conguration
 		Start.scanConfig();
 
 		// Custom colors using RGB values
-		Color backColorSel = new Color(55,55,55);
-		Color backColorNoSel = new Color(34,34,34);
-		
+		Color backColorSel = new Color(55, 55, 55);
+		Color backColorNoSel = new Color(34, 34, 34);
+
 		// Font colors for authors
-		Color avColorAuthor = new Color(64,150,255);
-		Color unColorAuthor = new Color(87,109,169);
-		
+		Color avColorAuthor = new Color(64, 150, 255);
+		Color unColorAuthor = new Color(87, 109, 169);
+
 		// Font colots for mod names
-		Color availableTextColor = new Color(220,220,220);
-		Color unavailableTextColor = new Color(180,80,82);
-		
+		Color availableTextColor = new Color(220, 220, 220);
+		Color unavailableTextColor = new Color(180, 80, 82);
 
 		// to use default colors: setBackground(list.getBackground());
-		
+
 		// Assumes the stuff in the list has a pretty toString
-        //setName(value.toString());
-		
+		// setName(value.toString());
+
 		boolean hideauthor = Start.getConfig()[1];
 
 		if (isSelected) {
@@ -107,23 +106,21 @@ public class ModRenderer extends JPanel implements ListCellRenderer<SorrMod> {
 			lbIcon.setBackground(backColorNoSel);
 			panelIcon.setBackground(backColorNoSel);
 		}
-		
-        if (SorrMod.getStatus() == 2) { // Unavailable mod
+
+		if (SorrMod.getStatus() == 2) { // Unavailable mod
 			lbName.setForeground(unavailableTextColor);
 			if (!hideauthor) {
 				lbAuthor.setForeground(unColorAuthor);
 			}
 			lbIcon.setForeground(unavailableTextColor);
-        }
-        else { // Available mod
+		} else { // Available mod
 			lbName.setForeground(availableTextColor);
-			if(!hideauthor) {
+			if (!hideauthor) {
 				lbAuthor.setForeground(avColorAuthor);
 			}
 			lbIcon.setForeground(availableTextColor);
-        }
-      
-		
+		}
+
 		// When select an item
 		Font myFont1 = new Font("Monospace", Font.BOLD, 14);
 		lbName.setFont(myFont1);

@@ -15,6 +15,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * The main class and the program's window.
@@ -57,7 +59,11 @@ public class Main extends JFrame {
 	static String selectedMod, sorrPath;
 	JList<SorrMod> listMod;
 	ImageIcon modImage;
+	static String selectedDir;
 
+	/**
+	 * Update the UI with the available mods.
+	 */
 	public void updateModList() {
 		setModData();
 
@@ -103,7 +109,7 @@ public class Main extends JFrame {
 		modQuantity = modFolders.size();
 		String[][] allModsValues = new String[modQuantity][3];
 
-		System.out.println("Size: " + modQuantity);
+		System.out.println("Amount of mods: " + modQuantity);
 		for (int i = 0; i < modFolders.size(); i++) {
 			String current = modFolders.get(i).toString();
 			allModsValues[i][0] = current;
@@ -279,7 +285,7 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Tools", null, panel_tools, null);
 		panel_tools.setLayout(null);
 
-		JLabel lblNewLabel_2_1 = new JLabel("Use a new save file with everyting unlocked.");
+		JLabel lblNewLabel_2_1 = new JLabel("Unlock everyting in the game.");
 		lblNewLabel_2_1.setBounds(21, 106, 352, 21);
 		panel_tools.add(lblNewLabel_2_1);
 
@@ -401,10 +407,14 @@ public class Main extends JFrame {
 		pn_installed.setLayout(null);
 
 		JLabel lblTitleImg = new JLabel("");
-		lblTitleImg.setBounds(27, 11, 320, 240);
+		lblTitleImg.setBounds(27, 34, 320, 240);
 		// Getting image from project resources
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
+		
+		JLabel lblAlText = new JLabel("Installed mod:");
+		lblAlText.setBounds(27, 0, 320, 30);
+		pn_installed.add(lblAlText);
 
 		JButton btPlay = new JButton("Start SorR");
 		btPlay.addActionListener(new ActionListener() {
@@ -425,7 +435,7 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Options", null, panel_option, null);
 		panel_option.setLayout(null);
 
-		JButton btPath = new JButton("Change");
+		JButton btPath = new JButton("Browse...");
 		btPath.setBounds(295, 268, 89, 23);
 		panel_option.add(btPath);
 
@@ -448,11 +458,6 @@ public class Main extends JFrame {
 			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
 			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
-
-			// For now this option won't be enabled when a mod is installed. I can enable
-			// later. To do this I have to review some parts of the code.
-			txtPath.setEnabled(false);
-			btPath.setEnabled(false);
 		}
 
 		JCheckBox chckAvailable = new JCheckBox("Show only available mods.");
@@ -608,9 +613,6 @@ public class Main extends JFrame {
 					chckFistMod.setEnabled(true);
 					lblListByAdding.setEnabled(true);
 
-					// The 2 lines below will be changed in the future.
-					txtPath.setEnabled(true);
-					btPath.setEnabled(true);
 				}
 				updateModList();
 				scrollPane_mods.setViewportView(listMod);
@@ -619,14 +621,83 @@ public class Main extends JFrame {
 
 		btPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				closeJVM = false;
-				openFileDialog();
-				closeJVM = true;
-				txtPath.setText(sorrPath + "\\SorR.exe");
-				Start.refreshModList(allModData);
+				// FileChooser object
+				JFileChooser sorChooser = new JFileChooser();
+				sorChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				sorChooser.setAcceptAllFileFilterUsed(false);
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Executable (*.exe)", "exe");
+				sorChooser.setFileFilter(filter);
+				
+				System.out.println("Openinig File dialog and waiting for user choice...");
+
+				// Show the file chooser dialog
+				int result = sorChooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					// User selected a file
+					selectedDir = sorChooser.getSelectedFile().getParent();
+					txtPath.setText(sorChooser.getSelectedFile().toString());
+					txtPath.setToolTipText(sorChooser.getSelectedFile().toString());
+
+				}
+
+				// Confirm ///////////
+
+				boolean fulfilled = true;
+				String selectedPath = txtPath.getText();
+
+				// The game doesn't work if you use an executable name different than
+				// "sorr.exe", this is why any other name won't be accepted here.
+				if (!selectedPath.toLowerCase().endsWith("sorr.exe")) {
+					String message = "The executable you selected must has the name of \"SorR.exe\"!";
+					JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.WARNING_MESSAGE);
+					fulfilled = false;
+				} else {
+					int pathSize = selectedPath.length();
+					String cutPath = selectedPath.substring(0, pathSize - 9);
+					System.out.println("Path you chose: " + cutPath + "\nChecking folders...");
+					String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
+					for (String i : palFolders) {
+						if (!new File(cutPath + "//palettes//" + i).exists()) {
+							fulfilled = false;
+							errorMsg(cutPath + "\\palettes\\" + i, "folder");
+							break;
+						}
+					}
+					// With all conditions accomplished, the path can be chose.
+					if (fulfilled) {
+						// Add game path to global variables
+						sorrPath = selectedDir;
+						System.out.println("Folders found!\n----------------------");
+					}
+				}
+
+				// Save the new path in the configuration
+				Start.changeConfig(3, sorrPath);
+				
 				updateModList();
-				scrollPane_mods.setViewportView(listMod);
+				Start.refreshModList(allModData);
+				setInstalledMod();
+
+				// Show a panel if there is an installed mod.
+				if (selectedMod == null) {
+					pn_installed.setVisible(false);
+					btInstall.setVisible(true);
+					btFolder.setVisible(true);
+					scrollPane_mods.setVisible(true);
+				} else {
+					pn_installed.setVisible(true);
+					btInstall.setVisible(false);
+					btFolder.setVisible(false);
+					scrollPane_mods.setVisible(false);
+					lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
+				}
 			}
 		});
+	}
+
+	public static void errorMsg(String file, String additionalText) {
+		String message = "The " + additionalText + " \"" + file.replace("//", "/") + "\" was not found!\n"
+				+ "The program needs that to work.";
+		JOptionPane.showMessageDialog(new JFrame(), message, "WARNING", JOptionPane.WARNING_MESSAGE);
 	}
 }

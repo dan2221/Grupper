@@ -243,7 +243,6 @@ public class FuncMods {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Folder: " + modData[0]);
 		System.out.println("Title: " + modData[1]);
 		System.out.println("Author: " + modData[2]);
 
@@ -259,7 +258,7 @@ public class FuncMods {
 	public static int scanMod(String proj) {
 		int status = 0;
 
-		System.out.println("\nSearching for " + proj + "...");
+		System.out.println("\nAnalyzing " + proj + "...");
 		// Creates a palette folder if it doesn't exists
 		if (!new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").exists()) {
 			new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").mkdirs();
@@ -289,7 +288,7 @@ public class FuncMods {
 				}
 			}
 		}
-		System.out.println("Scanning completed!");
+		// System.out.println("Scanning completed!");
 		System.out.println("--------------------------------------------------");
 		return status;
 	}
