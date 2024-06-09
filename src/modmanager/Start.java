@@ -68,7 +68,7 @@ public class Start {
 				myModel.addElement(new SorrMod(allmodsvalues[i][0], allmodsvalues[i][2], modStatus));
 			}
 
-			// Check if one of the mods is installed
+			// Check if there is a installed mod.
 			if (modStatus == 1) {
 				installed = true;
 			}
@@ -130,8 +130,7 @@ public class Start {
 			while (line != null) {
 				if (line.startsWith("hide_unavailable_mods=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String lineContent = line.replace("hide_unavailable_mods=", "").replace(";", "");
-					if (lineContent.equals("1")) {
+					if (line.replace("hide_unavailable_mods=", "").replace(";", "").equals("1")) {
 						configrupper[0] = true;
 					} else {
 						configrupper[0] = false;
@@ -142,8 +141,7 @@ public class Start {
 
 				if (line.startsWith("list_without_authors=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String lineContent = line.replace("list_without_authors=", "").replace(";", "");
-					if (lineContent.equals("1")) {
+					if (line.replace("list_without_authors=", "").replace(";", "").equals("1")) {
 						configrupper[1] = true;
 					} else {
 						configrupper[1] = false;
@@ -154,8 +152,7 @@ public class Start {
 
 				if (line.startsWith("installed_mod_first=") && line.endsWith(";")) {
 					// Isolate value (1 or 0)
-					String lineContent = line.replace("installed_mod_first=", "").replace(";", "");
-					if (lineContent.equals("1")) {
+					if (line.replace("installed_mod_first=", "").replace(";", "").equals("1")) {
 						configrupper[2] = true;
 					} else {
 						configrupper[2] = false;

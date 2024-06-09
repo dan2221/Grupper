@@ -1,7 +1,6 @@
 package modmanager;
 
 import java.io.BufferedReader;
-// Libraries for file checking
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList; // import the ArrayList class
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -97,7 +96,7 @@ public class FuncMods {
 		System.out.println("\nRenaming: " + origin);
 		System.out.println("To: " + newname);
 		if (new File(origin.replace(item, newname)).exists()) {
-			System.err.println("Impossible to rename! Already exists a file or folder with the same name!");
+			System.err.println("Impossible to rename! Already exists a item with the same name!");
 		} else {
 			new File(origin).renameTo(new File(origin.replace(item, newname)));
 		}
@@ -257,22 +256,26 @@ public class FuncMods {
 	 */
 	public static int scanMod(String proj) {
 		int status = 0;
+		String modPath = Main.sorrPath + "//mod//games//" + proj;
 
 		System.out.println("\nAnalyzing " + proj + "...");
-		// Creates a palette folder if it doesn't exists
-		if (!new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").exists()) {
-			new File(Main.sorrPath + "//mod//games//" + proj + "//palettes").mkdirs();
-			System.out.println("\"palettes\" folder created in \"" + Main.sorrPath + "\\" + proj + "\" project!");
+		if (new File(modPath).exists()) {
+
+			// Creates a palette folder if it doesn't exists
+			if (!new File(modPath + "//palettes").exists()) {
+				new File(modPath + "//palettes").mkdirs();
+				System.out.println("\"palettes\" folder created in \"" + Main.sorrPath + "\\" + proj + "\" project!");
+			}
 		}
+
 		// Checking for enemie's palettes
-		if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//palettes//enemies//*.pal")) {
+		if (anyFile(modPath + "//palettes//enemies//*.pal")) {
 			System.out.println("Enemies palettes found!");
 			status = 0; // Disabled mod
 		} else {
 			// Auto-fix enemies palette folder path
-			if (anyFile(Main.sorrPath + "//mod//games//" + proj + "//enemies//*.pal")) {
-				move(Main.sorrPath + "//mod//games//" + proj + "//enemies",
-						Main.sorrPath + "//mod//games//" + proj + "//palettes");
+			if (anyFile(modPath + "//enemies//*.pal")) {
+				move(modPath + "//enemies", modPath + "//palettes");
 			} else {
 				if (anyFile(Main.sorrPath + "//palettes//sorr_enemies//*.pal")) {
 					if (exist(Main.sorrPath + "//mod//" + proj + ".txt")) {
@@ -321,39 +324,38 @@ public class FuncMods {
 	 * @param selectedMod
 	 */
 	public static void installMod(String selectedMod) {
+		String modPath = Main.sorrPath + "//mod//games//" + selectedMod;
+
 		// This is for "First mod of the list" configuration
 		if (Start.getConfig()[2]) {
-			ren(Main.sorrPath + "//mod//games//" + selectedMod, "- " + selectedMod);
+			ren(modPath, "- " + selectedMod);
 			selectedMod = "- " + selectedMod;
 		}
 
 		System.out.println("------------------------------\nInstalling \"" + selectedMod + "\"...");
 
 		// Palettes
-		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies").exists()) {
+		if (new File(modPath + "//palettes//enemies").exists()) {
 			ren(Main.sorrPath + "//palettes//enemies", "sorr_enemies");
-			move(Main.sorrPath + "//mod//games//" + selectedMod + "//palettes//enemies", Main.sorrPath + "//palettes");
+			move(modPath + "//palettes//enemies", Main.sorrPath + "//palettes");
 		}
 
 		// List all data files in a txt file
-		if (new File(Main.sorrPath + "//mod//games//" + selectedMod + "//data").exists()) {
-			ArrayList<String> dataFiles = getAllFiles(Main.sorrPath + "//mod//games//" + selectedMod + "//data//*.*");
+		if (new File(modPath + "//data").exists()) {
+			ArrayList<String> dataFiles = getAllFiles(modPath + "//data//*.*");
 			try (FileWriter writer = new FileWriter(Main.sorrPath + "//mod//sorr.txt")) {
 				System.out.println("Handling with data files...");
 				for (String item : dataFiles) {
 					System.out.println("--------------------\n" + item);
 					writer.write(item + "\n");
 
-					// Your data files won't be replaced by mod's files, because the mod's files
-					// receives "[mod]" in their names when exists files with the same names in the
-					// data folder.
+					// User's data files won't be replaced by mod's files, because the mod's ones
+					// receives "[mod]" in their names when exists files with the same names.
 					if (new File(Main.sorrPath + "//data//" + item).exists()) {
-						ren(Main.sorrPath + "//mod//games//" + selectedMod + "//data//" + item, "[mod]" + item);
-						move(Main.sorrPath + "//mod//games//" + selectedMod + "//data//[mod]" + item,
-								Main.sorrPath + "//data");
+						ren(modPath + "//data//" + item, "[mod]" + item);
+						move(modPath + "//data//[mod]" + item, Main.sorrPath + "//data");
 					} else {
-						move(Main.sorrPath + "//mod//games//" + selectedMod + "//data//" + item,
-								Main.sorrPath + "//data");
+						move(modPath + "//data//" + item, Main.sorrPath + "//data");
 					}
 				}
 				writer.close();
@@ -362,16 +364,17 @@ public class FuncMods {
 				e.printStackTrace();
 			}
 		}
-		// Renaming the txt for identifying mod installation
+		// Renaming the txt for identifying mod installation.
 		ren(Main.sorrPath + "//mod//sorr.txt", selectedMod + ".txt");
 		System.out.println("Successfully installed!");
 	}
 
 	public static void uninstallMod(String proj) {
+		String modPath = Main.sorrPath + "//mod//games//" + proj;
 		System.out.println("Uninstalling \"" + proj + "\"...");
 
 		// Palettes
-		move(Main.sorrPath + "//palettes//enemies", Main.sorrPath + "//mod//games//" + proj + "//palettes");
+		move(Main.sorrPath + "//palettes//enemies", modPath + "//palettes");
 		ren(Main.sorrPath + "//palettes//sorr_enemies", "enemies");
 
 		try {
@@ -389,11 +392,11 @@ public class FuncMods {
 				// If a file has "[mod]" in its name, these characters will be removed
 				// during the uninstalling.
 				if (new File(Main.sorrPath + "//data//[mod]" + modFile).exists()) {
-					move(Main.sorrPath + "//data//[mod]" + modFile, Main.sorrPath + "//mod//games//" + proj + "//data");
-					ren(Main.sorrPath + "//mod//games//" + proj + "//data//" + "[mod]" + modFile, modFile);
+					move(Main.sorrPath + "//data//[mod]" + modFile, modPath + "//data");
+					ren(modPath + "//data//" + "[mod]" + modFile, modFile);
 				} else {
 					if (new File(Main.sorrPath + "//data//" + modFile).exists()) {
-						move(Main.sorrPath + "//data//" + modFile, Main.sorrPath + "//mod//games//" + proj + "//data");
+						move(Main.sorrPath + "//data//" + modFile, modPath + "//data");
 					}
 				}
 				// Read next line of the file
@@ -424,7 +427,7 @@ public class FuncMods {
 		if (Start.getConfig()[2]) {
 			if (proj.startsWith("- ")) {
 				// Remove the 2 first characters of the folder name.
-				ren(Main.sorrPath + "//mod//games//" + proj, proj.substring(2));
+				ren(modPath, proj.substring(2));
 			}
 		}
 		System.out.println("Uninstalled!");

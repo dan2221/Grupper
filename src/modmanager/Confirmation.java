@@ -36,40 +36,36 @@ public class Confirmation extends JDialog {
 	 * Create the dialog.
 	 */
 	public Confirmation() {
-		setBounds(100, 100, 326, 180);
+		setBounds(100, 100, 326, 147);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Chose the kind of palette below.");
-		lblNewLabel.setBounds(63, 27, 380, 13);
+		JLabel lblNewLabel = new JLabel("Your save file is going to be replaced.");
+		lblNewLabel.setBounds(63, 16, 239, 24);
 		contentPanel.add(lblNewLabel);
 		{
 			JLabel lblNewLabel_1 = new JLabel(UIManager.getIcon("OptionPane.informationIcon"));
 			lblNewLabel_1.setBounds(8, 16, 47, 41);
 			contentPanel.add(lblNewLabel_1);
 		}
-
-		JCheckBox chckbxNewCheckBox = new JCheckBox("Enemies");
-		chckbxNewCheckBox.setBounds(8, 73, 124, 21);
-		contentPanel.add(chckbxNewCheckBox);
-
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("Characters");
-		chckbxNewCheckBox_1.setBounds(132, 73, 109, 21);
-		contentPanel.add(chckbxNewCheckBox_1);
+		
+		JLabel lblProceed = new JLabel("Proceed?");
+		lblProceed.setBounds(63, 44, 74, 13);
+		contentPanel.add(lblProceed);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Restore");
+				JButton okButton = new JButton("Yes");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("No");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
