@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JCheckBox;
 
 public class Confirmation extends JDialog {
 

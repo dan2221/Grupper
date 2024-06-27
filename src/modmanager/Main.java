@@ -247,13 +247,30 @@ public class Main extends JFrame {
 		panel_level.setLayout(null);
 
 		JButton btInstall = new JButton("Install mod");
-		btInstall.setBounds(247, 357, 137, 23);
+		btInstall.setBounds(240, 357, 137, 23);
 		panel_level.add(btInstall);
 
-		JButton btFolder = new JButton("Open SorR Folder");
-		btFolder.setBounds(10, 357, 146, 23);
+		JButton btFolder = new JButton("📁");
+		btFolder.setToolTipText("Open SoRR Folder");
+		btFolder.setBounds(80, 357, 59, 23);
 		panel_level.add(btFolder);
 		btFolder.setBackground(UIManager.getColor("Button.background"));
+		
+		JButton btnNewButton_1 = new JButton("▶️");
+		btnNewButton_1.setToolTipText("Run Sor Remake");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Run SorR executable through the exec method.
+					Runtime.getRuntime().exec(sorrPath + "//SorR.exe", null, new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				System.exit(-1);
+			}
+		});
+		btnNewButton_1.setBounds(10, 357, 59, 23);
+		panel_level.add(btnNewButton_1);
 
 		JScrollPane scrollPane_mods = new JScrollPane();
 		scrollPane_mods.setBounds(10, 9, 374, 326);
@@ -398,6 +415,22 @@ public class Main extends JFrame {
 		separator_2.setToolTipText("Palette recover");
 		separator_2.setBounds(8, 10, 378, 82);
 		panel_tools.add(separator_2);
+		
+		JSeparator separator_2_1_1 = new JSeparator();
+		separator_2_1_1.setToolTipText("");
+		separator_2_1_1.setBorder(new TitledBorder(
+						new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+						"Palette editor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		separator_2_1_1.setBounds(8, 178, 378, 82);
+		panel_tools.add(separator_2_1_1);
+		
+		JLabel lblNewLabel_2_1_1 = new JLabel("External color editor with more options.");
+		lblNewLabel_2_1_1.setBounds(21, 197, 352, 21);
+		panel_tools.add(lblNewLabel_2_1_1);
+		
+		JButton btnNewButton = new JButton("Unnavailable yet");
+		btnNewButton.setBounds(232, 228, 141, 21);
+		panel_tools.add(btnNewButton);
 		// chckEnemies.addActionListener(BoxChecker("chars"));
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
@@ -415,21 +448,6 @@ public class Main extends JFrame {
 		JLabel lblAlText = new JLabel("Installed mod:");
 		lblAlText.setBounds(27, 0, 320, 30);
 		pn_installed.add(lblAlText);
-
-		JButton btPlay = new JButton("Start SorR");
-		btPlay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Run SorR executable through the exec method.
-					Runtime.getRuntime().exec(sorrPath + "//SorR.exe", null, new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				System.exit(-1);
-			}
-		});
-		btPlay.setBounds(256, 348, 118, 23);
-		pn_installed.add(btPlay);
 
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
@@ -455,7 +473,6 @@ public class Main extends JFrame {
 			pn_installed.setVisible(false);
 		} else {
 			btInstall.setVisible(false);
-			btFolder.setVisible(false);
 			scrollPane_mods.setVisible(false);
 			lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
 		}
@@ -576,7 +593,6 @@ public class Main extends JFrame {
 						// Swapping a panel
 						pn_installed.setVisible(true);
 						btInstall.setVisible(false);
-						btFolder.setVisible(false);
 						scrollPane_mods.setVisible(false);
 						setModData();
 						setInstalledMod();
@@ -589,7 +605,7 @@ public class Main extends JFrame {
 		});
 
 		JButton btUninstall = new JButton("Uninstall mod");
-		btUninstall.setBounds(10, 348, 135, 23);
+		btUninstall.setBounds(231, 349, 135, 23);
 		pn_installed.add(btUninstall);
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -608,7 +624,6 @@ public class Main extends JFrame {
 					// jerry-rigged way to change the panel
 					pn_installed.setVisible(false);
 					btInstall.setVisible(true);
-					btFolder.setVisible(true);
 					scrollPane_mods.setVisible(true);
 					chckFistMod.setEnabled(true);
 					lblListByAdding.setEnabled(true);
@@ -685,12 +700,10 @@ public class Main extends JFrame {
 				if (selectedMod == null) {
 					pn_installed.setVisible(false);
 					btInstall.setVisible(true);
-					btFolder.setVisible(true);
 					scrollPane_mods.setVisible(true);
 				} else {
 					pn_installed.setVisible(true);
 					btInstall.setVisible(false);
-					btFolder.setVisible(false);
 					scrollPane_mods.setVisible(false);
 					lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
 				}
