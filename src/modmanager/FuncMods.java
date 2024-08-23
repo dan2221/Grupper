@@ -324,18 +324,21 @@ public class FuncMods {
 	 * @param selectedMod
 	 */
 	public static void installMod(String selectedMod) {
-		String modPath = Main.sorrPath + "//mod//games//" + selectedMod;
+		String modName = selectedMod;
+		String modPath = Main.sorrPath + "//mod//games//" + modName;
+		
 
 		// This is for "First mod of the list" configuration
 		if (!selectedMod.startsWith("-")) {
 			if (Start.getConfig()[2]) {
 				ren(modPath, "- " + selectedMod);
-				selectedMod = "- " + selectedMod;
+				modName = "- " + selectedMod;
 			}
 		}
+		modPath = Main.sorrPath + "//mod//games//" + modName;
 
-		System.out.println("------------------------------\nInstalling \"" + selectedMod + "\"...");
-
+		System.out.println("------------------------------\nInstalling \"" + modName + "\"...");
+		
 		// Palettes
 		if (new File(modPath + "//palettes//enemies").exists()) {
 			ren(Main.sorrPath + "//palettes//enemies", "sorr_enemies");
@@ -343,6 +346,8 @@ public class FuncMods {
 		} else {
 			System.err.println("There is no palettes for enemies!");
 		}
+		
+		
 
 		// List all data files in a txt file
 		if (new File(modPath + "//data").exists()) {
@@ -369,7 +374,7 @@ public class FuncMods {
 			}
 		}
 		// Renaming the txt for identifying mod installation.
-		ren(Main.sorrPath + "//mod//sorr.txt", selectedMod + ".txt");
+		ren(Main.sorrPath + "//mod//sorr.txt", modName + ".txt");
 		System.out.println("Successfully installed!\n---------------------------------");
 	}
 

@@ -116,7 +116,7 @@ public class Start {
 			}
 		}
 		// Reading the cfg file
-		System.out.println("\nYour configuration:");
+		System.out.println("Scaning configuration...");
 
 		// This array is useful for figuring out a missing part of the configuration in
 		// the cfg, in case a person edited the file manually.
@@ -135,7 +135,7 @@ public class Start {
 					} else {
 						configrupper[0] = false;
 					}
-					System.out.println("hide_unavailable_mods=" + configrupper[0]);
+//					System.out.println("hide_unavailable_mods=" + configrupper[0]);
 					found[0] = true;
 				}
 
@@ -146,7 +146,7 @@ public class Start {
 					} else {
 						configrupper[1] = false;
 					}
-					System.out.println("list_without_authors=" + configrupper[1]);
+					// System.out.println("list_without_authors=" + configrupper[1]);
 					found[1] = true;
 				}
 
@@ -157,7 +157,7 @@ public class Start {
 					} else {
 						configrupper[2] = false;
 					}
-					System.out.println("installed_mod_first=" + configrupper[2]);
+//					System.out.println("installed_mod_first=" + configrupper[2]);
 					found[2] = true;
 				}
 
@@ -171,7 +171,7 @@ public class Start {
 						Main.sorrPath = lineContent;
 						sorrPath = lineContent;
 					}
-					System.out.println("sorr_path=" + sorrPath);
+//					System.out.println("sorr_path=" + sorrPath);
 					found[3] = true;
 				}
 
