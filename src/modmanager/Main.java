@@ -417,7 +417,7 @@ public class Main extends JFrame {
 			}
 		});
 
-		JButton btnApply = new JButton("Get save file");
+		JButton btnApply = new JButton("Import save file");
 		btnApply.addActionListener(new ActionListener() {
 			/**
 			 * Use a 100% savegame.
@@ -432,7 +432,7 @@ public class Main extends JFrame {
 				if (saveGameFile.exists()) {
 					// Show a confirmation pop-up
 					int response = JOptionPane.showConfirmDialog(null,
-							"The file \"savegame.sor\" already exists. Do you want to replace it?", "Confirmation",
+							"Do you want to replace your current savegame.sor?", "Confirmation",
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 					// If the user chooses "No", exit the method
