@@ -13,15 +13,17 @@ REQUIREMENTS:
 FEATURES:
 
 * Install palletes and data files (.wav .fpg) from your favorite mods.
-* If you want to use your own data files, put them in your data folder before install. When you install a mod, your files will not be replaced by mod's files, because the mod's files receives "[mod]" in their names when exists files with the same names in SorR data folder.
 * Option to shows the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
+* You can restore the default backup palettes of the game.
+* You can copy a savegame to your SorR with everything unlocked.
+* If you want to use your own data files, place them in your data folder before installing any mod. When you install the mod, your files won't be replaced because the mod's files will have '[mod]' added to their names.
 
 SOME FUTURE FEATURES:
 
 * Character mods support;
 * Music player for all mods, independent if the mod are listed in the Grupper mod list;
-* If you don't want to use playable character mods of level mods you can refuse this by activate an option.
-* If you want to use playable character palettes from level mods you can acept this by activate an option. But you won't able to use mod characters.
+* Tools for small modifications in the game.
+* Option to refuse using characters' FPG present in mods' data folders.
 
 IMPORTANT TOPICS:
 
@@ -32,11 +34,11 @@ IMPORTANT TOPICS:
 
 WARNINGS:
 
-* If you find some text files in the SORR subfolders, do not delete them, because they are created by the program to identify mod installations;
+* If you find some text files in the SORR subfolders, do not delete them, they are created by the program to identify mod installations;
 * Do not delete the folder of an installed mod. Uninstall it first and then delete its folder;
 * It's recommended that you don't change manually the files in the SORR folder and subfolders while a mod is installed;
-* When you are going to replace Grupper to a new version, uninstall all mods and chars first.
+* It's recommended that when you are going to replace Grupper to a new version, uninstall all mods and chars first.
 
 OPTIONAL DONATION:
 
-* If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://www.paypal.com/donate/?business=K3ED4TGS7FTYS&no_recurring=0&currency_code=USD
+* If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://ko-fi.com/danchavyn
