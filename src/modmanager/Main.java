@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -255,7 +254,7 @@ public class Main extends JFrame {
 		btFolder.setBounds(80, 357, 59, 23);
 		panel_level.add(btFolder);
 		btFolder.setBackground(UIManager.getColor("Button.background"));
-		
+
 		JButton btnNewButton_1 = new JButton("▶️");
 		btnNewButton_1.setToolTipText("Run Sor Remake");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -310,6 +309,14 @@ public class Main extends JFrame {
 		lblNewLabel_2.setBounds(21, 29, 352, 21);
 		panel_tools.add(lblNewLabel_2);
 
+		JCheckBox chckChars = new JCheckBox("Chars");
+		chckChars.setBounds(102, 60, 87, 21);
+		panel_tools.add(chckChars);
+
+		JCheckBox chckEnemies = new JCheckBox("Enemies");
+		chckEnemies.setBounds(15, 60, 87, 21);
+		panel_tools.add(chckEnemies);
+
 		JButton btnRestorePal = new JButton("Restore");
 		btnRestorePal.setEnabled(false);
 		btnRestorePal.setBounds(232, 60, 141, 21);
@@ -322,29 +329,59 @@ public class Main extends JFrame {
 			 */
 			public void actionPerformed(ActionEvent e) {
 				if (FuncMods.exist("resources.zip")) {
-					try {
-						FuncMods.unzip("resources.zip", "unzipped");
-						FuncMods.move("unzipped//palettes//backup_chars", sorrPath + "//palettes");
-						FuncMods.move("unzipped//palettes//backup_enemies", sorrPath + "//palettes");
-						Files.delete(new File("unizipped").toPath());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					// Show a confirmation dialog
+					int response = JOptionPane.showConfirmDialog(new JFrame(),
+							"This will replace any files in the backup folders. Do you want to proceed?",
+							"Confirm Action", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+					// Check the user's response
+					if (response == JOptionPane.YES_OPTION) {
+						try {
+							FuncMods.unzip("resources.zip", "unzipped");
+
+							if (chckEnemies.isSelected()) {
+								ArrayList<String> backupEnemiesFiles = FuncMods
+										.getAllFiles("unzipped//palettes//backup_enemies//*.*");
+
+								// Move each file from backup_enemies to the destination
+								for (String fileName : backupEnemiesFiles) {
+									FuncMods.move("unzipped//palettes//backup_enemies//" + fileName,
+											sorrPath + "//palettes//backup_enemies");
+								}
+							}
+
+							if (chckChars.isSelected()) {
+								// Get all files from the backup_chars and backup_enemies directories
+								ArrayList<String> backupCharsFiles = FuncMods
+										.getAllFiles("unzipped//palettes//backup_chars//*.*");
+
+								// Move each file from backup_chars to the destination
+								for (String fileName : backupCharsFiles) {
+									FuncMods.move("unzipped//palettes//backup_chars//" + fileName,
+											sorrPath + "//palettes//backup_chars");
+								}
+							}
+
+							FuncMods.deleteDirectory(new File("unzipped"));
+
+							// Show a success message
+							JOptionPane.showMessageDialog(new JFrame(), "Backup palettes successfully restored!\n",
+									"Information", JOptionPane.INFORMATION_MESSAGE);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					} else {
+						// User chose not to proceed
+						JOptionPane.showMessageDialog(new JFrame(), "Operation cancelled.\n", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
 				} else {
 					JOptionPane.showMessageDialog(new JFrame(), "The file \"resources.zip\" was not found!\n", "ERROR",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
+
 		});
-
-		JCheckBox chckChars = new JCheckBox("Chars");
-		chckChars.setBounds(102, 60, 87, 21);
-		panel_tools.add(chckChars);
-
-		JCheckBox chckEnemies = new JCheckBox("Enemies");
-		chckEnemies.setBounds(15, 60, 87, 21);
-		panel_tools.add(chckEnemies);
 
 		chckChars.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -380,23 +417,55 @@ public class Main extends JFrame {
 			}
 		});
 
-		JButton btnApply = new JButton("Apply");
+		JButton btnApply = new JButton("Get save file");
 		btnApply.addActionListener(new ActionListener() {
+			/**
+			 * Use a 100% savegame.
+			 * 
+			 * @param e
+			 */
 			public void actionPerformed(ActionEvent e) {
+				// Path to the savegame.sor file
+				File saveGameFile = new File(sorrPath + "//savegame//savegame.sor");
+
+				// Check if the file already exists
+				if (saveGameFile.exists()) {
+					// Show a confirmation pop-up
+					int response = JOptionPane.showConfirmDialog(null,
+							"The file \"savegame.sor\" already exists. Do you want to replace it?", "Confirmation",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+					// If the user chooses "No", exit the method
+					if (response != JOptionPane.YES_OPTION) {
+						return; // Cancel the operation
+					} else {
+						// If the user chooses "Yes", delete the existing file
+						saveGameFile.delete();
+					}
+				}
+
+				// Check if the resources.zip file exists
 				if (FuncMods.exist("resources.zip")) {
 					try {
+						// Unzip the file
 						FuncMods.unzip("resources.zip", "unzipped");
+						// Move the unzipped file
 						FuncMods.move("unzipped//savegame.sor", sorrPath + "//savegame");
-						Files.delete(new File("unizipped").toPath());
+						// Delete the unzipped directory
+						FuncMods.deleteDirectory(new File("unzipped"));
+						// Show a success message
+						JOptionPane.showMessageDialog(new JFrame(), "New savegame copied successfully!\n",
+								"Information", JOptionPane.INFORMATION_MESSAGE);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				} else {
+					// Show an error message if the resources.zip file is not found
 					JOptionPane.showMessageDialog(new JFrame(), "The file \"resources.zip\" was not found!\n", "ERROR",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
+
 		});
 		btnApply.setBounds(232, 137, 141, 21);
 		panel_tools.add(btnApply);
@@ -415,22 +484,24 @@ public class Main extends JFrame {
 		separator_2.setToolTipText("Palette recover");
 		separator_2.setBounds(8, 10, 378, 82);
 		panel_tools.add(separator_2);
-		
+
 		JSeparator separator_2_1_1 = new JSeparator();
 		separator_2_1_1.setToolTipText("");
 		separator_2_1_1.setBorder(new TitledBorder(
-						new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-						"Palette editor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Palette editor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		separator_2_1_1.setBounds(8, 178, 378, 82);
 		panel_tools.add(separator_2_1_1);
-		
-		JLabel lblNewLabel_2_1_1 = new JLabel("External color editor with more options.");
+
+		JLabel lblNewLabel_2_1_1 = new JLabel("External color editor with more options. (future feature)");
 		lblNewLabel_2_1_1.setBounds(21, 197, 352, 21);
 		panel_tools.add(lblNewLabel_2_1_1);
-		
-		JButton btnNewButton = new JButton("Unnavailable yet");
-		btnNewButton.setBounds(232, 228, 141, 21);
-		panel_tools.add(btnNewButton);
+
+		JButton palEditorButton = new JButton("Unnavailable yet");
+		palEditorButton.setBounds(232, 228, 141, 21);
+		palEditorButton.setEnabled(false);
+		panel_tools.add(palEditorButton);
+
 		// chckEnemies.addActionListener(BoxChecker("chars"));
 
 		////////////// INSTALLED MOD //////////////////////////////////////////////////
@@ -444,7 +515,7 @@ public class Main extends JFrame {
 		// Getting image from project resources
 		lblTitleImg.setIcon(new ImageIcon(Main.class.getResource("/images/default_title.png")));
 		pn_installed.add(lblTitleImg);
-		
+
 		JLabel lblAlText = new JLabel("Installed mod:");
 		lblAlText.setBounds(27, 0, 320, 30);
 		pn_installed.add(lblAlText);
@@ -642,7 +713,7 @@ public class Main extends JFrame {
 				sorChooser.setAcceptAllFileFilterUsed(false);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Executable (*.exe)", "exe");
 				sorChooser.setFileFilter(filter);
-				
+
 				System.out.println("Openinig File dialog and waiting for user choice...");
 
 				// Show the file chooser dialog
@@ -688,11 +759,11 @@ public class Main extends JFrame {
 
 				// Save the new path in the configuration
 				Start.changeConfig(3, sorrPath);
-				
+
 				System.out.println("SorR Directory changed! Looking for mods in the new folder...");
-				
+
 				setInstalledMod();
-				Start.refreshModList(allModData);				
+				Start.refreshModList(allModData);
 				updateModList();
 				scrollPane_mods.setViewportView(listMod);
 

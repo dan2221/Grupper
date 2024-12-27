@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -40,21 +41,30 @@ public class FuncMods {
 	 * 
 	 */
 	public static void move(String origem, String destino) {
-		// Getting the filename or folder
-		String[] tree = origem.split("//", 0);
-		String item = tree[tree.length - 1];
+	    // Obtendo o nome do arquivo ou pasta
+	    String[] tree = origem.split("//", 0);
+	    String item = tree[tree.length - 1];
 
-		File param1 = new File(origem);
-		File param2 = new File(destino + "//" + item);
-		System.out.println("Moving: " + param1);
-		System.out.println("To:     " + param2);
-		try {
-			Files.move(param1.toPath(), param2.toPath());
-			System.out.println("\"" + item + "\" successfully moved!");
-		} catch (IOException ex) {
-			System.err.println("Error found!");
-			ex.printStackTrace();
-		}
+	    File param1 = new File(origem);
+	    File param2 = new File(destino + "//" + item);
+	    System.out.println("Moving: " + param1);
+	    System.out.println("To:     " + param2);
+	    
+	    try {
+	        // Verifica se o arquivo de destino já existe
+	        if (param2.exists()) {
+	            // Se existir, exibe a mensagem de substituição
+	            Files.move(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	            System.out.println("\"" + item + "\" successfully replaced!");
+	        } else {
+	            // Se não existir, exibe a mensagem de movimento
+	            Files.move(param1.toPath(), param2.toPath());
+	            System.out.println("\"" + item + "\" successfully moved!");
+	        }
+	    } catch (IOException ex) {
+	        System.err.println("Error found!");
+	        ex.printStackTrace();
+	    }
 	}
 
 	/**
@@ -107,6 +117,29 @@ public class FuncMods {
 	 */
 	public static boolean exist(String arq) {
 		return new File(arq).exists();
+	}
+
+	/**
+	 * Deletes a directory and all of its contents recursively.
+	 *
+	 * @param directory The directory to be deleted. If the directory contains files
+	 *                  or subdirectories, they will also be deleted.
+	 * @throws IOException If an I/O error occurs while deleting the files or
+	 *                     directories.
+	 */
+	public static void deleteDirectory(File directory) throws IOException {
+		if (directory.isDirectory()) {
+			// Lista todos os arquivos e subdiretórios
+			File[] files = directory.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					// Chama recursivamente para excluir o conteúdo
+					deleteDirectory(file);
+				}
+			}
+		}
+		// Exclui o diretório ou arquivo
+		Files.delete(directory.toPath());
 	}
 
 	/**
@@ -326,7 +359,6 @@ public class FuncMods {
 	public static void installMod(String selectedMod) {
 		String modName = selectedMod;
 		String modPath = Main.sorrPath + "//mod//games//" + modName;
-		
 
 		// This is for "First mod of the list" configuration
 		if (!selectedMod.startsWith("-")) {
@@ -338,7 +370,7 @@ public class FuncMods {
 		modPath = Main.sorrPath + "//mod//games//" + modName;
 
 		System.out.println("------------------------------\nInstalling \"" + modName + "\"...");
-		
+
 		// Palettes
 		if (new File(modPath + "//palettes//enemies").exists()) {
 			ren(Main.sorrPath + "//palettes//enemies", "sorr_enemies");
@@ -346,8 +378,6 @@ public class FuncMods {
 		} else {
 			System.err.println("There is no palettes for enemies!");
 		}
-		
-		
 
 		// List all data files in a txt file
 		if (new File(modPath + "//data").exists()) {
