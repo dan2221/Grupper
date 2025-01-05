@@ -245,19 +245,10 @@ public class Main extends JFrame {
 		tabbedPane.addTab("Levels", null, panel_level, null);
 		panel_level.setLayout(null);
 
-		JButton btInstall = new JButton("Install mod");
-		btInstall.setBounds(240, 357, 137, 23);
-		panel_level.add(btInstall);
-
-		JButton btFolder = new JButton("📁");
-		btFolder.setToolTipText("Open SoRR Folder");
-		btFolder.setBounds(80, 357, 59, 23);
-		panel_level.add(btFolder);
-		btFolder.setBackground(UIManager.getColor("Button.background"));
-
-		JButton btnNewButton_1 = new JButton("▶️");
-		btnNewButton_1.setToolTipText("Run Sor Remake");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		// Load an icon image
+		ImageIcon SorrIcon = new ImageIcon(getClass().getResource("/images/sorremake.png"));
+		JButton btnRunRemake2 = new JButton(SorrIcon);
+		btnRunRemake2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					// Run SorR executable through the exec method.
@@ -268,8 +259,32 @@ public class Main extends JFrame {
 				System.exit(-1);
 			}
 		});
-		btnNewButton_1.setBounds(10, 357, 59, 23);
-		panel_level.add(btnNewButton_1);
+		btnRunRemake2.setToolTipText("Run Sor Remake");
+		btnRunRemake2.setBounds(20, 358, 59, 23);
+		panel_level.add(btnRunRemake2);
+
+		// Load an icon image
+		ImageIcon makerIcon = new ImageIcon(getClass().getResource("/images/sormaker.png"));
+
+		JButton btnSorMaker_1 = new JButton(makerIcon);
+		btnSorMaker_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Run SorR executable through the exec method.
+					Runtime.getRuntime().exec(sorrPath + "//SorMaker.exe", null, new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				System.exit(-1);
+			}
+		});
+		btnSorMaker_1.setToolTipText("Run Sor Remake");
+		btnSorMaker_1.setBounds(158, 358, 59, 23);
+		panel_level.add(btnSorMaker_1);
+
+		JButton btInstall = new JButton("Install mod");
+		btInstall.setBounds(240, 357, 137, 23);
+		panel_level.add(btInstall);
 
 		JScrollPane scrollPane_mods = new JScrollPane();
 		scrollPane_mods.setBounds(10, 9, 374, 326);
@@ -289,20 +304,12 @@ public class Main extends JFrame {
 		frmtdtxtfld01.setEditable(false);
 		panel_char.add(frmtdtxtfld01);
 
-		JPanel panel_music = new JPanel();
-		tabbedPane.addTab("Music Player", null, panel_music, null);
-
-		JFormattedTextField frmtdtxtfld02 = new JFormattedTextField();
-		frmtdtxtfld02.setText("This section is not available yet. Please wait for an update.");
-		frmtdtxtfld02.setEditable(false);
-		panel_music.add(frmtdtxtfld02);
-
 		JPanel panel_tools = new JPanel();
 		tabbedPane.addTab("Tools", null, panel_tools, null);
 		panel_tools.setLayout(null);
 
 		JLabel lblNewLabel_2_1 = new JLabel("Unlock everyting in the game.");
-		lblNewLabel_2_1.setBounds(21, 106, 352, 21);
+		lblNewLabel_2_1.setBounds(21, 116, 352, 21);
 		panel_tools.add(lblNewLabel_2_1);
 
 		JLabel lblNewLabel_2 = new JLabel("Restore the default backup palettes.");
@@ -475,7 +482,7 @@ public class Main extends JFrame {
 		separator_2_1.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Savegame 100%", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		separator_2_1.setBounds(8, 91, 378, 82);
+		separator_2_1.setBounds(8, 96, 378, 82);
 		panel_tools.add(separator_2_1);
 
 		JSeparator separator_2 = new JSeparator();
@@ -490,17 +497,41 @@ public class Main extends JFrame {
 		separator_2_1_1.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Palette editor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		separator_2_1_1.setBounds(8, 178, 378, 82);
+		separator_2_1_1.setBounds(8, 186, 378, 82);
 		panel_tools.add(separator_2_1_1);
 
 		JLabel lblNewLabel_2_1_1 = new JLabel("External color editor with more options. (future feature)");
-		lblNewLabel_2_1_1.setBounds(21, 197, 352, 21);
+		lblNewLabel_2_1_1.setBounds(21, 206, 352, 21);
 		panel_tools.add(lblNewLabel_2_1_1);
 
 		JButton palEditorButton = new JButton("Unnavailable yet");
 		palEditorButton.setBounds(232, 228, 141, 21);
 		palEditorButton.setEnabled(false);
 		panel_tools.add(palEditorButton);
+
+		JSeparator separator_2_1_1_1 = new JSeparator();
+		separator_2_1_1_1.setToolTipText("");
+		separator_2_1_1_1.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"File Finder (for mod makers)", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		separator_2_1_1_1.setBounds(8, 276, 378, 82);
+		panel_tools.add(separator_2_1_1_1);
+
+		JLabel lblNewLabel_3 = new JLabel("Find a FPG or WAV file name based in a search term.");
+		lblNewLabel_3.setBounds(21, 297, 310, 14);
+		panel_tools.add(lblNewLabel_3);
+
+		JButton btnNewButton_2 = new JButton("Search");
+		btnNewButton_2.setBounds(284, 322, 89, 23);
+		panel_tools.add(btnNewButton_2);
+
+		JPanel panel_music = new JPanel();
+		tabbedPane.addTab("Music Player", null, panel_music, null);
+
+		JFormattedTextField frmtdtxtfld02 = new JFormattedTextField();
+		frmtdtxtfld02.setText("This section is not available yet. Please wait for an update.");
+		frmtdtxtfld02.setEditable(false);
+		panel_music.add(frmtdtxtfld02);
 
 		// chckEnemies.addActionListener(BoxChecker("chars"));
 
@@ -642,17 +673,6 @@ public class Main extends JFrame {
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 231, 374, 2);
 		panel_option.add(separator_1);
-
-		btFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Show current directory
-				try {
-					Desktop.getDesktop().open(new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Check if there are a selected item
@@ -678,6 +698,56 @@ public class Main extends JFrame {
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.setBounds(231, 349, 135, 23);
 		pn_installed.add(btUninstall);
+
+		JButton btnSorMaker = new JButton(makerIcon);
+		btnSorMaker.setToolTipText("Start SorMaker");
+		btnSorMaker.setFont(UIManager.getFont("Table.font"));
+		btnSorMaker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Run SorR executable through the exec method.
+					Runtime.getRuntime().exec(sorrPath + "//SorMaker.exe", null, new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				System.exit(-1);
+			}
+		});
+		btnSorMaker.setBounds(148, 349, 59, 23);
+		pn_installed.add(btnSorMaker);
+
+		JButton btnRunRemake = new JButton(SorrIcon);
+		btnRunRemake.setBounds(10, 349, 59, 23);
+		pn_installed.add(btnRunRemake);
+		btnRunRemake.setToolTipText("Run Sor Remake");
+
+		JButton btFolder = new JButton("📁");
+		btFolder.setBounds(79, 349, 59, 23);
+		pn_installed.add(btFolder);
+		btFolder.setToolTipText("Open SoRR Folder");
+		btFolder.setBackground(UIManager.getColor("Button.background"));
+
+		btFolder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Show current directory
+				try {
+					Desktop.getDesktop().open(new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnRunRemake.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// Run SorR executable through the exec method.
+					Runtime.getRuntime().exec(sorrPath + "//SorR.exe", null, new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				System.exit(-1);
+			}
+		});
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Verify installed mod
