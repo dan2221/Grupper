@@ -278,6 +278,12 @@ public class Main extends JFrame {
 				System.exit(-1);
 			}
 		});
+		
+		JButton btFolder_1 = new JButton("📁");
+		btFolder_1.setToolTipText("Open SoRR Folder");
+		btFolder_1.setBackground(UIManager.getColor("Button.background"));
+		btFolder_1.setBounds(90, 357, 59, 23);
+		panel_level.add(btFolder_1);
 		btnSorMaker_1.setToolTipText("Run Sor Remake");
 		btnSorMaker_1.setBounds(158, 358, 59, 23);
 		panel_level.add(btnSorMaker_1);

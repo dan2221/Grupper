@@ -1,12 +1,13 @@
 package modmanager;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -14,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-public class ExecuteCommand {
+public class NoiseDenoiser {
 
 	public static void main(String[] args) {
 
@@ -50,24 +51,26 @@ public class ExecuteCommand {
 						// Make a temporary folder
 						new File("temp").mkdirs();
 
+						System.out.println("Flipping images...");
 						for (File file : selectedFiles) {
 							System.out.println(file.getAbsolutePath());
-							processSprite(file);
+							processSprite(file, true);
 						}
 
-						// Copy files for noising
-						System.out.println("Check denoiser...");
+						// Check noiser
 						FuncMods.copy("unzipped\\noise.exe", "temp");
 						FuncMods.copy("unzipped\\noise.dpr", "temp");
 
 						// Combine two commands using && to change directory and then run the for loop
+						System.out.println("----------------\nCalling Noiser...");
 						runCmd("cd temp && for %i in (*.bmp) do noise \"%i\" /n");
 
 						// Getting all images in temporary folder and process them again.
 						File[] files = getFilesByType("temp", ".bmp");
+						System.out.println("Fliping again...");
 						for (File file : files) {
 							System.out.println(file.getAbsolutePath());
-							processSprite(file);
+							processSprite(file, false);
 						}
 
 						// Show a success message
@@ -92,7 +95,7 @@ public class ExecuteCommand {
 					JOptionPane.ERROR_MESSAGE);
 		}
 
-		// Delete unzipped files
+		// Delete unzipped and temporary files
 		try {
 			FuncMods.deleteDirectory(new File("unzipped"));
 		} catch (IOException e) {
@@ -151,42 +154,49 @@ public class ExecuteCommand {
 		}
 	}
 
-	public static void processSprite(File img) {
+	public static void processSprite(File img, boolean pixelFill) {
 		try {
-			// Carregar a imagem
+			// Load the image
 			BufferedImage originalImage = ImageIO.read(img);
 
-			/////////////////////////////////////////////////////
 			// Get the name of the file (with extension)
 			String fileNameWithExtension = img.getName();
-
-			// Get the index of the last dot in the file name
 			int lastDotIndex = fileNameWithExtension.lastIndexOf('.');
+			String fileNameWithoutExtension = (lastDotIndex != -1) ? fileNameWithExtension.substring(0, lastDotIndex)
+					: fileNameWithExtension;
 
-			// If there is a dot, get the name without the extension
-			String fileNameWithoutExtension;
-			if (lastDotIndex != -1) {
-				fileNameWithoutExtension = fileNameWithExtension.substring(0, lastDotIndex);
-			} else {
-				// If there is no dot, the name is the same as the full name
-				fileNameWithoutExtension = fileNameWithExtension;
-			}
-
-			// Print the file name without the extension
 			System.out.println("File name without extension: " + fileNameWithoutExtension);
-
-			///////////////////////////////
 
 			// Check if the image is indexed
 			if (originalImage.getColorModel() instanceof IndexColorModel) {
-				// Manipular a imagem (girar verticalmente)
+				// Store positions of pixels with color rgb(0, 0, 8)
+				List<int[]> positions = new ArrayList<>();
+				for (int x = 0; x < originalImage.getWidth(); x++) {
+					for (int y = 0; y < originalImage.getHeight(); y++) {
+						if ((originalImage.getRGB(x, y) & 0x00FFFFFF) == 0x00000008) { // Check for rgb(0, 0, 8)
+							positions.add(new int[] { x, y });
+							System.out.println("Special pixel found: (" + x + "," + y + ")");
+						}
+					}
+				}
+
+				// Flip the image vertically
 				BufferedImage processedImage = flipImage(originalImage);
 
+				// Fill the new positions with rgb(0, 0, 8)
+				if (pixelFill) {
+					for (int[] pos : positions) {
+						int newX = pos[0];
+						int newY = originalImage.getHeight() - 1 - pos[1]; // Calculate new position after flip
+						processedImage.setRGB(newX, newY, 0x00000008); // Set the pixel to rgb(0, 0, 8) //0x00000008
+						System.out.println("Pixel filled! (" + newX + "," + newY + ")");
+					}
+				}
 				// Save image and preserve palette
 				saveImageWithPalette(processedImage, (IndexColorModel) originalImage.getColorModel(),
 						"temp/" + fileNameWithoutExtension + ".bmp");
 			} else {
-				System.out.println("A imagem não é indexada.");
+				System.out.println("The image is not indexed.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -194,14 +204,14 @@ public class ExecuteCommand {
 	}
 
 	private static BufferedImage flipImage(BufferedImage originalImage) {
-		// Criar uma nova imagem com as mesmas dimensões
+		// Create a new image with the same dimensions
 		BufferedImage newImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(),
 				originalImage.getType());
 
-		// Girar a imagem verticalmente (inverter as linhas)
+		// Flip the image vertically (invert the rows)
 		for (int x = 0; x < originalImage.getWidth(); x++) {
 			for (int y = 0; y < originalImage.getHeight(); y++) {
-				// Copiar o pixel da linha correspondente
+				// Copy the pixel from the corresponding row
 				newImage.setRGB(x, y, originalImage.getRGB(x, originalImage.getHeight() - 1 - y));
 			}
 		}
@@ -210,18 +220,18 @@ public class ExecuteCommand {
 
 	private static void saveImageWithPalette(BufferedImage image, IndexColorModel colorModel, String outputPath)
 			throws IOException {
-		// Criar uma nova imagem com a mesma paleta
+		// Create a new image with the same palette
 		BufferedImage indexedImage = new BufferedImage(image.getWidth(), image.getHeight(),
 				BufferedImage.TYPE_BYTE_INDEXED, colorModel);
 
-		// Copiar os pixels da imagem processada para a nova imagem indexada
+		// Copy the pixels from the processed image to the new indexed image
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
 				indexedImage.setRGB(x, y, image.getRGB(x, y));
 			}
 		}
 
-		// Salvar a imagem
+		// Save the image
 		ImageIO.write(indexedImage, "bmp", new File(outputPath));
 	}
 
