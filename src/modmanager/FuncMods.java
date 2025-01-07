@@ -41,30 +41,30 @@ public class FuncMods {
 	 * 
 	 */
 	public static void move(String origem, String destino) {
-	    // Obtendo o nome do arquivo ou pasta
-	    String[] tree = origem.split("//", 0);
-	    String item = tree[tree.length - 1];
+		// Obtendo o nome do arquivo ou pasta
+		String[] tree = origem.split("//", 0);
+		String item = tree[tree.length - 1];
 
-	    File param1 = new File(origem);
-	    File param2 = new File(destino + "//" + item);
-	    System.out.println("Moving: " + param1);
-	    System.out.println("To:     " + param2);
-	    
-	    try {
-	        // Verifica se o arquivo de destino já existe
-	        if (param2.exists()) {
-	            // Se existir, exibe a mensagem de substituição
-	            Files.move(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-	            System.out.println("\"" + item + "\" successfully replaced!");
-	        } else {
-	            // Se não existir, exibe a mensagem de movimento
-	            Files.move(param1.toPath(), param2.toPath());
-	            System.out.println("\"" + item + "\" successfully moved!");
-	        }
-	    } catch (IOException ex) {
-	        System.err.println("Error found!");
-	        ex.printStackTrace();
-	    }
+		File param1 = new File(origem);
+		File param2 = new File(destino + "//" + item);
+		System.out.println("Moving: " + param1);
+		System.out.println("To:     " + param2);
+
+		try {
+			// Verifica se o arquivo de destino já existe
+			if (param2.exists()) {
+				// Se existir, exibe a mensagem de substituição
+				Files.move(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				System.out.println("\"" + item + "\" successfully replaced!");
+			} else {
+				// Se não existir, exibe a mensagem de movimento
+				Files.move(param1.toPath(), param2.toPath());
+				System.out.println("\"" + item + "\" successfully moved!");
+			}
+		} catch (IOException ex) {
+			System.err.println("Error found!");
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -75,22 +75,23 @@ public class FuncMods {
 	 * 
 	 */
 	public static void copy(String origem, String destino) {
-		// Getting the filename or folder
-		String[] tree = origem.split("//", 0);
-		String item = tree[tree.length - 1];
+        // Getting the filename or folder
+        String[] tree = origem.replace("\\", "//").split("//", 0);
+        String item = tree[tree.length - 1];
 
-		File param1 = new File(origem);
-		File param2 = new File(destino + "//" + item);
-		System.out.println("Moving: " + param1);
-		System.out.println("To:     " + param2);
-		try {
-			Files.copy(param1.toPath(), param2.toPath());
-			System.out.println("\"" + item + "\" successfully copied!");
-		} catch (IOException ex) {
-			System.err.println("Error found!");
-			ex.printStackTrace();
-		}
-	}
+        File param1 = new File(origem);
+        File param2 = new File(destino + "//" + item);
+        System.out.println("Copying: " + param1);
+        System.out.println("To:     " + param2);
+        try {
+            // Copy the file and replace existing files
+            Files.copy(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Successfully copied!\n-------------------------");
+        } catch (IOException ex) {
+            System.err.println("Error found!");
+            ex.printStackTrace();
+        }
+    }
 
 	/**
 	 * Rename desired file or folder. It works like the Batch Script ren command.
@@ -167,20 +168,22 @@ public class FuncMods {
 	}
 
 	/**
-	 * Get all files inside a folder.
+	 * Get all files inside a folder. Usage: getAllFiles("path/to/folder/*.*"); You
+	 * can also specify a file type. E.g.: getAllFiles("path/to/folder/*.png");
 	 * 
-	 * @param diretorio
-	 * @return list of files as an ArrayList
+	 * @param The directory path to search for files.
+	 * @return A list of files as an ArrayList.
 	 */
-	public static ArrayList<String> getAllFiles(String diretorio) {
-		String[] params = diretorio.split("\\*");
+
+	public static ArrayList<String> getAllFiles(String directory) {
+		String[] params = directory.split("\\*");
 		File folder = new File(params[0]);
 		File[] listOfFiles = folder.listFiles();
 		ArrayList<String> allFiles = new ArrayList<String>(); // Create an ArrayList object
 		int count = 0;
 
 		if (listOfFiles != null) {
-			if (diretorio.endsWith("*.*")) { // No extension defined
+			if (directory.endsWith("*.*")) { // No extension defined
 				for (File file : listOfFiles) {
 					if (file.isFile()) {
 						allFiles.add(file.getName().toString());
