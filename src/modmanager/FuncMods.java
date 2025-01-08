@@ -17,6 +17,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 
 /**
  * This class has methods related to file manipulation.
@@ -75,23 +76,23 @@ public class FuncMods {
 	 * 
 	 */
 	public static void copy(String origem, String destino) {
-        // Getting the filename or folder
-        String[] tree = origem.replace("\\", "//").split("//", 0);
-        String item = tree[tree.length - 1];
+		// Getting the filename or folder
+		String[] tree = origem.replace("\\", "//").split("//", 0);
+		String item = tree[tree.length - 1];
 
-        File param1 = new File(origem);
-        File param2 = new File(destino + "//" + item);
-        System.out.println("Copying: " + param1);
-        System.out.println("To:     " + param2);
-        try {
-            // Copy the file and replace existing files
-            Files.copy(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Successfully copied!\n-------------------------");
-        } catch (IOException ex) {
-            System.err.println("Error found!");
-            ex.printStackTrace();
-        }
-    }
+		File param1 = new File(origem);
+		File param2 = new File(destino + "//" + item);
+		System.out.println("Copying: " + param1);
+		System.out.println("To:     " + param2);
+		try {
+			// Copy the file and replace existing files
+			Files.copy(param1.toPath(), param2.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			System.out.println("Successfully copied!\n-------------------------");
+		} catch (IOException ex) {
+			System.err.println("Error found!");
+			ex.printStackTrace();
+		}
+	}
 
 	/**
 	 * Rename desired file or folder. It works like the Batch Script ren command.
@@ -101,15 +102,18 @@ public class FuncMods {
 	 * 
 	 */
 	public static void ren(String origin, String newname) {
-		// Getting the filename or folder
-		String[] tree = origin.split("//", 0);
-		String item = tree[tree.length - 1];
+		File file = new File(origin);
+
+		// Getting parent directory
+		String parentDirectory = file.getParent();
+
 		System.out.println("\nRenaming: " + origin);
 		System.out.println("To: " + newname);
-		if (new File(origin.replace(item, newname)).exists()) {
+
+		if (new File(parentDirectory + "\\" + newname).exists()) {
 			System.err.println("Impossible to rename! Already exists a item with the same name!");
 		} else {
-			new File(origin).renameTo(new File(origin.replace(item, newname)));
+			new File(origin).renameTo(new File(parentDirectory + "\\" + newname));
 		}
 	}
 
@@ -304,7 +308,7 @@ public class FuncMods {
 			}
 		}
 
-		// Checking for enemie's palettes
+		// Checking for enemies' palettes
 		if (anyFile(modPath + "//palettes//enemies//*.pal")) {
 			System.out.println("Enemies palettes found!");
 			status = 0; // Disabled mod
@@ -322,7 +326,7 @@ public class FuncMods {
 						System.out.println("Unavailable mod! Txt mod file not found!");
 					}
 				} else {
-					System.out.println("The mod can't be installed! \"sorr_enemies\" folder not found!");
+					System.err.println("The mod is not available! \"sorr_enemies\" folder not found!");
 					status = 2; // Unavaliable mod
 				}
 			}
@@ -419,6 +423,7 @@ public class FuncMods {
 		move(Main.sorrPath + "//palettes//enemies", modPath + "//palettes");
 		ren(Main.sorrPath + "//palettes//sorr_enemies", "enemies");
 
+		// Data
 		try {
 			// Opens the file
 			FileReader stream = new FileReader(Main.sorrPath + "//mod//" + proj + ".txt");
@@ -486,6 +491,25 @@ public class FuncMods {
 				+ "The program needs that to work. Please select a different path or check your folder manually.";
 		JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.ERROR_MESSAGE);
 		System.exit(0);
+	}
+
+	/**
+	 * Checks if the specified file is unlocked (not in use by another process).
+	 * This method attempts to update the last modified timestamp of the file using
+	 * the Apache Commons IO library's FileUtils.touch() method.
+	 * 
+	 * @param file The file to check for being unlocked.
+	 * @return true if the file is unlocked, false if it is locked or cannot be
+	 *         accessed.
+	 */
+	public static boolean isFileUnlocked(File file) {
+		try {
+			// Attempt to touch the file to check if it is unlocked
+			FileUtils.touch(file);
+			return true; // The file is not locked
+		} catch (IOException e) {
+			return false; // The file is locked or cannot be accessed
+		}
 	}
 
 	/**

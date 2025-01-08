@@ -278,11 +278,21 @@ public class Main extends JFrame {
 				System.exit(-1);
 			}
 		});
-		
+
 		JButton btFolder_1 = new JButton("📁");
+		btFolder_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Show current directory
+				try {
+					Desktop.getDesktop().open(new File(sorrPath));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		btFolder_1.setToolTipText("Open SoRR Folder");
 		btFolder_1.setBackground(UIManager.getColor("Button.background"));
-		btFolder_1.setBounds(90, 357, 59, 23);
+		btFolder_1.setBounds(90, 358, 59, 23);
 		panel_level.add(btFolder_1);
 		btnSorMaker_1.setToolTipText("Run Sor Remake");
 		btnSorMaker_1.setBounds(158, 358, 59, 23);
@@ -681,21 +691,43 @@ public class Main extends JFrame {
 		panel_option.add(separator_1);
 		btInstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Check if there are a selected item
+				// Check if there is a selected item
 				if (listMod.getSelectedIndex() != -1) {
 					System.out.println("Selected mod:" + listMod.getSelectedValue());
 					// Check if the mod is available to install
 					if (FuncMods.scanMod(listMod.getSelectedValue().toString()) == 0) {
-						FuncMods.installMod(listMod.getSelectedValue().toString());
-						// Swapping a panel
-						pn_installed.setVisible(true);
-						btInstall.setVisible(false);
-						scrollPane_mods.setVisible(false);
-						setModData();
-						setInstalledMod();
-						lblTitleImg.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
-						chckFistMod.setEnabled(false);
-						lblListByAdding.setEnabled(false);
+						// Check if the project folder is used by another application.
+						if (FuncMods.isFileUnlocked(new File(sorrPath + "\\mod\\games\\" + selectedMod))) {
+							// Everything is okay to install the mod
+							FuncMods.installMod(listMod.getSelectedValue().toString());
+
+							// Remove a temp file used to check if the folder is used
+							if (new File(sorrPath + "\\mod\\games\\null").delete()) {
+								System.out.println("\"null\" deleted successfully.");
+							} else {
+								System.err.println("Failed to delete \"null\". It may not exist or is in use.");
+							}
+
+							// Swapping a panel
+							pn_installed.setVisible(true);
+							btInstall.setVisible(false);
+							scrollPane_mods.setVisible(false);
+							setModData();
+							setInstalledMod();
+							lblTitleImg
+									.setIcon(new ImageIcon(sorrPath + "//mod//games//" + selectedMod + "//title.png"));
+							chckFistMod.setEnabled(false);
+							lblListByAdding.setEnabled(false);
+						} else {
+							System.err.println("The project files are being used by another program!");
+							// Show a pop-up message informing the user that the file is locked
+							JOptionPane.showMessageDialog(null,
+									"You cannot continue because the project folder or some file of the project \""
+											+ selectedMod + "\" is being used by another program.\n"
+											+ "Please close any programs that might be using these files and try again.",
+									"File Locked", JOptionPane.WARNING_MESSAGE);
+
+						}
 					}
 				}
 			}
@@ -705,79 +737,42 @@ public class Main extends JFrame {
 		btUninstall.setBounds(231, 349, 135, 23);
 		pn_installed.add(btUninstall);
 
-		JButton btnSorMaker = new JButton(makerIcon);
-		btnSorMaker.setToolTipText("Start SorMaker");
-		btnSorMaker.setFont(UIManager.getFont("Table.font"));
-		btnSorMaker.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Run SorR executable through the exec method.
-					Runtime.getRuntime().exec(sorrPath + "//SorMaker.exe", null, new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				System.exit(-1);
-			}
-		});
-		btnSorMaker.setBounds(148, 349, 59, 23);
-		pn_installed.add(btnSorMaker);
-
-		JButton btnRunRemake = new JButton(SorrIcon);
-		btnRunRemake.setBounds(10, 349, 59, 23);
-		pn_installed.add(btnRunRemake);
-		btnRunRemake.setToolTipText("Run Sor Remake");
-
-		JButton btFolder = new JButton("📁");
-		btFolder.setBounds(79, 349, 59, 23);
-		pn_installed.add(btFolder);
-		btFolder.setToolTipText("Open SoRR Folder");
-		btFolder.setBackground(UIManager.getColor("Button.background"));
-
-		btFolder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Show current directory
-				try {
-					Desktop.getDesktop().open(new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnRunRemake.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Run SorR executable through the exec method.
-					Runtime.getRuntime().exec(sorrPath + "//SorR.exe", null, new File(sorrPath));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				System.exit(-1);
-			}
-		});
 		btUninstall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Verify installed mod
 				setInstalledMod();
 
-				// Call method to uninstall the mod
-				FuncMods.uninstallMod(selectedMod);
+				// Check if data folder is used by another application
+				if (FuncMods.isFileUnlocked(new File(sorrPath + "\\data"))) {
 
-				// Check if the mod was really uninstalled
-				setModData();
-				setInstalledMod();
+					// Call method to uninstall the mod
+					FuncMods.uninstallMod(selectedMod);
 
-				// Disable and enable GUI components
-				if (FuncMods.existsInstallation() == null) {
-					// jerry-rigged way to change the panel
-					pn_installed.setVisible(false);
-					btInstall.setVisible(true);
-					scrollPane_mods.setVisible(true);
-					chckFistMod.setEnabled(true);
-					lblListByAdding.setEnabled(true);
+					// Check if the mod was really uninstalled
+					setModData();
+					setInstalledMod();
+
+					// Disable and enable GUI components
+					if (FuncMods.existsInstallation() == null) {
+						// jerry-rigged way to change the panel
+						pn_installed.setVisible(false);
+						btInstall.setVisible(true);
+						scrollPane_mods.setVisible(true);
+						chckFistMod.setEnabled(true);
+						lblListByAdding.setEnabled(true);
+
+					}
+					updateModList();
+					scrollPane_mods.setViewportView(listMod);
+				} else {
+					System.err.println("The project files are being used by another program!");
+					// Show a pop-up message informing the user that the file is locked
+					JOptionPane.showMessageDialog(null,
+							"You cannot continue because some file of your data folder is being used by another program.\n"
+									+ "Please close any programs that might be using these files and try again.",
+							"File Locked", JOptionPane.WARNING_MESSAGE);
 
 				}
-				updateModList();
-				scrollPane_mods.setViewportView(listMod);
 			}
 		});
 
