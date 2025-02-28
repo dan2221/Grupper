@@ -13,7 +13,7 @@ REQUIREMENTS:
 FEATURES:
 
 * Install palletes and data files (.wav .fpg) from your favorite mods.
-* Option to shows the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
+* Option to show the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
 * You can restore the default backup palettes of the game.
 * You can copy a savegame to your SorR with everything unlocked.
 * If you want to use your own data files, place them in your data folder before installing any mod. When you install the mod, your files won't be replaced because the mod's files will have '[mod]' added to their names.
