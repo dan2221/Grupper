@@ -51,7 +51,7 @@ public class AboutG extends JDialog {
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null); // Posição da janela
 
-		JLabel lblNewLabel = new JLabel("Grupper (beta 6) v1.0 by Chavyn", SwingConstants.CENTER);
+		JLabel lblNewLabel = new JLabel("Grupper (beta 7) v1.0 by DanChavyn", SwingConstants.CENTER);
 		lblNewLabel.setBounds(48, 11, 267, 14);
 		contentPanel.add(lblNewLabel);
 

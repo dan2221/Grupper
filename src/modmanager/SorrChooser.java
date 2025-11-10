@@ -117,9 +117,16 @@ public class SorrChooser extends JDialog {
 			JButton btnPath = new JButton("Browse...");
 			btnPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String initialPath;
+					String labelText = lblPath.getText();
+					if (!labelText.isEmpty() && FuncMods.exist(labelText)) {
+						initialPath = labelText;
+					} else {
+						initialPath = System.getProperty("user.dir");
+					}
 
 					// FileChooser object
-					JFileChooser sorChooser = new JFileChooser();
+					JFileChooser sorChooser = new JFileChooser(initialPath);
 					sorChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					sorChooser.setAcceptAllFileFilterUsed(false);
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("Executable (*.exe)", "exe");
@@ -133,7 +140,8 @@ public class SorrChooser extends JDialog {
 						lblPath.setText(sorChooser.getSelectedFile().toString());
 						lblPath.setToolTipText(sorChooser.getSelectedFile().toString());
 						btnConfirm.setEnabled(true);
-
+					} else {
+						System.out.println("Operation canceled!");
 					}
 				}
 			});

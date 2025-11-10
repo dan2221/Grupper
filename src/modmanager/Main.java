@@ -760,7 +760,6 @@ public class Main extends JFrame {
 						scrollPane_mods.setVisible(true);
 						chckFistMod.setEnabled(true);
 						lblListByAdding.setEnabled(true);
-
 					}
 					updateModList();
 					scrollPane_mods.setViewportView(listMod);
@@ -771,7 +770,6 @@ public class Main extends JFrame {
 							"You cannot continue because some file of your data folder is being used by another program.\n"
 									+ "Please close any programs that might be using these files and try again.",
 							"File Locked", JOptionPane.WARNING_MESSAGE);
-
 				}
 			}
 		});
@@ -779,7 +777,7 @@ public class Main extends JFrame {
 		btPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// FileChooser object
-				JFileChooser sorChooser = new JFileChooser();
+				JFileChooser sorChooser = new JFileChooser(sorrPath);
 				sorChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				sorChooser.setAcceptAllFileFilterUsed(false);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Executable (*.exe)", "exe");
@@ -795,41 +793,39 @@ public class Main extends JFrame {
 					txtPath.setText(sorChooser.getSelectedFile().toString());
 					txtPath.setToolTipText(sorChooser.getSelectedFile().toString());
 
-				}
+					boolean fulfilled = true;
+					String selectedPath = txtPath.getText();
 
-				// Confirm ///////////
-
-				boolean fulfilled = true;
-				String selectedPath = txtPath.getText();
-
-				// The game doesn't work if you use an executable name different than
-				// "sorr.exe", this is why any other name won't be accepted here.
-				if (!selectedPath.toLowerCase().endsWith("sorr.exe")) {
-					String message = "The executable you selected must has the name of \"SorR.exe\"!";
-					JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.WARNING_MESSAGE);
-					fulfilled = false;
-				} else {
-					int pathSize = selectedPath.length();
-					String cutPath = selectedPath.substring(0, pathSize - 9);
-					System.out.println("Path you chose: " + cutPath + "\nChecking folders...");
-					String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
-					for (String i : palFolders) {
-						if (!new File(cutPath + "//palettes//" + i).exists()) {
-							fulfilled = false;
-							errorMsg(cutPath + "\\palettes\\" + i, "folder");
-							break;
+					// The game doesn't work if you use an executable name different than
+					// "sorr.exe", this is why any other name won't be accepted here.
+					if (!selectedPath.toLowerCase().endsWith("sorr.exe")) {
+						String message = "The executable you selected must has the name of \"SorR.exe\"!";
+						JOptionPane.showMessageDialog(new JFrame(), message, "ERROR", JOptionPane.WARNING_MESSAGE);
+						fulfilled = false;
+					} else {
+						int pathSize = selectedPath.length();
+						String cutPath = selectedPath.substring(0, pathSize - 9);
+						System.out.println("Path you chose: " + cutPath + "\nChecking folders...");
+						String[] palFolders = { "chars", "backup_chars", "enemies", "backup_enemies" };
+						for (String i : palFolders) {
+							if (!new File(cutPath + "//palettes//" + i).exists()) {
+								fulfilled = false;
+								errorMsg(cutPath + "\\palettes\\" + i, "folder");
+								break;
+							}
+						}
+						// With all conditions accomplished, the path can be chose.
+						if (fulfilled) {
+							// Add game path to global variables
+							sorrPath = selectedDir;
+							System.out.println("Folders found!\n----------------------");
 						}
 					}
-					// With all conditions accomplished, the path can be chose.
-					if (fulfilled) {
-						// Add game path to global variables
-						sorrPath = selectedDir;
-						System.out.println("Folders found!\n----------------------");
-					}
-				}
 
-				// Save the new path in the configuration
-				Start.changeConfig(3, sorrPath);
+					// Save the new path in the configuration
+					Start.changeConfig(3, sorrPath);
+
+				}
 
 				System.out.println("SorR Directory changed! Looking for mods in the new folder...");
 
