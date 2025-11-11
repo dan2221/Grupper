@@ -36,9 +36,9 @@ bk3_axel1.wav|axel,sor3
 bk3_blaze1.wav|blaze,sor3
 bk3_blaze2.wav|blaze,sor3
 bk3_shiva1.wav|shiva,sor3,final crash
-bk3_yamato1.wav|yamato,jutsu
-bk3_yamato2.wav|yamato,justu
-bk3_yamato3.wav|yamato,justu
+bk3_yamato1.wav|yamato,jutsu,samurai
+bk3_yamato2.wav|yamato,justu,samurai
+bk3_yamato3.wav|yamato,justu,samurai
 blaze.fpg|sor3,blaze
 bongo.fpg|bongo,sor3,fat
 boomerang.fpg|boomerang,antonio,boss

@@ -55,7 +55,7 @@ public class Main extends JFrame {
 
 	// The rest of the global variables are self-explanatory.
 	static int modQuantity;
-	static String selectedMod, sorrPath;
+	static String selectedMod, sorrPath, gameAssetsPath;
 	JList<SorrMod> listMod;
 	ImageIcon modImage;
 	static String selectedDir;
@@ -154,6 +154,7 @@ public class Main extends JFrame {
 	// DefaultListModel model;
 	private JPanel contentPane;
 	private JTextField txtPath;
+	private JTextField txtAltPath;
 
 	/**
 	 * Launch the application.
@@ -311,10 +312,11 @@ public class Main extends JFrame {
 		// Create Jlist using a model
 		scrollPane_mods.setViewportView(listMod);
 		// add(new JScrollPane(listMod));
-		
+
 		////////////////////////////////////////////////////////////////////////////////////////
-		/////// PANEL CHARACTERS   /////////////////////////////////////////////////////////////
-		
+		/////// PANEL CHARACTERS
+		//////////////////////////////////////////////////////////////////////////////////////// /////////////////////////////////////////////////////////////
+
 		JPanel panel_char = new JPanel();
 		tabbedPane.addTab("Characters", null, panel_char, null);
 
@@ -322,9 +324,10 @@ public class Main extends JFrame {
 		frmtdtxtfld01.setText("This section is not available yet. Please wait for an update.");
 		frmtdtxtfld01.setEditable(false);
 		panel_char.add(frmtdtxtfld01);
-		
+
 		////////////////////////////////////////////////////////////////////////////////////////
-		/////// PANEL TOOLS       //////////////////////////////////////////////////////////////
+		/////// PANEL TOOLS
+		//////////////////////////////////////////////////////////////////////////////////////// //////////////////////////////////////////////////////////////
 
 		JPanel panel_tools = new JPanel();
 		tabbedPane.addTab("Tools", null, panel_tools, null);
@@ -555,9 +558,10 @@ public class Main extends JFrame {
 		panel_tools.add(btnSearch);
 		panel_tools.setComponentZOrder(btnSearch, 0); // garante que o botão fique no topo do z-order do painel
 		btnSearch.setFocusable(true);
-		
+
 		////////////////////////////////////////////////////////////////////////////////////////
-		/////// PANEL MUSIC ////////////////////////////////////////////////////////////////////
+		/////// PANEL MUSIC
+		//////////////////////////////////////////////////////////////////////////////////////// ////////////////////////////////////////////////////////////////////
 
 		JPanel panel_music = new JPanel();
 		tabbedPane.addTab("Music Player", null, panel_music, null);
@@ -584,17 +588,17 @@ public class Main extends JFrame {
 		JLabel lblAlText = new JLabel("Installed mod:");
 		lblAlText.setBounds(27, 0, 320, 30);
 		pn_installed.add(lblAlText);
-		
+
 		////////////////////////////////////////////////////////////////////////////////////////
-		/////////// PANEL OPTION              //////////////////////////////////////////////////
+		/////////// PANEL OPTION //////////////////////////////////////////////////
 
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
 		panel_option.setLayout(null);
 
-		JButton btPath = new JButton("Browse...");
-		btPath.setBounds(295, 268, 89, 23);
-		panel_option.add(btPath);
+		JButton btnExePath = new JButton("Browse...");
+		btnExePath.setBounds(295, 268, 89, 23);
+		panel_option.add(btnExePath);
 
 		JLabel lblNewLabel_1 = new JLabel("Executable path:");
 		lblNewLabel_1.setBounds(10, 244, 223, 14);
@@ -605,16 +609,20 @@ public class Main extends JFrame {
 		txtPath.setBounds(10, 270, 275, 20);
 		panel_option.add(txtPath);
 		txtPath.setColumns(10);
-		
+
 		/////////////////////// resourses (extracted files for mod makers ////////////
-		
+
 		// --- inserir logo após txtPath.setColumns(10);
 
 		JLabel lblAltPath = new JLabel("Extracted resources folder (modders):");
 		lblAltPath.setBounds(10, 300, 223, 14);
 		panel_option.add(lblAltPath);
 
-		JTextField txtAltPath = new JTextField("");
+		String content ="";
+		if (gameAssetsPath!="") {
+			content=gameAssetsPath;
+		}
+		txtAltPath = new JTextField(content);
 		txtAltPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		txtAltPath.setBounds(10, 320, 275, 20);
 		panel_option.add(txtAltPath);
@@ -625,19 +633,31 @@ public class Main extends JFrame {
 		panel_option.add(btAltBrowse);
 
 		btAltBrowse.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        // abre um seletor de pastas e coloca o caminho no campo
-		        JFileChooser dirChooser = new JFileChooser(sorrPath);
-		        dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		        dirChooser.setAcceptAllFileFilterUsed(false);
-		        int result = dirChooser.showOpenDialog(null);
-		        if (result == JFileChooser.APPROVE_OPTION) {
-		            txtAltPath.setText(dirChooser.getSelectedFile().getAbsolutePath());
-		            txtAltPath.setToolTipText(dirChooser.getSelectedFile().getAbsolutePath());
-		            // por enquanto apenas atualiza o campo; você pode adicionar lógica depois
-		        }
-		    }
+			public void actionPerformed(ActionEvent e) {
+				String startPath;
+				if (gameAssetsPath=="") {
+					startPath=gameAssetsPath;
+				} else {
+					startPath=sorrPath;
+				}
+				// FileChooser object
+				JFileChooser sorChooser = new JFileChooser(startPath);
+				sorChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				// sorChooser.setAcceptAllFileFilterUsed(false);
+
+				System.out.println("Openinig File dialog and waiting for user choice...");
+
+				// Show the file chooser dialog
+				int result = sorChooser.showOpenDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					// User selected a file
+					String selectedDir2 = sorChooser.getSelectedFile().toString();
+					txtAltPath.setText(selectedDir2);
+					txtAltPath.setToolTipText(selectedDir2);
+					gameAssetsPath = selectedDir2;
+					Start.changeConfig(4, gameAssetsPath);
+				}
+			}
 		});
 
 		setInstalledMod();
@@ -829,7 +849,7 @@ public class Main extends JFrame {
 			}
 		});
 
-		btPath.addActionListener(new ActionListener() {
+		btnExePath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// FileChooser object
 				JFileChooser sorChooser = new JFileChooser(sorrPath);

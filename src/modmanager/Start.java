@@ -20,14 +20,16 @@ public class Start {
 	 * 0: Hide unavailable mods; 1: Hide authors from the list; 2: Put the installed
 	 * mod as the first one of the sormaker list.
 	 */
-	private static boolean[] configrupper = new boolean[3];
+	private static boolean[] configrupper = new boolean[4];
 	private static String sorrPath;
+	private static String gameAssetsPath;
 
 	/**
 	 * This is the directory where the Jar executable is located.
 	 */
 	static String dirJar = System.getProperty("user.dir") + "//";
 	static boolean pendingExecSetting;
+	static boolean pendingGameAssetsSetting;
 
 	public static boolean[] getConfig() {
 		return configrupper;
@@ -35,6 +37,10 @@ public class Start {
 
 	public static String getSorrPath() {
 		return sorrPath;
+	}
+
+	public static String getExtractedDataPath() {
+		return gameAssetsPath;
 	}
 
 	public static boolean getPendingExecStatus() {
@@ -98,7 +104,7 @@ public class Start {
 
 			// Values to add to cfg file
 			String[] defaultconfig = { "//Grupper configuration file//\n", "hide_unavailable_mods=0;",
-					"list_without_authors=0;", "installed_mod_first=0;", "sorr_path=;" };
+					"list_without_authors=0;", "installed_mod_first=0;", "sorr_path=;", "game_assets_path=;"};
 			try {
 				new File(dirJar + "grupper.cfg").createNewFile();
 
@@ -120,7 +126,7 @@ public class Start {
 
 		// This array is useful for figuring out a missing part of the configuration in
 		// the cfg, in case a person edited the file manually.
-		boolean[] found = { false, false, false, false };
+		boolean[] found = { false, false, false, false, false };
 
 		try {
 			FileReader stream = new FileReader(dirJar + "grupper.cfg");
@@ -175,6 +181,20 @@ public class Start {
 					found[3] = true;
 				}
 
+				if (line.startsWith("game_assets_path=") && line.endsWith(";")) {
+					// Isolate content
+					String lineContent = line.replace("game_assets_path=", "").replace(";", "");
+					if (lineContent.isEmpty()) {
+						Main.gameAssetsPath = null;
+						gameAssetsPath = null;
+					} else {
+						Main.gameAssetsPath = lineContent;
+						gameAssetsPath = lineContent;
+					}
+//					System.out.println("sorr_path=" + sorrPath);
+					found[4] = true;
+				}
+
 				// Next line of the file
 				line = reader.readLine();
 
@@ -187,7 +207,7 @@ public class Start {
 			// Checking if there is some option absent.
 			for (int i = 0; i < found.length; i++) {
 				if (!found[i]) {
-					System.out.println("The part " + i + " of the confiration is missing!");
+					System.err.println("The part " + i + " of the confiration is missing!");
 					// Absent parts are going to be added as default values.
 					rewriteConfig();
 				}
@@ -283,10 +303,10 @@ public class Start {
 	}
 
 	/**
-	 * Change only the third value in the grupper.cfg.
+	 * Change only the third and forty value in the grupper.cfg.
 	 * 
-	 * @param option      (only 3)
-	 * @param sorrExePath
+	 * @param option      (only 3 or 4)
+	 * @param Path
 	 */
 	public static void changeConfig(int option, String sorrExePath) {
 		FileReader stream;
@@ -313,6 +333,13 @@ public class Start {
 				for (String item : fileBefore) {
 					if (option == 3) {
 						textToFind = "sorr_path=";
+						if (item.startsWith(textToFind) && item.endsWith(";")) {
+							writer.write(textToFind + sorrExePath + ";\n");
+						} else {
+							writer.write(item + "\n");
+						}
+					} else if (option == 4) {
+						textToFind = "game_assets_path=";
 						if (item.startsWith(textToFind) && item.endsWith(";")) {
 							writer.write(textToFind + sorrExePath + ";\n");
 						} else {
@@ -373,6 +400,18 @@ public class Start {
 				// code execution goes back to Main.java).
 				pendingExecSetting = true;
 				System.err.println("You don't have a SorR path defined!");
+			}
+
+			// This other part too.
+			lineContent = "game_assets_path=";
+			if (gameAssetsPath != null) {
+				writer.write(lineContent + gameAssetsPath + ";\n");
+			} else {
+				writer.write(lineContent + ";\n");
+				// This variable indicates that the game assets path is going to be set later
+				// (when the user set it on their own).
+				pendingGameAssetsSetting = true;
+				System.out.println("You don't have an SoRR's assets path defined!");
 			}
 			writer.close();
 		} catch (IOException e) {
