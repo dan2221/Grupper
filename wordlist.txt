@@ -186,7 +186,7 @@ se12.wav|stomp
 se13.wav|shock,electra,hit
 se14.wav|whip,electra,hit
 se15.wav|glass,hit,obstacle,object,breakable
-se16.wav|knife,cut,pierce,knife,sword
+se16.wav|knife,cut,pierce,knife,sword,claw,souther
 se17.wav|axel,shiva,special
 se18.wav|roll,spin
 se19.wav|blaze,skate,sammy,eddie,kick,special

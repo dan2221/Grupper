@@ -97,7 +97,7 @@ public class SearchTextApp {
 
     private void buildGui(){
         frame = new JFrame("Busca (texto)");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(600,400);
         frame.setLocationRelativeTo(null);
 

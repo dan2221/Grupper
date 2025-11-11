@@ -553,6 +553,8 @@ public class Main extends JFrame {
 			}
 		});
 		panel_tools.add(btnSearch);
+		panel_tools.setComponentZOrder(btnSearch, 0); // garante que o botão fique no topo do z-order do painel
+		btnSearch.setFocusable(true);
 		
 		////////////////////////////////////////////////////////////////////////////////////////
 		/////// PANEL MUSIC ////////////////////////////////////////////////////////////////////
@@ -582,6 +584,9 @@ public class Main extends JFrame {
 		JLabel lblAlText = new JLabel("Installed mod:");
 		lblAlText.setBounds(27, 0, 320, 30);
 		pn_installed.add(lblAlText);
+		
+		////////////////////////////////////////////////////////////////////////////////////////
+		/////////// PANEL OPTION              //////////////////////////////////////////////////
 
 		JPanel panel_option = new JPanel();
 		tabbedPane.addTab("Options", null, panel_option, null);
@@ -600,6 +605,40 @@ public class Main extends JFrame {
 		txtPath.setBounds(10, 270, 275, 20);
 		panel_option.add(txtPath);
 		txtPath.setColumns(10);
+		
+		/////////////////////// resourses (extracted files for mod makers ////////////
+		
+		// --- inserir logo após txtPath.setColumns(10);
+
+		JLabel lblAltPath = new JLabel("Extracted resources folder (modders):");
+		lblAltPath.setBounds(10, 300, 223, 14);
+		panel_option.add(lblAltPath);
+
+		JTextField txtAltPath = new JTextField("");
+		txtAltPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		txtAltPath.setBounds(10, 320, 275, 20);
+		panel_option.add(txtAltPath);
+		txtAltPath.setColumns(10);
+
+		JButton btAltBrowse = new JButton("Browse...");
+		btAltBrowse.setBounds(295, 320, 89, 23);
+		panel_option.add(btAltBrowse);
+
+		btAltBrowse.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // abre um seletor de pastas e coloca o caminho no campo
+		        JFileChooser dirChooser = new JFileChooser(sorrPath);
+		        dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        dirChooser.setAcceptAllFileFilterUsed(false);
+		        int result = dirChooser.showOpenDialog(null);
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		            txtAltPath.setText(dirChooser.getSelectedFile().getAbsolutePath());
+		            txtAltPath.setToolTipText(dirChooser.getSelectedFile().getAbsolutePath());
+		            // por enquanto apenas atualiza o campo; você pode adicionar lógica depois
+		        }
+		    }
+		});
 
 		setInstalledMod();
 
