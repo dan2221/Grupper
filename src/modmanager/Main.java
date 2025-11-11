@@ -311,7 +311,10 @@ public class Main extends JFrame {
 		// Create Jlist using a model
 		scrollPane_mods.setViewportView(listMod);
 		// add(new JScrollPane(listMod));
-
+		
+		////////////////////////////////////////////////////////////////////////////////////////
+		/////// PANEL CHARACTERS   /////////////////////////////////////////////////////////////
+		
 		JPanel panel_char = new JPanel();
 		tabbedPane.addTab("Characters", null, panel_char, null);
 
@@ -319,6 +322,9 @@ public class Main extends JFrame {
 		frmtdtxtfld01.setText("This section is not available yet. Please wait for an update.");
 		frmtdtxtfld01.setEditable(false);
 		panel_char.add(frmtdtxtfld01);
+		
+		////////////////////////////////////////////////////////////////////////////////////////
+		/////// PANEL TOOLS       //////////////////////////////////////////////////////////////
 
 		JPanel panel_tools = new JPanel();
 		tabbedPane.addTab("Tools", null, panel_tools, null);
@@ -537,9 +543,19 @@ public class Main extends JFrame {
 		lblNewLabel_3.setBounds(21, 297, 310, 14);
 		panel_tools.add(lblNewLabel_3);
 
-		JButton btnNewButton_2 = new JButton("Search");
-		btnNewButton_2.setBounds(284, 322, 89, 23);
-		panel_tools.add(btnNewButton_2);
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setBounds(284, 322, 89, 23);
+		btnSearch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: implementar ação de busca aqui
+				SearchTextApp.main(null);
+			}
+		});
+		panel_tools.add(btnSearch);
+		
+		////////////////////////////////////////////////////////////////////////////////////////
+		/////// PANEL MUSIC ////////////////////////////////////////////////////////////////////
 
 		JPanel panel_music = new JPanel();
 		tabbedPane.addTab("Music Player", null, panel_music, null);
