@@ -295,7 +295,7 @@ public class Main extends JFrame {
 		btFolder_1.setBackground(UIManager.getColor("Button.background"));
 		btFolder_1.setBounds(90, 358, 59, 23);
 		panel_level.add(btFolder_1);
-		btnSorMaker_1.setToolTipText("Run Sor Remake");
+		btnSorMaker_1.setToolTipText("Run SorMaker");
 		btnSorMaker_1.setBounds(158, 358, 59, 23);
 		panel_level.add(btnSorMaker_1);
 

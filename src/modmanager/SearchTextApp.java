@@ -34,7 +34,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class SearchTextApp {
-    private static final Path ROOT_DIR = Paths.get(Main.sorrPath + "//data");       // pasta dos .fpg
+    private static final Path ROOT_DIR = Paths.get(Main.gameAssetsPath);       // pasta dos .fpg
     private static final Path ITEMS_FILE = Paths.get("wordlist.txt");     // arquivo com dados
 
     private JFrame frame;
@@ -48,7 +48,7 @@ public class SearchTextApp {
         boolean exists;
         Path path;
         Item(String name, List<String> features){ this.name=name; this.features=new ArrayList<>(features); }
-        public String toString(){ return name + (exists ? "" : " (ausente)"); }
+        public String toString(){ return name + (exists ? "" : " (absent)"); }
     }
 
     public static void main(String[] args){

@@ -36,11 +36,11 @@ bk3_axel1.wav|axel,sor3
 bk3_blaze1.wav|blaze,sor3
 bk3_blaze2.wav|blaze,sor3
 bk3_shiva1.wav|shiva,sor3,final crash
-bk3_yamato1.wav|yamato,jutsu,samurai
-bk3_yamato2.wav|yamato,justu,samurai
-bk3_yamato3.wav|yamato,justu,samurai
+bk3_yamato1.wav|yamato,jutsu,samurai,ninja
+bk3_yamato2.wav|yamato,justu,samurai,ninja
+bk3_yamato3.wav|yamato,justu,samurai,ninja
 blaze.fpg|sor3,blaze
-bongo.fpg|bongo,sor3,fat
+bongo.fpg|bigben,bongo,sor3,fat
 boomerang.fpg|boomerang,antonio,boss
 bronz.fpg|bronz,suit,gun,pistol,revolver,sunglass
 bruce.fpg|bruce,clown,kangaroo,whip
@@ -58,13 +58,13 @@ dinamicos.fpg|gate,trash,cat,trap,spike,chandelier,lamp,water,splash,bird,car,th
 donovan.fpg|donovan,upper,uppercut,sor2
 donovanx.fpg|donovan,upper,uppercut,sor3
 drdahm.fpg|dr dahm,doctor,dr,mechanic,boss,laboratory
-electra.fpg|electra,whip,shock,sor2
+electra.fpg|electra,whip,shock,sor2,woman
 electra1.wav|whip,electra
 electra2.wav|electra,shock,spark
-electrax.fpg|electra,whip,shock,dominatrix,sor3
-electraxs.fpg|electra,whip,shock,dominatrix,censored,sor3
+electrax.fpg|electra,whip,shock,dominatrix,sor3,woman
+electraxs.fpg|electra,whip,shock,dominatrix,censored,sor3,woman
 electra_char.fpg|electra,whip,shock,sor2,playable
-electra_sor1.fpg|electra,whip,dominatrix,sor1,police
+electra_sor1.fpg|electra,whip,dominatrix,sor1,police,woman
 ending1.fpg|bad end,trone
 ending2.fpg|bad end,death
 ending3.fpg|sor2 end,good end
@@ -145,7 +145,7 @@ ninja.fpg|ninja,shuriken,sword,sor2
 ninjax.fpg|ninja,shuriken,sword,sor3
 ninjo.fpg|shirtless,ninja,sword,sorr,remake
 objeto.fpg|item,tube,pipe,cane,sword,bat,4x4,board,shiriken,kunai,granade,pepper,star wars,light,bottle,gun,pistol,machine gun,smg,bazooka,shotgun,flamethrower,flameshot,hammer,banhammer,shuriken,missile,yamato,clown,axe,obstacle,object,breakable,plant,trashcan,drum,box,crate,chest,lamp,buoy,table,wall,statue,sculpture,sandbag,pitcher,jug,arcade,alien egg,broken
-onihime.fpg|yasha,onihime,mona,lisa,monalisa,twin,purple
+onihime.fpg|yasha,onihime,mona,lisa,monalisa,twin,purple,woman
 p1.fpg|robot,p1
 pajaros.wav|bird
 particle.fpg|robot
@@ -318,33 +318,33 @@ sev25.wav|shiva,final crash,sor2
 sev26.wav|oba
 sev27.wav|barbon
 sev29.wav|ninja,mifune
-sev3.wav|signal,throw
+sev3.wav|signal,throw,ysignal
 sev30.wav|shiva
-sev31.wav|shiva,ninja,tiger,fernando
+sev31.wav|shiva,ninja,tiger,fabio
 sev32.wav|shiva,final crash
-sev33.wav|shiva,tiger,fernando,ninja
+sev33.wav|shiva,tiger,fabio,ninja
 sev34.wav|mr x,robot x,robotx,doctor
 sev35.wav|ninja,mifune
 sev36.wav|galsia,sor3,scream
 sev37.wav|galsia,slum,enemy,scream,sor3
 sev38.wav|robot,stump
-sev39.wav|yamato,jutsu
+sev39.wav|yamato,jutsu,ninja
 sev4.wav|jet,throw
-sev40.wav|yamato,jutsu
-sev41.wav|yamato,jutsu
-sev42.wav|yamato,jutsu
+sev40.wav|yamato,jutsu,ninja
+sev41.wav|yamato,jutsu,ninja
+sev42.wav|yamato,jutsu,ninja
 sev43.wav|dash
 sev44.wav|ash,laught
 sev45.wav|woman,scream,death,die,electra
 sev46.wav|explosion,syndicate
 sev47.wav|onihime,yasha,twins,mona,lisa,monalisa,woman
-sev5.wav|Zamza
+sev5.wav|Zamza,blanka,mask
 sev6.wav|barbon
 sev7.wav|jack
 sev9.wav|hakuyo,ninja,scream
 shiva.fpg|shiva,playable
 shivax.fpg|shiva,sor3
-signal.fpg|signal
+signal.fpg|ysignal,signal,slide
 silver.fpg|suit,gun,pistol,revolver,sunglass
 siren.wav|bad end,siren,people
 skate.fpg|skate,sammy,eddie
@@ -603,20 +603,20 @@ storm.fpg|storm,biker
 stormx.fpg|storm,biker
 superfx.fpg|
 tienda.fpg|blaze,shopping,shop,cheat
-tiger.fpg|tiger,fernando
+tiger.fpg|tiger,fabio
 tortugas.wav|
 tren.wav|
 truck.wav|
-twins.fpg|yasha,onihime,mona,lisa,twins,monalisa
+twins.fpg|yasha,onihime,mona,lisa,twins,monalisa,woman
 vball.fpg|
 vehelits.fpg|vehelits,alien,monster,demon
 vehelits1.wav|vehelits,alien,monster,demon
 vehelits2.wav|vehelits,alien,monster,demon
 vice.fpg|enemy,grab
 viento.wav|wind
-yamato.fpg|yamato,samurai
-yamato16.fpg|yamato,samurai
-yasha.fpg|yasha,onihime,mona,lisa,twins,monalisa
+yamato.fpg|yamato,samurai,ninja
+yamato16.fpg|yamato,samurai,ninja
+yasha.fpg|yasha,onihime,mona,lisa,twins,monalisa,woman
 ysignal.fpg|signal,ysignal,sor2,slide
 ysignalx.fpg|ysignal,signal,sor3,slide
 zamza.fpg|zamza,blanka,mask,kabuki,claw
