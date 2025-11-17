@@ -15,7 +15,9 @@ import java.net.URISyntaxException;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -27,7 +29,7 @@ public class DonateDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtaffcbeaefcf;
+	private JTextField txtPix;
 
 	/**
 	 * Launch the application.
@@ -61,12 +63,13 @@ public class DonateDialog extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		centerFrame();
-		
+
 		// Define o ícone da janela
-        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/heart16x16.png")); // Altere o caminho
-        setIconImage(icon);
+		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/heart16x16.png")); // Altere o
+																												// caminho
+		setIconImage(icon);
 
 		JLabel lblNewLabel = new JLabel("<html><body>Consider supporting me to help the development of\r\n"
 				+ "new software for the beatemup community.</body></html>");
@@ -126,22 +129,33 @@ public class DonateDialog extends JDialog {
 			}
 		});
 
-		txtaffcbeaefcf = new JTextField();
-		txtaffcbeaefcf.setText("888a0f24-fc77-4105-b8ea-e1f919849c4f");
-		txtaffcbeaefcf.setBounds(61, 111, 245, 20);
-		contentPanel.add(txtaffcbeaefcf);
-		txtaffcbeaefcf.setColumns(10);
+		txtPix = new JTextField();
+		txtPix.setText("888a0f24-fc77-4105-b8ea-e1f919849c4f");
+		txtPix.setBounds(61, 111, 245, 20);
+		contentPanel.add(txtPix);
+		txtPix.setColumns(10);
+		txtPix.setEditable(false);
+
+		// Criar menu de contexto
+		JPopupMenu contextMenu = new JPopupMenu();
+
+		JMenuItem copyItem = new JMenuItem("Copy");
+		copyItem.addActionListener(e -> txtPix.copy());
+		contextMenu.add(copyItem);
+
+		// Adicionar MouseListener para abrir o menu de contexto
+		txtPix.setComponentPopupMenu(contextMenu);
 	}
-	
+
 	private void centerFrame() {
-        // Obtém a dimensão da tela
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
-        // Calcula a posição x e y para centralizar
-        int x = (screenSize.width - getWidth()) / 2;
-        int y = (screenSize.height - getHeight()) / 2;
-        
-        // Define a nova localização da janela
-        setLocation(x, y);
-    }
+		// Obtém a dimensão da tela
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+		// Calcula a posição x e y para centralizar
+		int x = (screenSize.width - getWidth()) / 2;
+		int y = (screenSize.height - getHeight()) / 2;
+
+		// Define a nova localização da janela
+		setLocation(x, y);
+	}
 }

@@ -843,7 +843,7 @@ public class Main extends JFrame {
 		lblAbout.setBounds(10, 36, 374, 121);
 		panel_info.add(lblAbout);
 		
-		JLabel lblNewLabel_6 = new JLabel("The program is provided AS IS with NO WARRANT/ OF ANV KIND.");
+		JLabel lblNewLabel_6 = new JLabel("The program is provided as is with NO WARRANTY of any kind.");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setBounds(10, 366, 374, 14);
 		panel_info.add(lblNewLabel_6);
@@ -892,6 +892,25 @@ public class Main extends JFrame {
         btnNewButton_1.setIcon(iconHeart); // Define a imagem como ícone do botão
         // ImageIcon SorrIcon = new ImageIcon(getClass().getResource("/images/sorremake.png"));
         panel_info.add(btnNewButton_1);
+        
+        JButton btnNewButton_2 = new JButton("🌐 GitHub Page");
+        btnNewButton_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+        			URI uri = new URI("https://github.com/dan2221/Grupper");
+        			Desktop.getDesktop().browse(uri);
+        		} catch (IOException | URISyntaxException e1) {
+        			e1.printStackTrace();
+        		}
+        	}
+        });
+        btnNewButton_2.setBounds(132, 326, 129, 23);
+        panel_info.add(btnNewButton_2);
+        
+        JLabel lblNewLabel_4 = new JLabel("Visit the project page on GitHub to check updates.");
+        lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel_4.setBounds(10, 290, 374, 25);
+        panel_info.add(lblNewLabel_4);
 
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.setBounds(231, 349, 135, 23);
