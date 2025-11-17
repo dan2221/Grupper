@@ -43,4 +43,4 @@ WARNINGS:
 OPTIONAL SUPPORT:
 
 * If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://ko-fi.com/danchavyn
-* PIX(Brazil): daniel227@gmail.com
+* PIX(Brazil): daniel227@duck.com
