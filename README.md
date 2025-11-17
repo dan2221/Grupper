@@ -24,12 +24,11 @@ SOME FUTURE FEATURES:
 * Character mods support;
 * Music player for all mods, independent if the mod are listed in the Grupper mod list;
 * Tools for small modifications in the game.
-* Option to refuse using characters' FPG present in mods' data folders.
 
 IMPORTANT TOPICS:
 
-* Grupper doesn't come with mods. You need to get them on your own;
-* This program is a beta yet, so maybe you find some bugs. If you found a bug you can report it;
+* Grupper doesn't come with mods or games. You need to get them on your own;
+* This program is unfinished (beta stage), so be aware that it's possible that you find an unknown bug. If you find one, you can report it here: https://github.com/dan2221/Grupper/issues
 * If some mod is not available to install, check if it has a "palettes/enemies" directory with ".pal" files inside.
 
 

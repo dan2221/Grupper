@@ -1,6 +1,7 @@
 package modmanager;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -8,6 +9,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -834,15 +837,16 @@ public class Main extends JFrame {
 		lblNewLabel_5.setBounds(10, 11, 374, 14);
 		panel_info.add(lblNewLabel_5);
 		
-		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p><p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE (Java) and uses Apache Library.</p><p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding.</p></body></html>");
+		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p><p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding.</p></body></html>");
 		lblAbout.setVerticalAlignment(SwingConstants.TOP);
-		lblAbout.setBounds(10, 36, 374, 131);
+		lblAbout.setBounds(10, 36, 374, 90);
 		panel_info.add(lblAbout);
 		
-//		JLabel lblNewLabel_6 = new JLabel("Software released under the MIT License.");
-//		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-//		lblNewLabel_6.setBounds(10, 366, 374, 14);
-//		panel_info.add(lblNewLabel_6);
+		JLabel lblNewLabel_6 = new JLabel("This program is provided as is with no warranty of any kind.");
+		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_6.setBounds(10, 366, 374, 14);
+		panel_info.add(lblNewLabel_6);
 		
 		// Cria o botão
         JButton btnNewButton = new JButton("Visit my channel");
@@ -856,7 +860,7 @@ public class Main extends JFrame {
         		}
         	}
         });
-        btnNewButton.setBounds(119, 180, 161, 23);
+        btnNewButton.setBounds(119, 140, 161, 23);
         
      // Define o ícone da janela
         Image icon = Toolkit.getDefaultToolkit().getImage("caminho/para/seu/icone.png"); // Altere o caminho
@@ -869,9 +873,9 @@ public class Main extends JFrame {
         // Adiciona o botão ao painel
         panel_info.add(btnNewButton);
 		
-		JLabel lblconsiderSupporting = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Visit the project page on GitHub to check updates. Also, consider supporting me to help the development of new software for beatemups.</p></body></html>");
+		JLabel lblconsiderSupporting = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Visit the project page on GitHub to check updates. Consider supporting me to help the development of more cool software.</p></body></html>");
 		lblconsiderSupporting.setVerticalAlignment(SwingConstants.TOP);
-		lblconsiderSupporting.setBounds(10, 237, 374, 53);
+		lblconsiderSupporting.setBounds(10, 192, 374, 44);
 		panel_info.add(lblconsiderSupporting);
 		
 		// Cria o botão
@@ -881,7 +885,7 @@ public class Main extends JFrame {
         		SupportDialog.main(null);
         	}
         });
-        btnNewButton_1.setBounds(243, 315, 58, 23);
+        btnNewButton_1.setBounds(241, 240, 58, 23);
         
         // Carrega a imagem
         ImageIcon iconHeart = new ImageIcon(getClass().getResource("/images/heart16x16.png")); // Altere o caminho
@@ -892,16 +896,73 @@ public class Main extends JFrame {
         JButton btnNewButton_2 = new JButton("🌐 GitHub Page");
         btnNewButton_2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		try {
-        			URI uri = new URI("https://github.com/dan2221/Grupper");
-        			Desktop.getDesktop().browse(uri);
-        		} catch (IOException | URISyntaxException e1) {
-        			e1.printStackTrace();
-        		}
+        		openLink("https://github.com/dan2221/Grupper");
         	}
         });
-        btnNewButton_2.setBounds(105, 315, 129, 23);
+        btnNewButton_2.setBounds(103, 240, 129, 23);
         panel_info.add(btnNewButton_2);
+        
+        JLabel lblNewLabel_6_1 = new JLabel("This program was developed in Eclipse IDE (Java):");
+        lblNewLabel_6_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_6_1.setHorizontalAlignment(SwingConstants.LEFT);
+        lblNewLabel_6_1.setBounds(10, 298, 250, 14);
+        panel_info.add(lblNewLabel_6_1);
+        
+        JLabel lblNewLabel_4 = new JLabel("https://eclipseide.org/");
+        lblNewLabel_4.setForeground(new Color(0, 0, 255));
+        lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_4.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_4.setBounds(241, 298, 143, 14);
+        lblNewLabel_4.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lblNewLabel_4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	openLink("https://eclipseide.org/");
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblNewLabel_4.setText("<html><u>" + lblNewLabel_4.getText() + "</u></html>");
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblNewLabel_4.setText("https://eclipseide.org/");
+            }
+        });
+        panel_info.add(lblNewLabel_4);
+
+        
+        
+        JLabel lblNewLabel_6_1_1 = new JLabel("Apache Commons library was used.");
+        lblNewLabel_6_1_1.setHorizontalAlignment(SwingConstants.LEFT);
+        lblNewLabel_6_1_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_6_1_1.setBounds(10, 321, 222, 14);
+        panel_info.add(lblNewLabel_6_1_1);
+        
+        JLabel lblNewLabel_4_1 = new JLabel("https://commons.apache.org/");
+        lblNewLabel_4_1.setForeground(new Color(0, 0, 255));
+        lblNewLabel_4_1.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblNewLabel_4_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblNewLabel_4_1.setBounds(231, 323, 153, 14);
+        lblNewLabel_4_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lblNewLabel_4_1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	openLink("https://commons.apache.org/");
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblNewLabel_4_1.setText("<html><u>" + lblNewLabel_4_1.getText() + "</u></html>");
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblNewLabel_4_1.setText("https://commons.apache.org/");
+            }
+        });
+        panel_info.add(lblNewLabel_4_1);
+
+        
+        
+        panel_info.add(lblNewLabel_4_1);
 
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.setBounds(231, 349, 135, 23);
@@ -1017,6 +1078,15 @@ public class Main extends JFrame {
 				}
 			}
 		});
+	}
+	
+	private static void openLink(String urlString) {
+		try {
+			URI uri = new URI(urlString);
+			Desktop.getDesktop().browse(uri);
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void errorMsg(String file, String additionalText) {
