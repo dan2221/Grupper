@@ -40,7 +40,7 @@ WARNINGS:
 * It's recommended that you don't change manually the files in the SORR folder and subfolders while a mod is installed;
 * It's recommended that when you are going to replace Grupper to a new version, uninstall all mods and chars first.
 
-OPTIONAL DONATION:
+OPTIONAL SUPPORT:
 
 * If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://ko-fi.com/danchavyn
-* PIX(Brazil):daniel227@gmail.com
+* PIX(Brazil): daniel227@gmail.com
