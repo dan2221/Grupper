@@ -834,13 +834,9 @@ public class Main extends JFrame {
 		lblNewLabel_5.setBounds(10, 11, 374, 14);
 		panel_info.add(lblNewLabel_5);
 		
-		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'>"
-				+ "<p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p>"
-				+ "<p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE 2022-12 (Java).</p>"
-				+ "<p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding!</p>"
-				+ "</body></html>");
+		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p><p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE (Java) and uses Apache Library.</p><p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding!</p></body></html>");
 		lblAbout.setVerticalAlignment(SwingConstants.TOP);
-		lblAbout.setBounds(10, 36, 374, 121);
+		lblAbout.setBounds(10, 36, 374, 131);
 		panel_info.add(lblAbout);
 		
 		JLabel lblNewLabel_6 = new JLabel("The program is provided as is with NO WARRANTY of any kind.");
@@ -860,7 +856,7 @@ public class Main extends JFrame {
         		}
         	}
         });
-        btnNewButton.setBounds(119, 168, 161, 23);
+        btnNewButton.setBounds(119, 180, 161, 23);
         
      // Define o ícone da janela
         Image icon = Toolkit.getDefaultToolkit().getImage("caminho/para/seu/icone.png"); // Altere o caminho
@@ -873,19 +869,19 @@ public class Main extends JFrame {
         // Adiciona o botão ao painel
         panel_info.add(btnNewButton);
 		
-		JLabel lblconsiderSupporting = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Consider supporting me to help the development of new software for beatemups.</p></body></html>");
+		JLabel lblconsiderSupporting = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Visit the project page on GitHub to check updates. Also, consider supporting me to help the development of new software for beatemups.</p></body></html>");
 		lblconsiderSupporting.setVerticalAlignment(SwingConstants.TOP);
-		lblconsiderSupporting.setBounds(10, 207, 374, 38);
+		lblconsiderSupporting.setBounds(10, 237, 374, 53);
 		panel_info.add(lblconsiderSupporting);
 		
 		// Cria o botão
         JButton btnNewButton_1 = new JButton("");
         btnNewButton_1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		DonateDialog.main(null);
+        		SupportDialog.main(null);
         	}
         });
-        btnNewButton_1.setBounds(166, 256, 58, 23);
+        btnNewButton_1.setBounds(243, 315, 58, 23);
         
         // Carrega a imagem
         ImageIcon iconHeart = new ImageIcon(getClass().getResource("/images/heart16x16.png")); // Altere o caminho
@@ -904,13 +900,8 @@ public class Main extends JFrame {
         		}
         	}
         });
-        btnNewButton_2.setBounds(132, 326, 129, 23);
+        btnNewButton_2.setBounds(105, 315, 129, 23);
         panel_info.add(btnNewButton_2);
-        
-        JLabel lblNewLabel_4 = new JLabel("Visit the project page on GitHub to check updates.");
-        lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel_4.setBounds(10, 290, 374, 25);
-        panel_info.add(lblNewLabel_4);
 
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.setBounds(231, 349, 135, 23);

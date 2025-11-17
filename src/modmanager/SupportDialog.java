@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class DonateDialog extends JDialog {
+public class SupportDialog extends JDialog {
 
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class DonateDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DonateDialog dialog = new DonateDialog();
+			SupportDialog dialog = new SupportDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -56,7 +56,7 @@ public class DonateDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DonateDialog() {
+	public SupportDialog() {
 		setTitle("Supporting options");
 		setBounds(100, 100, 332, 213);
 		getContentPane().setLayout(new BorderLayout());
@@ -130,11 +130,12 @@ public class DonateDialog extends JDialog {
 		});
 
 		txtPix = new JTextField();
-		txtPix.setText("888a0f24-fc77-4105-b8ea-e1f919849c4f");
+		txtPix.setText("daniel227@duck.com");
 		txtPix.setBounds(61, 111, 245, 20);
 		contentPanel.add(txtPix);
 		txtPix.setColumns(10);
 		txtPix.setEditable(false);
+		txtPix.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
 		// Criar menu de contexto
 		JPopupMenu contextMenu = new JPopupMenu();
