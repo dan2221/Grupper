@@ -839,7 +839,7 @@ public class Main extends JFrame {
 		lblAbout.setBounds(10, 36, 374, 131);
 		panel_info.add(lblAbout);
 		
-		JLabel lblNewLabel_6 = new JLabel("The program is provided as is with NO WARRANTY of any kind.");
+		JLabel lblNewLabel_6 = new JLabel("Software released under the MIT License.");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setBounds(10, 366, 374, 14);
 		panel_info.add(lblNewLabel_6);

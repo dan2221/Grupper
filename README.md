@@ -16,7 +16,8 @@ FEATURES:
 * Option to show the installed mod as the first one in the sormaker list by adding the character "-" to its folder name.
 * You can restore the default backup palettes of the game.
 * You can copy a savegame to your SorR with everything unlocked.
-* If you want to use your own data files, place them in your data folder before installing any mod. When you install the mod, your files won't be replaced because the mod's files will have '[mod]' added to their names.
+* If you want to use your own data files, place them in your data folder before installing any mod. When you install the mod, your files won't be replaced because the mod's files will have '[mod]' added to their names;
+* There is a tool to help mod creators to find files they want in game's assets.
 
 SOME FUTURE FEATURES:
 
@@ -42,3 +43,4 @@ WARNINGS:
 OPTIONAL DONATION:
 
 * If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://ko-fi.com/danchavyn
+* PIX(Brazil):daniel227@gmail.com
