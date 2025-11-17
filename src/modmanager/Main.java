@@ -834,15 +834,15 @@ public class Main extends JFrame {
 		lblNewLabel_5.setBounds(10, 11, 374, 14);
 		panel_info.add(lblNewLabel_5);
 		
-		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p><p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE (Java) and uses Apache Library.</p><p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding!</p></body></html>");
+		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'><p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p><p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE (Java) and uses Apache Library.</p><p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding.</p></body></html>");
 		lblAbout.setVerticalAlignment(SwingConstants.TOP);
 		lblAbout.setBounds(10, 36, 374, 131);
 		panel_info.add(lblAbout);
 		
-		JLabel lblNewLabel_6 = new JLabel("Software released under the MIT License.");
-		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_6.setBounds(10, 366, 374, 14);
-		panel_info.add(lblNewLabel_6);
+//		JLabel lblNewLabel_6 = new JLabel("Software released under the MIT License.");
+//		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+//		lblNewLabel_6.setBounds(10, 366, 374, 14);
+//		panel_info.add(lblNewLabel_6);
 		
 		// Cria o botão
         JButton btnNewButton = new JButton("Visit my channel");

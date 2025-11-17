@@ -28,8 +28,8 @@ SOME FUTURE FEATURES:
 
 IMPORTANT TOPICS:
 
+* Grupper doesn't come with mods. You need to get them on your own;
 * This program is a beta yet, so maybe you find some bugs. If you found a bug you can report it;
-* Grupper doesn't come with mods. You need to download them on internet;
 * If some mod is not available to install, check if it has a "palettes/enemies" directory with ".pal" files inside.
 
 
