@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -53,11 +56,17 @@ public class DonateDialog extends JDialog {
 	 */
 	public DonateDialog() {
 		setTitle("Supporting options");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 332, 213);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		centerFrame();
+		
+		// Define o ícone da janela
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/heart16x16.png")); // Altere o caminho
+        setIconImage(icon);
 
 		JLabel lblNewLabel = new JLabel("<html><body>Consider supporting me to help the development of\r\n"
 				+ "new software for the beatemup community.</body></html>");
@@ -119,8 +128,20 @@ public class DonateDialog extends JDialog {
 
 		txtaffcbeaefcf = new JTextField();
 		txtaffcbeaefcf.setText("888a0f24-fc77-4105-b8ea-e1f919849c4f");
-		txtaffcbeaefcf.setBounds(61, 111, 230, 20);
+		txtaffcbeaefcf.setBounds(61, 111, 245, 20);
 		contentPanel.add(txtaffcbeaefcf);
 		txtaffcbeaefcf.setColumns(10);
 	}
+	
+	private void centerFrame() {
+        // Obtém a dimensão da tela
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        // Calcula a posição x e y para centralizar
+        int x = (screenSize.width - getWidth()) / 2;
+        int y = (screenSize.height - getHeight()) / 2;
+        
+        // Define a nova localização da janela
+        setLocation(x, y);
+    }
 }
