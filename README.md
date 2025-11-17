@@ -44,7 +44,3 @@ OPTIONAL SUPPORT:
 
 * If you enjoyed this software and would like to support the developer, please consider accessing the following link: https://ko-fi.com/danchavyn
 * PIX(Brazil): daniel227@duck.com
-
-OPEN SOURCE LICENSE:
-
-The source code of this software is licensed under the MIT License.
