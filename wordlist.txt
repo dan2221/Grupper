@@ -1,4 +1,4 @@
-abadede.fpg|wrestler,strong
+abadede.fpg|wrestler,strong,barbarian
 adam.fpg|
 adam.wav|
 adam1.wav|death
@@ -20,7 +20,7 @@ ambient7.wav|rain,water
 ambient8.wav|ocean,water
 ambient9.wav|ocean,gull,bird
 ash.fpg|
-ash.wav|laught
+ash.wav|
 ash_char.fpg|
 axel.fpg|sor2
 banderas.fpg|flag,ensligh,spanish
@@ -59,14 +59,14 @@ donovan.fpg|upper,uppercut,sor2
 donovanx.fpg|upper,uppercut,sor3
 drdahm.fpg|dr dahm,doctor,dr,mechanic,boss,laboratory
 electra.fpg|whip,shock,sor2,woman
-electra1.wav|whip,electra
+electra1.wav|whip,electra,linda
 electra2.wav|shock,spark
 electrax.fpg|whip,shock,dominatrix,sor3,woman
 electraxs.fpg|whip,shock,dominatrix,censored,sor3,woman
 electra_char.fpg|whip,shock,sor2,playable
-electra_sor1.fpg|whip,dominatrix,sor1,police,woman
+electra_sor1.fpg|whip,dominatrix,sor1,woman,linda
 ending1.fpg|bad end,trone
-ending2.fpg|bad end,death
+ending2.fpg|bad end
 ending3.fpg|sor2,good end
 ending4.fpg|sor1,good end
 ending5.fpg|bad end,city
@@ -75,7 +75,7 @@ ending7.fpg|rudra end,urban rudra
 ending8.fpg|secret end,opa-opa,fantasy zone,everyone
 english.fpg|item,names,english
 fade.fpg|fade
-falcon.fpg|falcon,joe higashi,muay thai,kick
+falcon.fpg|falcon,joe higashi,muay thai,kick,raven
 fat.fpg|bongo,flame,fire,sor1
 fgolpe.fpg|flash,hitflash,blood,spark,bright,explosion,wave,stream,smoke
 firework.wav|new year
@@ -126,7 +126,7 @@ intro7.fpg|
 item.fpg|soda,water,juice,apple,candy,cherry,coffee,tea,pear,orange,musse,donut,pizza,hamburger,cheeseburger,burger,pineaple,meat,grapes,chicken,diamond,pearl,money,cash,glasses,glove,radio,coin,watch,gold,moneybag,pin,police,1up,life,special,gauge,specialbar,ok,super
 item1eng.fpg|names,english
 item1spa.fpg|names,spanish
-jack.fpg|knife,laught
+jack.fpg|knife,soya
 jet.fpg|jetpack
 jetx.fpg|jetpack
 letrero.fpg|signboard
@@ -141,8 +141,8 @@ mrx.wav|mr x
 mry.fpg|
 nameditor.fpg|
 neox.fpg|robot,neo x,
-ninja.fpg|shuriken,sword,sor2
-ninjax.fpg|shuriken,sword,sor3
+ninja.fpg|shuriken,mifune,sword,sor2
+ninjax.fpg|shuriken,mifune,sword,sor3
 ninjo.fpg|shirtless,ninja,sword,sorr,remake
 objeto.fpg|item,tube,pipe,cane,sword,bat,4x4,board,shiriken,kunai,granade,pepper,star wars,light,bottle,gun,pistol,machine gun,smg,bazooka,shotgun,flamethrower,flameshot,banhammer,shuriken,missile,yamato,clown,axe,obstacle,object,breakable,plant,trashcan,drum,box,crate,chest,lamp,buoy,table,wall,statue,sculpture,sandbag,pitcher,jug,arcade,alien egg,broken
 onihime.fpg|yasha,mona,lisa,monalisa,twin,purple,woman
@@ -255,7 +255,7 @@ se74.wav|robot,hit,attack
 se75.wav|police,car,vrum,aceleration
 se76.wav|police,car,stop
 se77.wav|police,shot
-se78.wav|police,bazooka,flame,fire,explosion
+se78.wav|police,bazooka,flame,fire,explosion,shot
 se79.wav|explosion
 se8.wav|whip,electra
 se80.wav|laxine,bomb,explosion,hadoken
@@ -320,7 +320,7 @@ sev27.wav|barbon
 sev29.wav|ninja,mifune
 sev3.wav|signal,throw,ysignal
 sev30.wav|shiva
-sev31.wav|shiva,ninja,tiger,fabio
+sev31.wav|shiva,ninja,tiger,dragon,fabio
 sev32.wav|shiva,final crash
 sev33.wav|shiva,tiger,fabio,ninja
 sev34.wav|mr x,robot x,robotx,doctor
@@ -336,7 +336,7 @@ sev42.wav|yamato,jutsu,ninja
 sev43.wav|dash
 sev44.wav|ash,laught
 sev45.wav|woman,scream,death,die,electra
-sev46.wav|explosion,syndicate
+sev46.wav|explosion
 sev47.wav|onihime,yasha,twins,mona,lisa,monalisa,woman
 sev5.wav|Zamza,blanka,mask
 sev6.wav|barbon
@@ -377,14 +377,14 @@ sorr.fpg|select screen,portraits,character,proprieties,stars,medal,rank,menu,nam
 souther.fpg|claw,wolverine,freddy krueger,assasin
 spanish.fpg|menu,names
 stage.fpg|blood,select
-step0.wav|step,stomp
-step1.wav|step,stomp
-step2.wav|step,stomp
-step3.wav|step,stomp
-step4.wav|step,stomp
-step5.wav|step,stomp
-step6.wav|step,stomp
-storm.fpg|biker
+step0.wav|stomp
+step1.wav|stomp
+step2.wav|stomp
+step3.wav|stomp
+step4.wav|stomp
+step5.wav|stomp
+step6.wav|stomp
+storm.fpg|biker,granade
 stormx.fpg|biker
 superfx.fpg|
 tienda.fpg|blaze,shopping,cheat

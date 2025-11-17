@@ -1,13 +1,17 @@
 package modmanager;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -25,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -155,7 +160,7 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtPath;
 	private JTextField txtAltPath;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -552,6 +557,22 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO: implementar ação de busca aqui
+				// If there isn't a defined path
+				if (gameAssetsPath == null) {
+					System.err.println("The game assets variable is empty!");
+					JOptionPane.showMessageDialog(null,
+							"No game's asset directory defined. Please set the path before starting.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				// If the path is invalid
+				if (!FuncMods.exist(gameAssetsPath)) {
+					System.err.println("The game assets folder doesn't exist!");
+					JOptionPane.showMessageDialog(null, "Game assets directory does not exist: " + gameAssetsPath,
+							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				SearchTextApp.main(null);
 			}
 		});
@@ -618,9 +639,9 @@ public class Main extends JFrame {
 		lblAltPath.setBounds(10, 300, 223, 14);
 		panel_option.add(lblAltPath);
 
-		String content ="";
-		if (gameAssetsPath!="") {
-			content=gameAssetsPath;
+		String content = "";
+		if (gameAssetsPath != "") {
+			content = gameAssetsPath;
 		}
 		txtAltPath = new JTextField(content);
 		txtAltPath.setFont(new Font("Tahoma", Font.PLAIN, 10));
@@ -635,10 +656,10 @@ public class Main extends JFrame {
 		btAltBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String startPath;
-				if (gameAssetsPath=="") {
-					startPath=gameAssetsPath;
+				if (gameAssetsPath == "") {
+					startPath = gameAssetsPath;
 				} else {
-					startPath=sorrPath;
+					startPath = sorrPath;
 				}
 				// FileChooser object
 				JFileChooser sorChooser = new JFileChooser(startPath);
@@ -743,15 +764,6 @@ public class Main extends JFrame {
 		chckFistMod.setEnabled(conditOption);
 		lblListByAdding.setEnabled(conditOption);
 
-		JButton btAbout = new JButton("🛈 About");
-		btAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AboutG.main(null);
-			}
-		});
-		btAbout.setBounds(290, 357, 94, 23);
-		panel_option.add(btAbout);
-
 		JLabel lblUseCharactersMods = new JLabel("characters mods).");
 		lblUseCharactersMods.setEnabled(false);
 		lblUseCharactersMods.setBounds(31, 206, 314, 14);
@@ -807,6 +819,117 @@ public class Main extends JFrame {
 				}
 			}
 		});
+
+		///////////////////////////////////////////////////////////////////////////////////////
+		////////// PANEL INFO
+		///////////////////////////////////////////////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		JPanel panel_info = new JPanel();
+		tabbedPane.addTab("🛈", null, panel_info, null);
+		panel_info.setLayout(null);
+
+		// texto descritivo
+//		JLabel lblNewLabel1 = new JLabel("<html><body>Consider supporting me to help the development of new software for the beatemup community.</body></html>");
+//		lblNewLabel1.setVerticalAlignment(SwingConstants.TOP);
+//		lblNewLabel1.setBounds(10, 115, 380, 42);
+//		panel_info.add(lblNewLabel1);
+
+		// rótulos
+		JLabel lblNewLabel_11 = new JLabel("PayPal:");
+		lblNewLabel_11.setBounds(10, 253, 58, 14);
+		panel_info.add(lblNewLabel_11);
+
+		JLabel lblNewLabel_21 = new JLabel("Ko-FI:");
+		lblNewLabel_21.setBounds(10, 278, 46, 14);
+		panel_info.add(lblNewLabel_21);
+
+		JLabel lblNewLabel_31 = new JLabel("PIX:");
+		lblNewLabel_31.setBounds(10, 303, 46, 14);
+		panel_info.add(lblNewLabel_31);
+
+		JLabel lblNewLabel_4 = new JLabel("YT Super Thanks:");
+		lblNewLabel_4.setBounds(10, 328, 111, 14);
+		panel_info.add(lblNewLabel_4);
+
+		// links clicáveis
+		JLabel lblPayPalLink = new JLabel("<html><u>https://www.paypal.com/donate/...</u></html>");
+		lblPayPalLink.setToolTipText("https://www.paypal.com/donate/?hosted_button_id=RK8T3UG4T2LCU");
+		lblPayPalLink.setForeground(new Color(0, 0, 255));
+		lblPayPalLink.setBounds(62, 253, 229, 14);
+		lblPayPalLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		panel_info.add(lblPayPalLink);
+		lblPayPalLink.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				openLink("https://www.paypal.com/donate/?hosted_button_id=RK8T3UG4T2LCU");
+			}
+		});
+
+		// Ko-fi
+		JLabel lblKofiLink = new JLabel("<html><u>https://ko-fi.com/danchavyn</u></html>");
+		lblKofiLink.setToolTipText("https://ko-fi.com/danchavyn");
+		lblKofiLink.setForeground(Color.BLUE);
+		lblKofiLink.setBounds(62, 278, 229, 14);
+		lblKofiLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		panel_info.add(lblKofiLink);
+		lblKofiLink.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				openLink("https://ko-fi.com/danchavyn");
+			}
+		});
+
+		// YT Super Thanks link
+		JLabel lblNewLabel_5_1_1 = new JLabel("<html><u>Available on any video</u></html>");
+		lblNewLabel_5_1_1.setToolTipText("https://www.youtube.com/playlist?list=PLa-mXLTenBmKFWyTz2OeIF-b6gNuYOWzw");
+		lblNewLabel_5_1_1.setForeground(Color.BLUE);
+		lblNewLabel_5_1_1.setBounds(135, 328, 156, 14);
+		lblNewLabel_5_1_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		panel_info.add(lblNewLabel_5_1_1);
+		lblNewLabel_5_1_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				openLink("https://www.youtube.com/playlist?list=PLa-mXLTenBmKFWyTz2OeIF-b6gNuYOWzw");
+			}
+		});
+
+		// campo PIX (JTextField)
+		JTextField txtaffcbeaefcf = new JTextField();
+		txtaffcbeaefcf.setText("888a0f24-fc77-4105-b8ea-e1f919849c4f");
+		txtaffcbeaefcf.setBounds(61, 300, 230, 20);
+		panel_info.add(txtaffcbeaefcf);
+		txtaffcbeaefcf.setColumns(10);
+		
+		JLabel lblNewLabel_5 = new JLabel("Grupper beta 7 v1.0 by DanChavyn (2025)");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_5.setBounds(10, 11, 374, 14);
+		panel_info.add(lblNewLabel_5);
+		
+		JLabel lblAbout = new JLabel("<html><body style='text-align:center;'>"
+				+ "<p style='margin:0 0 8px 0;'>Grupper is an open source mod manager for SorR. Have fun with awesome projects by all mod creators!</p>"
+				+ "<p style='margin:0 0 8px 0;'>This software was Developed in Eclipse IDE 2022-12 (Java).</p>"
+				+ "<p style='margin:0 0 8px 0;color: #A500B5;'>If you love beat 'em ups, I invite you to check out my YouTube channel, where you can follow my creations and learn a lot of cool stuff about modding!</p>"
+				+ "</body></html>");
+		lblAbout.setVerticalAlignment(SwingConstants.TOP);
+		lblAbout.setBounds(10, 36, 374, 121);
+		panel_info.add(lblAbout);
+		
+		JLabel lblNewLabel_6 = new JLabel("The program is provided AS IS with NO WARRANT/ OF ANV KIND.");
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_6.setBounds(10, 366, 374, 14);
+		panel_info.add(lblNewLabel_6);
+		
+		JButton btnNewButton = new JButton("Visit my channel");
+		btnNewButton.setBounds(119, 168, 143, 23);
+		panel_info.add(btnNewButton);
+		
+		JLabel lblconsiderSupporting = new JLabel("<html><body style='text-align:center;'>"
+				+ "<p style='margin:0 0 8px 0;'>Consider supporting me to help the development of new software for the beatemup community.</p>"
+				+ "</body></html>");
+		lblconsiderSupporting.setVerticalAlignment(SwingConstants.TOP);
+		lblconsiderSupporting.setBounds(10, 207, 374, 38);
+		panel_info.add(lblconsiderSupporting);
 
 		JButton btUninstall = new JButton("Uninstall mod");
 		btUninstall.setBounds(231, 349, 135, 23);
@@ -922,6 +1045,14 @@ public class Main extends JFrame {
 				}
 			}
 		});
+	}
+
+	private void openLink(String url) {
+		try {
+			Desktop.getDesktop().browse(new URI(url));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public static void errorMsg(String file, String additionalText) {
